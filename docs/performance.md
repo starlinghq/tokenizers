@@ -15,12 +15,12 @@ Qwen BPE profiles, exploratory (same machine, 2026-10-10, under background load 
 
 ## Running the benchmark
 
-`benchmarks/Starling.Tokenizers.LoadBench` measures `Tokenizer.FromFile` in fresh processes (`cold`) and repeated in one process (`warm`), with GC allocated bytes and peak working set. CI builds it but never runs it.
+`benchmarks/StarlingHq.Tokenizers.LoadBench` measures `Tokenizer.FromFile` in fresh processes (`cold`) and repeated in one process (`warm`), with GC allocated bytes and peak working set. CI builds it but never runs it.
 
 ```sh
 tools/fetch-assets.sh
-dotnet run -c Release --project benchmarks/Starling.Tokenizers.LoadBench -- cold .models/<repo>/<commit>/tokenizer.json 15
-dotnet run -c Release --project benchmarks/Starling.Tokenizers.LoadBench -- warm .models/<repo>/<commit>/tokenizer.json 10
+dotnet run -c Release --project benchmarks/StarlingHq.Tokenizers.LoadBench -- cold .models/<repo>/<commit>/tokenizer.json 15
+dotnet run -c Release --project benchmarks/StarlingHq.Tokenizers.LoadBench -- warm .models/<repo>/<commit>/tokenizer.json 10
 ```
 
 Record a new measurement as a dated file under `docs/benchmarks/` with the commit, SDK and runtime versions, the machine and its load, and the reference measured right after on the same machine.

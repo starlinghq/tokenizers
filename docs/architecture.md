@@ -1,6 +1,6 @@
 # Architecture
 
-Starling.Tokenizers is an interpreter for the `tokenizer.json` format. It does not reimplement any particular model's tokenizer. It reproduces huggingface/tokenizers stage by stage, so any file built only from implemented components behaves like the reference. The reference is the specification: each stage is ported from its upstream Rust source, keeps upstream's offset alignment, and reproduces upstream's quirks rather than "fixing" them.
+StarlingHq.Tokenizers is an interpreter for the `tokenizer.json` format. It does not reimplement any particular model's tokenizer. It reproduces huggingface/tokenizers stage by stage, so any file built only from implemented components behaves like the reference. The reference is the specification: each stage is ported from its upstream Rust source, keeps upstream's offset alignment, and reproduces upstream's quirks rather than "fixing" them.
 
 ## Loading
 

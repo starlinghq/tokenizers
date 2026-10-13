@@ -1,8 +1,8 @@
 # Owned tokenizer load time, 2026-10-09
 
-> **Historical record.** Written in the Starling planning repository before this repository was split out. The package then had a planning-era name (it is `Starling.Tokenizers` throughout here); paths such as `tokenizers-dotnet/`, `model-pipeline/` and `tools/*-tokenizer-*` refer to that repository's layout (see [docs/repository-history.md](../repository-history.md)).
+> **Historical record.** Written in the Starling planning repository before this repository was split out. The package then had a planning-era name (it is `StarlingHq.Tokenizers` throughout here); paths such as `tokenizers-dotnet/`, `model-pipeline/` and `tools/*-tokenizer-*` refer to that repository's layout (see [docs/repository-history.md](../repository-history.md)).
 
-`Tokenizer.FromFile` in `Starling.Tokenizers`, 0.1.0-preview.1 (main at `ff55265`) against 0.1.0-preview.2 (this change). Follow-up to decision 1 of [e5-2026-10-09.md](e5-2026-10-09.md): the owned tokenizer's load made a C# process reach its first e5 embedding 1.7x later than Python.
+`Tokenizer.FromFile` in `StarlingHq.Tokenizers`, 0.1.0-preview.1 (main at `ff55265`) against 0.1.0-preview.2 (this change). Follow-up to decision 1 of [e5-2026-10-09.md](e5-2026-10-09.md): the owned tokenizer's load made a C# process reach its first e5 embedding 1.7x later than Python.
 
 One workstation, not a controlled lab machine: Intel i7-5820K (6 cores, AVX2), Linux x64 7.2, .NET 10.0.12 (SDK 10.0.100), Release builds, assets in the OS page cache. Load average 0.7 to 1.8 during every run (checked before each series; the script waits while it is above 4); the user's desktop, Chrome and a local ClickHouse server were running. Exploratory evidence, reproducible with the commands below.
 
@@ -10,7 +10,7 @@ Assets: e5 `tokenizer.json` (`intfloat/multilingual-e5-small@614241f6`, 17,082,7
 
 ## Results
 
-`benchmarks/Starling.Tokenizers.LoadBench`. **Cold:** a fresh process per run; `load_ms` is `Tokenizer.FromFile` (file read included) timed inside the process, so JIT of the loader is included and runtime start-up is not; `wall` is spawn to exit (start-up, load, one encode, exit). **Warm:** reloads in one process after one warm-up load. Allocations are `GC.GetTotalAllocatedBytes` for the whole cold process; "heap after load" is `GC.GetTotalMemory(forceFullCollection: true)` with the tokenizer alive. Median, with min to max and the interquartile range; two interleaved rounds of 10 cold runs each for e5 (20 per version), one round of 10 for GLiNER2.
+`benchmarks/StarlingHq.Tokenizers.LoadBench`. **Cold:** a fresh process per run; `load_ms` is `Tokenizer.FromFile` (file read included) timed inside the process, so JIT of the loader is included and runtime start-up is not; `wall` is spawn to exit (start-up, load, one encode, exit). **Warm:** reloads in one process after one warm-up load. Allocations are `GC.GetTotalAllocatedBytes` for the whole cold process; "heap after load" is `GC.GetTotalMemory(forceFullCollection: true)` with the tokenizer alive. Median, with min to max and the interquartile range; two interleaved rounds of 10 cold runs each for e5 (20 per version), one round of 10 for GLiNER2.
 
 | Asset | Measure | 0.1.0-preview.1 | 0.1.0-preview.2 | Ratio |
 | --- | --- | ---: | ---: | ---: |
@@ -77,8 +77,8 @@ Caveat found while measuring: building `ai-dotnet/AI.slnx` builds the tokenizer 
 
 ```sh
 export DOTNET_ROOT=~/.dotnet PATH=~/.dotnet:$PATH
-dotnet build -c Release benchmarks/Starling.Tokenizers.LoadBench
-B=benchmarks/Starling.Tokenizers.LoadBench/bin/Release/net10.0/Starling.Tokenizers.LoadBench
+dotnet build -c Release benchmarks/StarlingHq.Tokenizers.LoadBench
+B=benchmarks/StarlingHq.Tokenizers.LoadBench/bin/Release/net10.0/StarlingHq.Tokenizers.LoadBench
 $B cold  "$STARLING_MODELS/intfloat/multilingual-e5-small/614241f622f53c4eeff9890bdc4f31cfecc418b3/tokenizer.json" 15
 $B warm  "$STARLING_MODELS/intfloat/multilingual-e5-small/614241f622f53c4eeff9890bdc4f31cfecc418b3/tokenizer.json" 10
 $B encode "$STARLING_MODELS/intfloat/multilingual-e5-small/614241f622f53c4eeff9890bdc4f31cfecc418b3/tokenizer.json" 20

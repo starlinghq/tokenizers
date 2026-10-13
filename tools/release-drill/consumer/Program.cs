@@ -1,4 +1,4 @@
-// Clean-consumer check for the Starling.Tokenizers release drill (docs/releasing.md).
+// Clean-consumer check for the StarlingHq.Tokenizers release drill (docs/releasing.md).
 // tools/release-drill.sh copies this file into a temporary directory outside the repository and
 // builds it against the packed package from a local folder feed. It must compile and run with nothing but
 // that package: no project references, no repository paths, no test framework.
@@ -9,7 +9,7 @@
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text.Json;
-using Starling.Tokenizers;
+using StarlingHq.Tokenizers;
 
 if (args.Length != 3)
 {

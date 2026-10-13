@@ -3,7 +3,7 @@
 profile: gliner2-base-v1-unigram
 status: experimental  # partial fixtures only; GLiNER2 revision and contract settled 2026-10-08 (docs/kickoff.md)
 backlog: P-024 (stretch), P-014
-library: Starling.Tokenizers 0.2.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
+library: StarlingHq.Tokenizers 0.2.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
 
 asset:
   repo: fastino/gliner2-base-v1
@@ -29,7 +29,7 @@ pipeline:
 
 conformance:
   fixtures: conformance/gliner2-base-v1-unigram/  # accepted as development fixtures 2026-10-08 (PR #4)
-  tests: tests/Starling.Tokenizers.Tests/Gliner2ConformanceTests.cs
+  tests: tests/StarlingHq.Tokenizers.Tests/Gliner2ConformanceTests.cs
   result: # 2026-10-08
     per_word_tokens: 46/46 cases exact (every word of the whitespace splitter, and of the char splitter where recorded), add_special_tokens false
     per_word_input_ids: 46/46 cases, text part of input_ids exact (subword strings mapped with token_to_id, unknown -> 3)

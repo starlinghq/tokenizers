@@ -2,7 +2,7 @@
 
 > Backlog ids (`P-0xx`), dates and "plan section" references in this ledger are records from the Starling planning repository, where this library was first built under a planning-era package name ([docs/repository-history.md](docs/repository-history.md)). The local-change ids `L1` and later continue here.
 
-Every imported file, local change, and upstream contribution gets a row. Paths are relative to `src/Starling.Tokenizers/`. Origin digests are SHA-256 of the origin file at the stated revision (first 16 hex digits). License texts are in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+Every imported file, local change, and upstream contribution gets a row. Paths are relative to `src/StarlingHq.Tokenizers/`. Origin digests are SHA-256 of the origin file at the stated revision (first 16 hex digits). License texts are in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 Two kinds of intake are recorded:
 
@@ -47,7 +47,7 @@ Not adopted (P-023 section 4 lists them): the ML.NET BPE path, `SentencePieceBas
 
 | Change | Paths | Reason | Upstreamable | Upstream PR | Released in |
 | --- | --- | --- | --- | --- | --- |
-| L1: namespace `Starling.Tokenizers.ThirdParty.MLNet`; `#if Test` namespace switch and file BOM removed; darts-clone notice text added to the header | `ThirdParty/MLNet/DoubleArrayTrie.cs` | Owned namespace (ADR-13); BSD 2-Clause requires the notice in source. | No (organization-specific) | | not yet released |
+| L1: namespace `StarlingHq.Tokenizers.ThirdParty.MLNet`; `#if Test` namespace switch and file BOM removed; darts-clone notice text added to the header | `ThirdParty/MLNet/DoubleArrayTrie.cs` | Owned namespace (ADR-13); BSD 2-Clause requires the notice in source. | No (organization-specific) | | not yet released |
 | L2: builder takes pre-sorted UTF-8 keys (`IReadOnlyList<KeyValuePair<byte[], int>>`) instead of `SortedDictionary<string, int>`; `DoubleArrayUnit(uint)` constructor added | `ThirdParty/MLNet/DoubleArrayTrie.cs` | Keys come from the reference's piece-to-id map; charsmaps load without `unsafe` code. | Possibly (the constructor) | | not yet released |
 | L3: scores are `double` | `ThirdParty/MLNet/UnigramModel.cs` | Reference uses `f64`; `float` sums can break ties differently. | Yes | | not yet released |
 | L4: every vocabulary piece, special pieces included, is in the trie; no Unused/UserDefined/Control piece types | `ThirdParty/MLNet/UnigramModel.cs` | Reference `Unigram::from` inserts all pieces. | Needs discussion (ML.NET follows SentencePiece's model proto types) | | not yet released |

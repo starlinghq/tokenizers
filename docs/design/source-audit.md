@@ -1,6 +1,6 @@
 # P-023: Tokenizer source audit
 
-> **Historical record.** Written in the Starling planning repository before this repository was split out. The package then had a planning-era name (it is `Starling.Tokenizers` throughout here); paths such as `tokenizers-dotnet/`, `model-pipeline/` and `tools/*-tokenizer-*` refer to that repository's layout (see [docs/repository-history.md](../repository-history.md)).
+> **Historical record.** Written in the Starling planning repository before this repository was split out. The package then had a planning-era name (it is `StarlingHq.Tokenizers` throughout here); paths such as `tokenizers-dotnet/`, `model-pipeline/` and `tools/*-tokenizer-*` refer to that repository's layout (see [docs/repository-history.md](../repository-history.md)).
 
 Status: audit complete, adoption not started. Checked 2026-10-05. Backlog item P-023 (plan sections 6, 6.1, 6.3; ADR-13, ADR-14, ADR-15). Kickoff row: "Tokenizer source to adopt".
 
@@ -210,7 +210,7 @@ Shape from transformers source, not from a Hub file [code; Hub content unverifie
 
 ## 8. Recommendation
 
-1. **Adopt selected Microsoft.ML.Tokenizers source at `5a44dfdbf20d1b64211da313dfbaa9ffbf63ea5d`** (equal in tokenizer code to the `3.0.0-preview.26457.2` package): the Unigram path and the BPE merge path listed in section 4, under the `Starling.Tokenizers` namespace, `net10.0` only, no package references. It is MIT, already managed and allocation-conscious, and on the real DeBERTa-v3 asset it matched HF on 45 of 48 probes. Porting the Unigram lattice and the precompiled charsmap from Rust instead would add an estimated 10 to 16 maintainer hours for no fidelity gain.
+1. **Adopt selected Microsoft.ML.Tokenizers source at `5a44dfdbf20d1b64211da313dfbaa9ffbf63ea5d`** (equal in tokenizer code to the `3.0.0-preview.26457.2` package): the Unigram path and the BPE merge path listed in section 4, under the `StarlingHq.Tokenizers` namespace, `net10.0` only, no package references. It is MIT, already managed and allocation-conscious, and on the real DeBERTa-v3 asset it matched HF on 45 of 48 probes. Porting the Unigram lattice and the precompiled charsmap from Rust instead would add an estimated 10 to 16 maintainer hours for no fidelity gain.
 2. **Write the interpreter fresh**, using huggingface/tokenizers `v0.23.2` (`88a4498a`) as the behavioral spec and Apache-2.0 port source where ML.NET has nothing. Do not adopt `CreateFromTokenizerJson` as the architecture: it fuses stages into one model and approximates `Whitespace` and `prepend_scheme: "first"`. Each `type` tag gets its own stage class; any unknown tag, unknown field value, or unimplemented option fails with an explicit error naming the tag. Use the ML.NET factory only as a field-validation reference.
 3. **Target format `version: "1.0"`** and reject `"2.0"` explicitly until a pinned asset needs it. Record the upstream 1.0 rewrite as a tracked risk (section 10).
 4. **Fix the reproduced divergences in the owned copy** (unknown-run fusion, empty-input template, `Split` on supplementary-plane characters) and open upstream issues or PRs through the contribution track (P-026). Record each as a local change in `PROVENANCE.md`.

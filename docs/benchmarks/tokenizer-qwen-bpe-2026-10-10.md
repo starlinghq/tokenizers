@@ -1,8 +1,8 @@
 # Owned tokenizer, Qwen byte-level BPE profiles: load and encode, 2026-10-10
 
-> **Historical record.** Written in the Starling planning repository before this repository was split out. The package then had a planning-era name (it is `Starling.Tokenizers` throughout here); paths such as `tokenizers-dotnet/`, `model-pipeline/` and `tools/*-tokenizer-*` refer to that repository's layout (see [docs/repository-history.md](../repository-history.md)).
+> **Historical record.** Written in the Starling planning repository before this repository was split out. The package then had a planning-era name (it is `StarlingHq.Tokenizers` throughout here); paths such as `tokenizers-dotnet/`, `model-pipeline/` and `tools/*-tokenizer-*` refer to that repository's layout (see [docs/repository-history.md](../repository-history.md)).
 
-Exploratory. `Starling.Tokenizers` 0.1.0-preview.3 (this change) against the Rust `tokenizers` 0.23.2 (Python binding) on the two Qwen profile assets. One workstation, not a controlled machine: Intel i7-5820K (6 cores), Linux x64 7.2, .NET 10.0.12 (SDK 10.0.100), Release builds, assets in the OS page cache. **Background load average 5 to 8 during every series** (a local LLM server using about 2.5 cores, other sessions); absolute numbers are inflated by it (the e5 cold load measured 445 ms in the same window against 270 ms in [tokenizer-load-2026-10-09.md](tokenizer-load-2026-10-09.md)). The C# and Rust series ran back to back, so the ratios are the more useful figure.
+Exploratory. `StarlingHq.Tokenizers` 0.1.0-preview.3 (this change) against the Rust `tokenizers` 0.23.2 (Python binding) on the two Qwen profile assets. One workstation, not a controlled machine: Intel i7-5820K (6 cores), Linux x64 7.2, .NET 10.0.12 (SDK 10.0.100), Release builds, assets in the OS page cache. **Background load average 5 to 8 during every series** (a local LLM server using about 2.5 cores, other sessions); absolute numbers are inflated by it (the e5 cold load measured 445 ms in the same window against 270 ms in [tokenizer-load-2026-10-09.md](tokenizer-load-2026-10-09.md)). The C# and Rust series ran back to back, so the ratios are the more useful figure.
 
 Assets: `qwen2-bpe-kev` (`jaredpalmer/kev-0.8b@9a45d25e` `tokenizer.json`, 19,989,325 bytes, `06b95093…`) and `qwen35-bpe-chat` (derived transformers 5.18.0 pipeline, 19,989,339 bytes, `a5cd9732…`): 248,044 vocabulary entries, 247,587 merges, 33 added tokens.
 
@@ -24,7 +24,7 @@ Method:
 - No word cache in the owned BPE (upstream has a per-thread cache); encode is still faster on these texts.
 
 ```sh
-B=benchmarks/Starling.Tokenizers.LoadBench/bin/Release/net10.0/Starling.Tokenizers.LoadBench
+B=benchmarks/StarlingHq.Tokenizers.LoadBench/bin/Release/net10.0/StarlingHq.Tokenizers.LoadBench
 $B cold   "$STARLING_MODELS/jaredpalmer/kev-0.8b/9a45d25eb2ab761841196625383fa1dff0e56c1e/tokenizer.json" 15
 $B warm   "$STARLING_MODELS/jaredpalmer/kev-0.8b/9a45d25eb2ab761841196625383fa1dff0e56c1e/tokenizer.json" 10
 $B encode "$STARLING_MODELS/jaredpalmer/kev-0.8b/9a45d25eb2ab761841196625383fa1dff0e56c1e/tokenizer.json" 20
