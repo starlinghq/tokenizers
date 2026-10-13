@@ -4,7 +4,7 @@
 profile: qwen35-bpe-chat   # pilot LLM Qwen/Qwen3.5-0.8B (P-016); same vocabulary and merges as qwen2-bpe-kev, regex with \p{M}
 status: experimental  # 137/137 fixture cases exact; fixtures proposed, not yet accepted (see conformance.fixtures)
 backlog: P-024 (follow-up), P-016
-library: StarlingHq.Tokenizers 0.2.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
+library: Starlings.Tokenizers 0.3.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
 
 asset:   # the runtime pipeline, not a Hub file: the Hub tokenizer.json at this revision (5f9e4d49..., 12,807,982 bytes) is NOT what transformers runs
   repo: Qwen/Qwen3.5-0.8B
@@ -44,10 +44,10 @@ conformance:
     - conformance/corpus/tokenizer-corpus-v1.jsonl (49 cases, sha256 8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199)
     - conformance/corpus/tokenizer-corpus-qwen-bpe-v1.jsonl (88 cases)
   tests:
-    - tests/StarlingHq.Tokenizers.Tests/QwenBpeConformanceTests.cs
-    - tests/StarlingHq.Tokenizers.Tests/QwenBpeDifferentialTests.cs
-    - tests/StarlingHq.Tokenizers.Tests/QwenSplitPatternTests.cs
-    - tests/StarlingHq.Tokenizers.Tests/BpeLoaderTests.cs
+    - tests/Starlings.Tokenizers.Tests/QwenBpeConformanceTests.cs
+    - tests/Starlings.Tokenizers.Tests/QwenBpeDifferentialTests.cs
+    - tests/Starlings.Tokenizers.Tests/QwenSplitPatternTests.cs
+    - tests/Starlings.Tokenizers.Tests/BpeLoaderTests.cs
   result: # 2026-10-10, Linux x64, .NET SDK 10.0.100, runtime 10.0.12, Release
     encode: "137/137 cases exact (134 single, 3 pairs): ids, tokens, type_ids, attention_mask, special_tokens_mask, utf16 and scalar offsets, sequence_ids; add_special_tokens true and false give the same ids"
     decode: 137/137 cases exact, skip_special_tokens true and false

@@ -1,8 +1,8 @@
 name: release
 
-# Release StarlingHq.Tokenizers (docs/releasing.md).
+# Release Starlings.Tokenizers (docs/releasing.md).
 #
-#   git tag v0.2.0-preview.1 && git push origin v0.2.0-preview.1
+#   git tag v0.3.0-preview.1 && git push origin v0.3.0-preview.1
 #
 # 1. candidate: the tag must equal the version in Directory.Build.props, point at a commit on main and
 #    have a CHANGELOG.md section. The release drill then tests with every asset required, packs, and
@@ -47,7 +47,7 @@ jobs:
       - name: Version
         id: version
         run: |
-          version="$(dotnet msbuild src/StarlingHq.Tokenizers -getProperty:Version)"
+          version="$(dotnet msbuild src/Starlings.Tokenizers -getProperty:Version)"
           echo "version=${version}" >>"$GITHUB_OUTPUT"
           echo "version ${version}"
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
@@ -105,8 +105,8 @@ jobs:
       - name: Package is the drilled candidate
         run: |
           ls -l package
-          test -f "package/StarlingHq.Tokenizers.${VERSION}.nupkg"
-          test -f "package/StarlingHq.Tokenizers.${VERSION}.snupkg"
+          test -f "package/Starlings.Tokenizers.${VERSION}.nupkg"
+          test -f "package/Starlings.Tokenizers.${VERSION}.snupkg"
           grep -qx 'RESULT: PASS' package/consumer.log
           sha256sum package/*.nupkg package/*.snupkg
       - name: NuGet login (OIDC)
@@ -117,7 +117,7 @@ jobs:
       # No --skip-duplicate: a published version is immutable, so pushing one twice must fail.
       - name: Push to nuget.org
         run: >
-          dotnet nuget push "package/StarlingHq.Tokenizers.${VERSION}.nupkg"
+          dotnet nuget push "package/Starlings.Tokenizers.${VERSION}.nupkg"
           --api-key "${{ steps.nuget.outputs.NUGET_API_KEY }}"
           --source https://api.nuget.org/v3/index.json
       - name: GitHub release
@@ -131,5 +131,5 @@ jobs:
           prerelease=()
           [[ "${VERSION}" == *-* ]] && prerelease=(--prerelease)
           gh release create "${GITHUB_REF_NAME}" "${prerelease[@]}" \
-            --title "StarlingHq.Tokenizers ${VERSION}" --notes-file notes.md \
-            "package/StarlingHq.Tokenizers.${VERSION}.nupkg" "package/StarlingHq.Tokenizers.${VERSION}.snupkg"
+            --title "Starlings.Tokenizers ${VERSION}" --notes-file notes.md \
+            "package/Starlings.Tokenizers.${VERSION}.nupkg" "package/Starlings.Tokenizers.${VERSION}.snupkg"

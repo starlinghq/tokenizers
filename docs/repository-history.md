@@ -1,6 +1,6 @@
 # Repository history
 
-This library was built in the Starling planning repository (private), under `tokenizers-dotnet/`, with a planning-era package name. On 2026-10-12 it was split out into this repository as `StarlingHq.Tokenizers`. This repository starts from a single snapshot commit: the earlier commit history stays in the planning repository.
+This library was built in the Starling planning repository (private), under `tokenizers-dotnet/`, with a planning-era package name. On 2026-10-12 it was split out into this repository as `Starlings.Tokenizers`. This repository starts from a single snapshot commit: the earlier commit history stays in the planning repository.
 
 ## What moved
 
@@ -26,10 +26,10 @@ Every fixture file is byte-identical to its original. The staged Qwen copies und
 
 | Before | After |
 | --- | --- |
-| planning-era package and namespace | `StarlingHq.Tokenizers` |
+| planning-era package and namespace | `Starlings.Tokenizers` (published once, as 0.2.0-preview.1, under the interim ID `StarlingHq.Tokenizers`) |
 | planning-era environment variables | `STARLING_MODELS`, `STARLING_REQUIRE_ASSETS`, `STARLING_QWEN_DIFFERENTIAL_DIR`, `STARLING_GEMMA_DIFFERENTIAL_DIR` |
 | release tag `tokenizers-v<version>` | `v<version>` |
-| last version `0.1.0-preview.4` (never published) | first version `0.2.0-preview.1` |
+| last version `0.1.0-preview.4` (never published) | `0.2.0-preview.1` as `StarlingHq.Tokenizers`, then `0.3.0-preview.1` as `Starlings.Tokenizers` |
 
 ## Reading older records
 

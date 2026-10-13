@@ -1,6 +1,6 @@
 # Releasing
 
-StarlingHq.Tokenizers ships often: a new tokenizer profile, a component that unlocks new models, or a fix can each be its own release. Pushing a tag does the whole release: it rebuilds from a clean clone, runs every test with every asset, packs, checks the package from outside the repository, waits for a maintainer's approval, then publishes the exact bytes it checked.
+Starlings.Tokenizers ships often: a new tokenizer profile, a component that unlocks new models, or a fix can each be its own release. Pushing a tag does the whole release: it rebuilds from a clean clone, runs every test with every asset, packs, checks the package from outside the repository, waits for a maintainer's approval, then publishes the exact bytes it checked.
 
 ## Versions
 
@@ -20,8 +20,8 @@ StarlingHq.Tokenizers ships often: a new tokenizer profile, a component that unl
 
    ```sh
    git switch main && git pull
-   git tag v0.2.0-preview.1
-   git push origin v0.2.0-preview.1
+   git tag v0.3.0-preview.1
+   git push origin v0.3.0-preview.1
    ```
 
 4. The [`release`](../.github/workflows/release.yml) workflow runs:
@@ -43,7 +43,7 @@ The drill builds the committed `HEAD` from a clean clone with an empty private N
 2. Runs the tests with `STARLING_REQUIRE_ASSETS=1` and locked restore, and fails on any skip.
 3. Packs and checks the nuspec: version, the `MIT OR Apache-2.0` license expression, repository commit, no dependencies, and the packed README, notices and every `profiles/*.yaml`.
 4. Pushes the package to a temporary local folder feed. It never pushes to nuget.org.
-5. Builds a consumer in a temporary directory outside the repository. The consumer's `NuGet.config` lists only that feed and nuget.org, with `StarlingHq.*` mapped to the local feed.
+5. Builds a consumer in a temporary directory outside the repository. The consumer's `NuGet.config` lists only that feed and nuget.org, with `Starlings.*` mapped to the local feed.
 6. Fails if Microsoft.ML.Tokenizers appears in the consumer's restore graph or package cache, if the restored package differs from the packed one, or if any consumer file names the repository path.
 7. Runs the consumer. It checks the pinned e5 `tokenizer.json` digest and compares every e5 fixture case (encode, decode, truncation, padded batch) with `conformance/xlmr-unigram-e5/`.
 
@@ -69,6 +69,6 @@ These are account settings. An agent or contributor cannot apply them.
    | Environment | `release` |
 
    The user must be an administrator of the `starlinghq` organization on nuget.org.
-3. **NuGet ID prefix.** The `Starling` prefix is reserved on nuget.org by another owner, which is why the package ID is `StarlingHq.Tokenizers` (a push under `Starling.` fails with 409 "The package ID is reserved"). Optionally ask account@nuget.org to reserve `StarlingHq` for the `starlinghq` organization; see the NuGet ID prefix reservation documentation. Reservation is not required to publish, but it marks packages as verified and stops others from publishing under the prefix.
+3. **NuGet ID prefix.** Packages use the `Starlings.` prefix. `Starling.` is reserved on nuget.org by another owner (a push under it fails with 409 "The package ID is reserved"). Ask account@nuget.org to reserve `Starlings` for the `starlinghq` organization; see the NuGet ID prefix reservation documentation. Reservation is not required to publish, but it marks packages as verified and stops others from publishing under the prefix.
 4. **Branch protection.** Protect `main`: require pull requests, require the `ci` checks (`boundary`, `test (ubuntu-latest)`, `test (windows-latest)`, `release drill`, `reference runners (ruff)`), and require review from code owners. `CODEOWNERS` covers `conformance/`, `tests/*/TestData/`, `tools/pinned-assets.txt` and the release files.
 5. **Actions.** Keep the default workflow token read-only (Settings > Actions > General). The release workflow asks for `contents: write` and `id-token: write` on the publish job only.

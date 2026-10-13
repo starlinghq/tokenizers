@@ -1,9 +1,9 @@
-# StarlingHq.Tokenizers
+# Starlings.Tokenizers
 
 Hugging Face `tokenizer.json` files in pure .NET, with the same token ids, offsets and decoded text as the Python and Rust `tokenizers` library, checked case by case.
 
 ```csharp
-using StarlingHq.Tokenizers;
+using Starlings.Tokenizers;
 
 Tokenizer tokenizer = Tokenizer.FromFile("tokenizer.json");
 TokenEncoding encoding = tokenizer.Encode("Hello, world!");
@@ -21,13 +21,13 @@ Part of [Starling](https://github.com/starlinghq), .NET implementations of AI mo
 ## Install
 
 ```sh
-dotnet add package StarlingHq.Tokenizers --prerelease
+dotnet add package Starlings.Tokenizers --prerelease
 ```
 
 ## Usage
 
 ```csharp
-using StarlingHq.Tokenizers;
+using Starlings.Tokenizers;
 
 Tokenizer tokenizer = Tokenizer.FromFile("tokenizer.json")            // also FromStream, FromUtf8Json
     .WithTruncation(new TruncationOptions(MaxLength: 512))

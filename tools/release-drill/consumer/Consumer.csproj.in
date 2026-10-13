@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="StarlingHq.Tokenizers" Version="[@VERSION@]" />
+    <PackageReference Include="Starlings.Tokenizers" Version="[@VERSION@]" />
   </ItemGroup>
 
 </Project>

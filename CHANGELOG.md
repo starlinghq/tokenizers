@@ -1,12 +1,22 @@
 # Changelog
 
-All notable changes to StarlingHq.Tokenizers. Versions follow [docs/releasing.md](docs/releasing.md): a change in token ids, offsets or decoded text is a behavior change and is always listed.
+All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers for 0.2.0-preview.1). Versions follow [docs/releasing.md](docs/releasing.md): a change in token ids, offsets or decoded text is a behavior change and is always listed.
 
 ## [Unreleased]
 
+## [0.3.0-preview.1] - 2026-10-13
+
+### Changed
+
+- Package ID and namespaces renamed from `StarlingHq.Tokenizers` to `Starlings.Tokenizers` (namespaces `Starlings.Tokenizers`, `Starlings.Tokenizers.Pipeline`). Replace the package reference and update `using` directives; the API and tokenizer output are otherwise unchanged. `StarlingHq.Tokenizers` 0.2.0-preview.1 is deprecated in favor of this package.
+
+### Behavior
+
+- No change in output for any profile: the same conformance fixtures pass unchanged.
+
 ## [0.2.0-preview.1] - 2026-10-12
 
-First release from this repository and under this package ID. Versions up to 0.1.0-preview.4 were built under a planning-era package ID in the Starling planning repository and never published ([docs/repository-history.md](docs/repository-history.md)).
+First release from this repository, published as `StarlingHq.Tokenizers` (now deprecated; see 0.3.0-preview.1). Versions up to 0.1.0-preview.4 were built under a planning-era package ID in the Starling planning repository and never published ([docs/repository-history.md](docs/repository-history.md)).
 
 ### Changed
 

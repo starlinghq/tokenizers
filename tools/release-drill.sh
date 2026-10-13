@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Release drill for StarlingHq.Tokenizers (docs/releasing.md).
+# Release drill for Starlings.Tokenizers (docs/releasing.md).
 #
 # Proves the tokenizer releases on its own: from a clean clone of the committed HEAD, with no optional
 # Microsoft comparator and no upstream patch merged, it
@@ -8,7 +8,7 @@
 #   3. packs the package and inspects the nuspec (version, MIT OR Apache-2.0, no dependencies, notices, readme, profiles),
 #   4. pushes it to a local folder feed only (never nuget.org),
 #   5. builds a throwaway consumer outside the repository whose NuGet.config knows only that feed and
-#      nuget.org (package source mapping sends StarlingHq.* to the local feed only), with an isolated
+#      nuget.org (package source mapping sends Starlings.* to the local feed only), with an isolated
 #      empty NuGet package cache: no project references, no repository paths, no hidden cache,
 #   6. proves Microsoft.ML.Tokenizers is absent from the consumer's restore graph and package cache,
 #   7. runs the consumer: it verifies the pinned tokenizer.json digest and compares ids, tokens, masks,
@@ -91,14 +91,14 @@ grep -Eqi 'skipped:[[:space:]]*[1-9]' "$work/test.log" && fail "tests were skipp
 (cd "$src" && tools/check-independence.sh) || fail "independence check failed"
 
 step "4. Pack"
-version="$(cd "$src" && dotnet msbuild src/StarlingHq.Tokenizers -getProperty:Version)"
+version="$(cd "$src" && dotnet msbuild src/Starlings.Tokenizers -getProperty:Version)"
 echo "version:   $version"
-(cd "$src" && CI=true dotnet pack src/StarlingHq.Tokenizers --configuration Release \
+(cd "$src" && CI=true dotnet pack src/Starlings.Tokenizers --configuration Release \
     --output "$work/pack" >/dev/null) || fail "pack failed"
-nupkg="$work/pack/StarlingHq.Tokenizers.$version.nupkg"
+nupkg="$work/pack/Starlings.Tokenizers.$version.nupkg"
 [[ -f "$nupkg" ]] || fail "expected $nupkg"
 [[ -f "${nupkg%.nupkg}.snupkg" ]] || fail "symbol package missing"
-nuspec="$(unzip -p "$nupkg" StarlingHq.Tokenizers.nuspec)"
+nuspec="$(unzip -p "$nupkg" Starlings.Tokenizers.nuspec)"
 contents="$(unzip -Z1 "$nupkg")"
 grep -q "<version>$version</version>" <<<"$nuspec" || fail "nuspec version"
 grep -q '<license type="expression">MIT OR Apache-2.0</license>' <<<"$nuspec" || fail "nuspec license"
@@ -106,7 +106,7 @@ grep -q "commit=\"$sha\"" <<<"$nuspec" || fail "nuspec repository commit"
 grep -q '<group targetFramework="net10.0" />' <<<"$nuspec" || fail "package has dependencies; expected none"
 profile_files=()
 for f in "$src"/profiles/*.yaml; do profile_files+=("profiles/$(basename "$f")"); done
-for f in lib/net10.0/StarlingHq.Tokenizers.dll lib/net10.0/StarlingHq.Tokenizers.xml \
+for f in lib/net10.0/Starlings.Tokenizers.dll lib/net10.0/Starlings.Tokenizers.xml \
     README.md THIRD-PARTY-NOTICES.md "${profile_files[@]}"; do
     grep -qx "$f" <<<"$contents" || fail "package lacks $f"
 done
@@ -138,7 +138,7 @@ cat >"$consumer/NuGet.config" <<EOF
   </packageSources>
   <packageSourceMapping>
     <packageSource key="drill-local">
-      <package pattern="StarlingHq.*" />
+      <package pattern="Starlings.*" />
     </packageSource>
     <packageSource key="nuget.org">
       <package pattern="*" />
@@ -157,7 +157,7 @@ libraries = sorted(assets["libraries"])
 print("assets libraries:", ", ".join(libraries))
 assert not any("microsoft.ml.tokenizers" in name.lower() for name in libraries), "Microsoft.ML.Tokenizers restored"
 assert all(assets["libraries"][n]["type"] == "package" for n in libraries), "non-package library (project reference)"
-assert [n.split("/")[0] for n in libraries] == ["StarlingHq.Tokenizers"], "unexpected libraries"
+assert [n.split("/")[0] for n in libraries] == ["Starlings.Tokenizers"], "unexpected libraries"
 lib = assets["libraries"][libraries[0]]
 packed = base64.b64encode(hashlib.sha512(open(sys.argv[2], "rb").read()).digest()).decode()
 assert lib["sha512"] == packed, "restored package differs from the drill's packed package"
@@ -181,4 +181,4 @@ grep -qx 'RESULT: PASS' "$work/consumer.log" || fail "consumer did not pass"
 out="$root/artifacts/release-drill"
 mkdir -p "$out"
 cp "$nupkg" "${nupkg%.nupkg}.snupkg" "$work/consumer.log" "$work/consumer-packages.txt" "$out/"
-step "DRILL PASS: StarlingHq.Tokenizers $version from $sha (packages and logs in artifacts/release-drill/)"
+step "DRILL PASS: Starlings.Tokenizers $version from $sha (packages and logs in artifacts/release-drill/)"

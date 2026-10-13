@@ -1,4 +1,4 @@
-#:project ../src/StarlingHq.Tokenizers/StarlingHq.Tokenizers.csproj
+#:project ../src/Starlings.Tokenizers/Starlings.Tokenizers.csproj
 #:property PublishAot=false
 
 // Does a tokenizer.json load, and which components does it use? The first step of adding a profile
@@ -7,7 +7,7 @@
 //
 //   dotnet run tools/inspect.cs -- <tokenizer.json> ["sample text"]
 using System.Security.Cryptography;
-using StarlingHq.Tokenizers;
+using Starlings.Tokenizers;
 
 if (args.Length is < 1 or > 2)
 {
