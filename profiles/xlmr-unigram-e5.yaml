@@ -5,7 +5,7 @@
 profile: xlmr-unigram-e5   # name used by the ai-dotnet IEncoderTokenizer seam
 status: experimental  # P0 encoder settled (docs/kickoff.md); release qualification (G1) is the maintainer's call.
 backlog: P-024
-library: Starling.Tokenizers 0.2.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
+library: StarlingHq.Tokenizers 0.2.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
 
 asset:
   repo: intfloat/multilingual-e5-small
@@ -34,7 +34,7 @@ pipeline:   # exactly what the pinned file declares
 conformance:
   fixtures: conformance/xlmr-unigram-e5/  # accepted as development fixtures 2026-10-08 (PR #4); not a release evaluation set (P-030)
   corpus: conformance/corpus/tokenizer-corpus-v1.jsonl (sha256 8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199)
-  tests: tests/Starling.Tokenizers.Tests/E5ConformanceTests.cs
+  tests: tests/StarlingHq.Tokenizers.Tests/E5ConformanceTests.cs
   result: # 2026-10-08, Linux x64, .NET SDK 10.0.100, Debug and Release
     encode: "49/49 cases exact (46 single, 3 pairs): ids, tokens, type_ids, attention_mask, special_tokens_mask, utf16 and scalar offsets, sequence_ids"
     decode: 49/49 cases exact, skip_special_tokens true and false

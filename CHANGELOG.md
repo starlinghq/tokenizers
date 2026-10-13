@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Starling.Tokenizers. Versions follow [docs/releasing.md](docs/releasing.md): a change in token ids, offsets or decoded text is a behavior change and is always listed.
+All notable changes to StarlingHq.Tokenizers. Versions follow [docs/releasing.md](docs/releasing.md): a change in token ids, offsets or decoded text is a behavior change and is always listed.
 
 ## [Unreleased]
 
@@ -11,7 +11,7 @@ First release from this repository and under this package ID. Versions up to 0.1
 ### Changed
 
 - License: dual MIT OR Apache-2.0 (previously MIT), copyright StarlingHq. Third-party portions keep their own permissive licenses and notices (`THIRD-PARTY-NOTICES.md`).
-- Package ID and namespaces renamed from the planning-era name to `Starling.Tokenizers`. Update `using` directives; the API is otherwise unchanged.
+- Package ID and namespaces renamed from the planning-era name to `StarlingHq.Tokenizers` (the `Starling` ID prefix is reserved on nuget.org by another owner). Update `using` directives; the API is otherwise unchanged.
 - Test and tool environment variables use the `STARLING_` prefix (`STARLING_MODELS`, `STARLING_REQUIRE_ASSETS`, `STARLING_QWEN_DIFFERENTIAL_DIR`, `STARLING_GEMMA_DIFFERENTIAL_DIR`).
 
 ### Added

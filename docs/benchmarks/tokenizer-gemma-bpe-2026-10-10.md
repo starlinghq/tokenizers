@@ -1,8 +1,8 @@
 # Owned tokenizer, Gemma BPE profile: load and encode, 2026-10-10
 
-> **Historical record.** Written in the Starling planning repository before this repository was split out. The package then had a planning-era name (it is `Starling.Tokenizers` throughout here); paths such as `tokenizers-dotnet/`, `model-pipeline/` and `tools/*-tokenizer-*` refer to that repository's layout (see [docs/repository-history.md](../repository-history.md)).
+> **Historical record.** Written in the Starling planning repository before this repository was split out. The package then had a planning-era name (it is `StarlingHq.Tokenizers` throughout here); paths such as `tokenizers-dotnet/`, `model-pipeline/` and `tools/*-tokenizer-*` refer to that repository's layout (see [docs/repository-history.md](../repository-history.md)).
 
-Exploratory. `Starling.Tokenizers` 0.1.0-preview.4 (this change) against the Rust `tokenizers` 0.23.3 (Python binding, the version the EmbeddingGemma 2 fixtures were generated with) on the `gemma-bpe-embeddinggemma2` asset. One workstation, not a controlled machine: Intel i7-5820K (6 cores), Linux x64 7.2, .NET 10.0.12 (SDK 10.0.100), Release builds, asset in the OS page cache. **Background load average about 8 during every series** (a local LLM server and other agents' test runs); absolute numbers are inflated by it. The C# and Rust series ran back to back, so the ratios are the more useful figure.
+Exploratory. `StarlingHq.Tokenizers` 0.1.0-preview.4 (this change) against the Rust `tokenizers` 0.23.3 (Python binding, the version the EmbeddingGemma 2 fixtures were generated with) on the `gemma-bpe-embeddinggemma2` asset. One workstation, not a controlled machine: Intel i7-5820K (6 cores), Linux x64 7.2, .NET 10.0.12 (SDK 10.0.100), Release builds, asset in the OS page cache. **Background load average about 8 during every series** (a local LLM server and other agents' test runs); absolute numbers are inflated by it. The C# and Rust series ran back to back, so the ratios are the more useful figure.
 
 Asset: `google/embeddinggemma-2@914f7f89` `tokenizer.json`, 32,170,510 bytes, `4d777ef5…`: 262,144 vocabulary entries (256 byte tokens), 514,906 merges in pair form, 24 added tokens.
 
@@ -22,7 +22,7 @@ Method (as in [tokenizer-qwen-bpe-2026-10-10.md](tokenizer-qwen-bpe-2026-10-10.m
 - Encode: `LoadBench encode <tokenizer.json> 20`: 200 x 5 texts per round (short English query, English passage, German/French, CJK/Korean, a 3,800-character English paragraph), 3 warm-up rounds. Rust: the same texts and loop through `Tokenizer.encode(text).ids` in Python, so the binding's per-call overhead is in the Rust figure. Id checksums equal (169055653400 for 20 rounds in both).
 
 ```sh
-B=benchmarks/Starling.Tokenizers.LoadBench/bin/Release/net10.0/Starling.Tokenizers.LoadBench
+B=benchmarks/StarlingHq.Tokenizers.LoadBench/bin/Release/net10.0/StarlingHq.Tokenizers.LoadBench
 A="$STARLING_MODELS/google/embeddinggemma-2/914f7f89142e33e77833254d9c9b90c3cef7303b/tokenizer.json"
 $B cold "$A" 15
 $B warm "$A" 10

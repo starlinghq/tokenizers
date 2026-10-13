@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>StarlingHq.Tokenizers</PackageId>
+    <Description>Managed .NET tokenizer for Hugging Face tokenizer.json files (format 1.0): Unigram, byte-level BPE, SentencePiece-style BPE with byte fallback, and WordPiece. Exact against huggingface/tokenizers on published conformance fixtures, fails explicitly on any component it does not support, no native code and no package dependencies. Profile descriptors with pinned asset digests and per-capability status are packed under profiles/.</Description>
+    <PackageTags>tokenizer;tokenizers;tokenizer.json;huggingface;bpe;byte-level-bpe;unigram;sentencepiece;wordpiece;llm;embeddings;nlp;starling</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>https://github.com/starlinghq/tokenizers/blob/main/CHANGELOG.md</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="StarlingHq.Tokenizers.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Adopted-source notices travel with the binary (BSD 2-Clause, Apache-2.0, MIT). -->
+    <None Include="../../THIRD-PARTY-NOTICES.md" Pack="true" PackagePath="" Visible="false" />
+    <None Include="../../README.md" Pack="true" PackagePath="" Visible="false" />
+    <!-- Profile descriptors as plain package files under profiles/; nothing is copied into consumer builds. -->
+    <None Include="../../profiles/*.yaml;../../profiles/README.md" Pack="true" PackagePath="profiles/" Visible="false" />
+  </ItemGroup>
+
+</Project>

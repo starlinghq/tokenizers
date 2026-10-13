@@ -13,7 +13,7 @@ Outputs (``--out``, normally ``conformance/<profile>/``):
 - ``environment.json``: runner, its repository commit, interpreter, packages, CPU, and the asset and
   corpus digests.
 
-The row layout is the one ``tests/Starling.Tokenizers.Tests/ProfileConformanceTests.cs`` reads for every
+The row layout is the one ``tests/StarlingHq.Tokenizers.Tests/ProfileConformanceTests.cs`` reads for every
 profile that declares ``conformance.fixtures`` with a ``tokenizer.jsonl``.
 
 Usage:

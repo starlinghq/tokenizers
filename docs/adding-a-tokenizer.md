@@ -50,7 +50,7 @@ Add one line to [`tools/pinned-assets.txt`](../tools/pinned-assets.txt):
 BAAI/bge-small-en-v1.5|5c38ec7c405ec4b44b94cc5a9bb96e735b38267a|tokenizer.json|d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66
 ```
 
-Add the same pin as a field in `tests/Starling.Tokenizers.Tests/TestAssets.cs`:
+Add the same pin as a field in `tests/StarlingHq.Tokenizers.Tests/TestAssets.cs`:
 
 ```csharp
 public static readonly PinnedAsset BgeSmallTokenizerJson = new(
@@ -98,7 +98,7 @@ Copy the closest existing profile under [`profiles/`](../profiles/) and edit it.
 ```yaml
 profile: bert-wordpiece-bge-small
 status: experimental   # supported | experimental | untested | unsupported
-library: Starling.Tokenizers 0.2.1-preview.1
+library: StarlingHq.Tokenizers 0.2.1-preview.1
 
 asset:
   repo: BAAI/bge-small-en-v1.5
@@ -123,7 +123,7 @@ pipeline:   # exactly what the pinned file declares (tools/inspect.cs lists the 
 conformance:
   fixtures: conformance/bert-wordpiece-bge-small/   # proposed
   corpus: conformance/corpus/tokenizer-corpus-v1.jsonl (49 cases)
-  tests: tests/Starling.Tokenizers.Tests/ProfileConformanceTests.cs
+  tests: tests/StarlingHq.Tokenizers.Tests/ProfileConformanceTests.cs
   result:
     encode: 49/49 cases exact
     decode: 49/49 cases exact

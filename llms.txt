@@ -1,19 +1,19 @@
-# Starling.Tokenizers
+# StarlingHq.Tokenizers
 
-> Managed .NET (net10.0) library that loads Hugging Face `tokenizer.json` files (format 1.0) and encodes and decodes text with output identical to huggingface/tokenizers (Python/Rust) on the conformance fixtures of each supported profile. NuGet package `Starling.Tokenizers`, namespace `Starling.Tokenizers`, licensed MIT OR Apache-2.0 (your choice). No native code, no package dependencies. Preview: versions are `0.MINOR.PATCH-preview.N`.
+> Managed .NET (net10.0) library that loads Hugging Face `tokenizer.json` files (format 1.0) and encodes and decodes text with output identical to huggingface/tokenizers (Python/Rust) on the conformance fixtures of each supported profile. NuGet package `StarlingHq.Tokenizers`, namespace `StarlingHq.Tokenizers`, licensed MIT OR Apache-2.0 (your choice). No native code, no package dependencies. Preview: versions are `0.MINOR.PATCH-preview.N`.
 
 Use it when a .NET application needs the exact token ids a Hugging Face model expects: embeddings, rerankers, NER, local LLM prompts. It replaces calling Python, and replaces approximate tokenizers whose ids drift from the reference. It does not download files. Get `tokenizer.json` from the model's Hugging Face repository at a pinned revision.
 
 ## Install
 
 ```sh
-dotnet add package Starling.Tokenizers --prerelease
+dotnet add package StarlingHq.Tokenizers --prerelease
 ```
 
 ## Complete public API
 
 ```csharp
-namespace Starling.Tokenizers;
+namespace StarlingHq.Tokenizers;
 
 public sealed class Tokenizer                       // immutable, thread-safe
 {
@@ -74,7 +74,7 @@ That is the whole public surface. There is no `Tokenizer.FromPretrained`, no dow
 ## Examples
 
 ```csharp
-using Starling.Tokenizers;
+using StarlingHq.Tokenizers;
 
 // Embedding model input: ids and attention mask for a padded batch, truncated to the model's limit.
 Tokenizer loaded = Tokenizer.FromFile("tokenizer.json");
