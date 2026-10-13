@@ -4,7 +4,7 @@
 profile: gemma-bpe-embeddinggemma2   # EmbeddingGemma 2 (model-pipeline/admissions/embeddinggemma-2.md), text path
 status: experimental  # 49/49 accepted fixture cases exact; 0 differential mismatches (conformance.result)
 backlog: EmbeddingGemma 2 admission (plan section 7, P1); docs/m0/embeddinggemma2-spike.md section 5
-library: StarlingHq.Tokenizers 0.2.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
+library: Starlings.Tokenizers 0.3.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
 
 asset:
   repo: google/embeddinggemma-2
@@ -40,10 +40,10 @@ conformance:
   corpus: conformance/corpus/tokenizer-corpus-v1.jsonl (49 cases, sha256 8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199)
   differential: reference/gemma-bpe/run_gemma_bpe_tokenizer.py (requirements.txt: tokenizers 0.23.3)
   tests:
-    - tests/StarlingHq.Tokenizers.Tests/GemmaBpeConformanceTests.cs
-    - tests/StarlingHq.Tokenizers.Tests/GemmaBpeDifferentialTests.cs
-    - tests/StarlingHq.Tokenizers.Tests/GemmaBpeComponentTests.cs
-    - tests/StarlingHq.Tokenizers.Tests/BpeLoaderTests.cs   # fast path equals document path on the asset
+    - tests/Starlings.Tokenizers.Tests/GemmaBpeConformanceTests.cs
+    - tests/Starlings.Tokenizers.Tests/GemmaBpeDifferentialTests.cs
+    - tests/Starlings.Tokenizers.Tests/GemmaBpeComponentTests.cs
+    - tests/Starlings.Tokenizers.Tests/BpeLoaderTests.cs   # fast path equals document path on the asset
   result: # 2026-10-10, Linux x64, .NET SDK 10.0.100, runtime 10.0.12, Release
     encode: "49/49 cases exact (46 single, 3 pairs): ids, tokens, type_ids, attention_mask, special_tokens_mask, sequence_ids, offsets in unicode scalars, UTF-16 code units and UTF-8 bytes; 9 cases contain byte-fallback tokens; without special tokens only the template tokens are dropped"
     decode: 49/49 cases exact, skip_special_tokens true and false

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generates the Unicode data tables of the owned tokenizer's Qwen byte-level BPE components.
 
-Two generated C# files under src/StarlingHq.Tokenizers/Pipeline/:
+Two generated C# files under src/Starlings.Tokenizers/Pipeline/:
 
 - Unicode9NormalizationData.g.cs: canonical combining classes, full canonical decompositions and
   primary compositions from the crate unicode-normalization-alignments 0.1.12 (src/tables.rs,
@@ -30,7 +30,7 @@ from pathlib import Path
 
 CRATE_SHA256 = "43f613e4fa046e69818dd287fdc4bc78175ff20331479dab6e1b0f98d57062de"
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "src/StarlingHq.Tokenizers/Pipeline"
+OUT = ROOT / "src/Starlings.Tokenizers/Pipeline"
 
 
 def char_value(literal: str) -> int:
@@ -96,7 +96,7 @@ def write_normalization(ccc, decomposed, composed) -> None:
 // THIRD-PARTY-NOTICES.md and PROVENANCE.md. huggingface/tokenizers 0.23.2 normalizes NFC with this
 // crate, so these Unicode 9.0.0 values, not the runtime's, are the reference behavior.
 
-namespace StarlingHq.Tokenizers.Pipeline;
+namespace Starlings.Tokenizers.Pipeline;
 
 internal static class Unicode9NormalizationData
 {{
@@ -148,7 +148,7 @@ def write_classes(classes: dict) -> None:
 // Unicode Character Database general categories (Unicode License V3); see THIRD-PARTY-NOTICES.md.
 // \\s matched exactly these {len(white)} code points: {", ".join(f"U+{c:04X}" for c in white)}.
 
-namespace StarlingHq.Tokenizers.Pipeline;
+namespace Starlings.Tokenizers.Pipeline;
 
 internal static class RegexUnicodeClassData
 {{

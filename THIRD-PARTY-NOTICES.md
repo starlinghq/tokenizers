@@ -1,6 +1,6 @@
 # Third-party notices
 
-`StarlingHq.Tokenizers` contains source adopted or ported from the projects below. Each
+`Starlings.Tokenizers` contains source adopted or ported from the projects below. Each
 file carries a header naming its origin and stating that StarlingHq modified it; per-file
 detail is in [PROVENANCE.md](PROVENANCE.md). License texts are reproduced verbatim.
 

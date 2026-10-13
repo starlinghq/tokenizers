@@ -1,11 +1,11 @@
 <Solution>
   <Folder Name="/benchmarks/">
-    <Project Path="benchmarks/StarlingHq.Tokenizers.LoadBench/StarlingHq.Tokenizers.LoadBench.csproj" />
+    <Project Path="benchmarks/Starlings.Tokenizers.LoadBench/Starlings.Tokenizers.LoadBench.csproj" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/StarlingHq.Tokenizers/StarlingHq.Tokenizers.csproj" />
+    <Project Path="src/Starlings.Tokenizers/Starlings.Tokenizers.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/StarlingHq.Tokenizers.Tests/StarlingHq.Tokenizers.Tests.csproj" />
+    <Project Path="tests/Starlings.Tokenizers.Tests/Starlings.Tokenizers.Tests.csproj" />
   </Folder>
 </Solution>
