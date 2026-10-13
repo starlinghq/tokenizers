@@ -1,0 +1,11 @@
+# Pinned tokenizer.json assets for the conformance tests. One per line: repo|commit|path|sha256
+# Assets are model-owner files: never committed, downloaded and verified by tools/fetch-assets.sh into
+# $STARLING_MODELS/<repo>/<commit>/<path> (default <repo root>/.models). Commits are full SHAs, never
+# branch or tag names. Keep in step with TestAssets.cs and profiles/*.yaml (PinnedAssetsTests checks).
+intfloat/multilingual-e5-small|614241f622f53c4eeff9890bdc4f31cfecc418b3|tokenizer.json|0b44a9d7b51c3c62626640cda0e2c2f70fdacdc25bbbd68038369d14ebdf4c39
+fastino/gliner2-base-v1|f9634218e53580c56edf0de97ca1a7d3f1c2354e|tokenizer.json|1b7fbabfb4c690bed84c6793bfecae9b8dfe205751b04f9ffd1e76a1e7df9c16
+jaredpalmer/kev-0.8b|9a45d25eb2ab761841196625383fa1dff0e56c1e|tokenizer.json|06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523
+google/embeddinggemma-2|914f7f89142e33e77833254d9c9b90c3cef7303b|tokenizer.json|4d777ef5bdc1aa36227abdfb77c3e49e7b9c892d16e1b6bda41c393504828be4
+sentence-transformers/all-MiniLM-L6-v2|1110a243fdf4706b3f48f1d95db1a4f5529b4d41|tokenizer.json|be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037
+BAAI/bge-small-en-v1.5|5c38ec7c405ec4b44b94cc5a9bb96e735b38267a|tokenizer.json|d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66
+cross-encoder/ms-marco-MiniLM-L6-v2|233902d25c440f23af6f7d6e94d2946bac0bee0a|tokenizer.json|d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66

@@ -1,0 +1,12 @@
+# Adopted third-party source keeps its upstream shape so selective intake stays diffable
+# (plan section 6.3). Style rules are relaxed here; correctness analyzers still apply.
+[*.cs]
+csharp_style_namespace_declarations = block_scoped:none
+csharp_prefer_braces = true:none
+dotnet_style_qualification_for_field = false:none
+dotnet_naming_rule.private_fields_underscore.severity = none
+dotnet_analyzer_diagnostic.category-Style.severity = none
+# Upstream shape over local preference: sealing, static members, throw helpers.
+dotnet_diagnostic.CA1852.severity = none
+dotnet_diagnostic.CA1822.severity = none
+dotnet_diagnostic.CA1510.severity = none

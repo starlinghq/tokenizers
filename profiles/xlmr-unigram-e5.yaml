@@ -1,0 +1,86 @@
+# Tokenizer profile: a tested combination of one pinned asset and the interpreter components it
+# uses (profiles/README.md). Status values: supported, unsupported, experimental, untested.
+# "supported" here means: exact match on the conformance cases listed, in this repository's CI.
+# Release qualification (G1) is a maintainer decision; this file does not grant a badge.
+profile: xlmr-unigram-e5   # name used by the ai-dotnet IEncoderTokenizer seam
+status: experimental  # P0 encoder settled (docs/kickoff.md); release qualification (G1) is the maintainer's call.
+backlog: P-024
+library: Starling.Tokenizers 0.2.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
+
+asset:
+  repo: intfloat/multilingual-e5-small
+  revision: 614241f622f53c4eeff9890bdc4f31cfecc418b3
+  file: tokenizer.json            # identical to onnx/tokenizer.json at the same revision
+  sha256: 0b44a9d7b51c3c62626640cda0e2c2f70fdacdc25bbbd68038369d14ebdf4c39
+  size: 17082730
+  format_version: "1.0"
+  acquisition: tools/fetch-assets.sh   # never committed (plan section 9)
+
+reference:
+  implementation: huggingface/tokenizers 0.23.2 (Python binding, Tokenizer.from_file)
+  source_revision: 88a4498ad4ea1a9487b0a9b0ff881383fd5a06a3
+  offsets_unit: unicode-scalars   # reference unit; the .NET API also gives utf16-code-units
+
+pipeline:   # exactly what the pinned file declares
+  normalizer: Sequence[Precompiled(precompiled_charsmap), Replace(Regex " {2,}" -> " ")]
+  pre_tokenizer: Metaspace(replacement "▁", add_prefix_space true)  # legacy form: prepend_scheme always, split true
+  model: Unigram(vocab 250002, unk_id 3, byte_fallback absent = false)
+  post_processor: TemplateProcessing(single "<s> $A </s>", pair "<s> $A </s> </s> $B </s>", all type ids 0)
+  decoder: Metaspace(replacement "▁", add_prefix_space true)
+  added_tokens: "[\"<s>\" 0, \"<pad>\" 1, \"</s>\" 2, \"<unk>\" 3, \"<mask>\" 250001]"  # all special, normalized false
+  truncation: null
+  padding: null
+
+conformance:
+  fixtures: conformance/xlmr-unigram-e5/  # accepted as development fixtures 2026-10-08 (PR #4); not a release evaluation set (P-030)
+  corpus: conformance/corpus/tokenizer-corpus-v1.jsonl (sha256 8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199)
+  tests: tests/Starling.Tokenizers.Tests/E5ConformanceTests.cs
+  result: # 2026-10-08, Linux x64, .NET SDK 10.0.100, Debug and Release
+    encode: "49/49 cases exact (46 single, 3 pairs): ids, tokens, type_ids, attention_mask, special_tokens_mask, utf16 and scalar offsets, sequence_ids"
+    decode: 49/49 cases exact, skip_special_tokens true and false
+    truncation: 2/2 cases exact (long-english, long-mixed; max_length 512, longest_first, right)
+    batch: 6-row right-padded batch exact (pad id 1), rows equal single encodes
+
+capabilities:
+  encode_single: supported
+  encode_pair: supported
+  encode_batch: supported
+  offsets_utf16_code_units: supported
+  offsets_unicode_scalars: supported
+  sequence_ids: supported
+  special_tokens_mask: supported
+  decode_skip_special_tokens: supported
+  decode_keep_special_tokens: supported
+  truncation_right_longest_first_single: supported
+  truncation_pair: experimental        # ported; unit tests only, no reference fixture
+  truncation_left: experimental        # ported; unit tests only
+  truncation_only_first_only_second: experimental
+  truncation_stride_overflowing: unsupported   # rejected at load; no overflow API
+  padding_right_batch_longest: supported
+  padding_left_fixed_multiple: experimental    # ported; unit tests only
+  added_tokens_special_non_normalized: supported
+  added_tokens_normalized: experimental        # not used by this asset; exercised by the GLiNER2 asset
+  added_tokens_single_word_lstrip_rstrip: unsupported  # rejected at load
+  encode_special_tokens_as_text: unsupported
+  pre_tokenized_input: unsupported
+  word_ids: unsupported                # not exposed
+  incremental_decode_stream: unsupported
+  unpaired_utf16_surrogates_in_input: unsupported   # rejected with ArgumentException; the reference cannot represent them either
+  thread_safety: untested              # instances are immutable by design; no concurrency test yet
+  native_aot: experimental             # one local linux-x64 PublishAot console smoke, no trim/AOT warnings; not in CI
+  performance: untested                # exploratory Stopwatch numbers only (PR description)
+
+known_divergences:
+  against_reference: none on the conformance corpus
+  other_implementations_vs_reference:   # from docs/m0/reference-runs.md section 1; not divergences of this library
+    - transformers 5.18.0 rebuilds the pipeline from its class (no Replace, WhitespaceSplit+Metaspace) and differs on 6 of 46 cases (space-only, ws-leading-trailing, control-chars, special-literal-s, special-literal-mask, long-mixed)
+    - transformers 4.57.6 slow XLMRobertaTokenizer and raw SentencePiece 0.2.2 differ on 6 of 46 (lone "▁" around special literals and trailing spaces, Hangul jamo composition)
+    - Microsoft.ML.Tokenizers 3.0.0-preview.26457.2 does not fuse unknown runs and returns no tokens for empty input (docs/design/source-audit.md section 3.4); this library follows the reference on both
+  reference_quirks_reproduced:
+    - trailing whitespace and the space before a special-token literal become a lone "▁" token
+    - zero-width characters map to a lone "▁" (Precompiled), decomposed Hangul jamo stay decomposed
+    - Precompiled takes the shortest charsmap key that prefixes a grapheme (spm_precompiled behavior)
+    - a collapsed run of spaces is aligned to the last original space
+  risks:
+    - grapheme segmentation uses .NET StringInfo; the reference uses unicode-segmentation 1.13.3. A Unicode-version difference could change Precompiled output for newly assigned characters.
+    - only the Replace regex " {2,}" is accepted; other Oniguruma patterns fail at load.

@@ -1,0 +1,12 @@
+version: 2
+updates:
+  # Action pins are full commit SHAs; Dependabot proposes updates with the new SHA.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  # Test-only packages (the library itself has no package dependencies). Lock files are updated in the same PR.
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly

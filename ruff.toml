@@ -1,0 +1,14 @@
+# Python reference runners (reference/) and tools (tools/*.py).
+line-length = 120
+target-version = "py311"
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[lint.isort]
+# The runners import the vendored reference/fixtures.py after adjusting sys.path.
+known-first-party = ["fixtures"]
+
+[lint.per-file-ignores]
+# Long lines are C# text emitted verbatim into the generated tables.
+"tools/generate-unicode-tables.py" = ["E501"]

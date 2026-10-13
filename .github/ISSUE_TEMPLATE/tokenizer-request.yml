@@ -1,0 +1,28 @@
+name: Tokenizer request
+description: Ask for a model's tokenizer.json to be supported (a new profile).
+labels: [profile-request]
+body:
+  - type: input
+    id: repo
+    attributes:
+      label: Hugging Face repository
+      placeholder: org/model-name
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Revision (full commit SHA if you know it)
+      description: Profiles pin a full 40-character commit, never a branch or tag.
+  - type: textarea
+    id: error
+    attributes:
+      label: What happens today
+      description: >
+        Paste the UnsupportedTokenizerComponentException message from Tokenizer.FromFile if there is one.
+        Its Component names the JSON path and type tag (for example pre_tokenizer.type=Digits).
+  - type: textarea
+    id: usage
+    attributes:
+      label: How you will use it
+      description: Encode only, decode, pairs, offsets, padding or truncation, chat templates.

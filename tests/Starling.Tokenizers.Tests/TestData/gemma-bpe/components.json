@@ -1,0 +1,5933 @@
+{
+ "reference": "tokenizers 0.23.3",
+ "generator": "reference/gemma-bpe/run_gemma_bpe_tokenizer.py --components-out",
+ "offsets": "Unicode scalar values",
+ "tokenizers": {
+  "base": {
+   "version": "1.0",
+   "truncation": null,
+   "padding": null,
+   "added_tokens": [
+    {
+     "id": 14,
+     "content": "<bos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 15,
+     "content": "<eos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    }
+   ],
+   "normalizer": {
+    "type": "Replace",
+    "pattern": {
+     "String": " "
+    },
+    "content": "▁"
+   },
+   "pre_tokenizer": {
+    "type": "Split",
+    "pattern": {
+     "String": " "
+    },
+    "behavior": "MergedWithPrevious",
+    "invert": false
+   },
+   "post_processor": null,
+   "decoder": {
+    "type": "Sequence",
+    "decoders": [
+     {
+      "type": "Replace",
+      "pattern": {
+       "String": "▁"
+      },
+      "content": " "
+     },
+     {
+      "type": "ByteFallback"
+     },
+     {
+      "type": "Fuse"
+     }
+    ]
+   },
+   "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "<unk>",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": true,
+    "byte_fallback": true,
+    "ignore_merges": false,
+    "vocab": {
+     "<unk>": 0,
+     "a": 1,
+     "b": 2,
+     "ab": 3,
+     "▁": 4,
+     "▁a": 5,
+     "<0xC3>": 6,
+     "<0xA9>": 7,
+     "<0xF0>": 8,
+     "<0x9F>": 9,
+     "<0x98>": 10,
+     "<0x80>": 11,
+     "<0xE2>": 12,
+     "<0x41>": 13,
+     "<bos>": 14,
+     "<eos>": 15
+    },
+    "merges": [
+     [
+      "a",
+      "b"
+     ],
+     [
+      "▁",
+      "a"
+     ]
+    ]
+   }
+  },
+  "unk-unfused": {
+   "version": "1.0",
+   "truncation": null,
+   "padding": null,
+   "added_tokens": [
+    {
+     "id": 14,
+     "content": "<bos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 15,
+     "content": "<eos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    }
+   ],
+   "normalizer": {
+    "type": "Replace",
+    "pattern": {
+     "String": " "
+    },
+    "content": "▁"
+   },
+   "pre_tokenizer": {
+    "type": "Split",
+    "pattern": {
+     "String": " "
+    },
+    "behavior": "MergedWithPrevious",
+    "invert": false
+   },
+   "post_processor": null,
+   "decoder": {
+    "type": "Sequence",
+    "decoders": [
+     {
+      "type": "Replace",
+      "pattern": {
+       "String": "▁"
+      },
+      "content": " "
+     },
+     {
+      "type": "ByteFallback"
+     },
+     {
+      "type": "Fuse"
+     }
+    ]
+   },
+   "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "<unk>",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": false,
+    "byte_fallback": true,
+    "ignore_merges": false,
+    "vocab": {
+     "<unk>": 0,
+     "a": 1,
+     "b": 2,
+     "ab": 3,
+     "▁": 4,
+     "▁a": 5,
+     "<0xC3>": 6,
+     "<0xA9>": 7,
+     "<0xF0>": 8,
+     "<0x9F>": 9,
+     "<0x98>": 10,
+     "<0x80>": 11,
+     "<0xE2>": 12,
+     "<0x41>": 13,
+     "<bos>": 14,
+     "<eos>": 15
+    },
+    "merges": [
+     [
+      "a",
+      "b"
+     ],
+     [
+      "▁",
+      "a"
+     ]
+    ]
+   }
+  },
+  "no-byte-fallback": {
+   "version": "1.0",
+   "truncation": null,
+   "padding": null,
+   "added_tokens": [
+    {
+     "id": 14,
+     "content": "<bos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 15,
+     "content": "<eos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    }
+   ],
+   "normalizer": {
+    "type": "Replace",
+    "pattern": {
+     "String": " "
+    },
+    "content": "▁"
+   },
+   "pre_tokenizer": {
+    "type": "Split",
+    "pattern": {
+     "String": " "
+    },
+    "behavior": "MergedWithPrevious",
+    "invert": false
+   },
+   "post_processor": null,
+   "decoder": {
+    "type": "Sequence",
+    "decoders": [
+     {
+      "type": "Replace",
+      "pattern": {
+       "String": "▁"
+      },
+      "content": " "
+     },
+     {
+      "type": "ByteFallback"
+     },
+     {
+      "type": "Fuse"
+     }
+    ]
+   },
+   "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "<unk>",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": true,
+    "byte_fallback": false,
+    "ignore_merges": false,
+    "vocab": {
+     "<unk>": 0,
+     "a": 1,
+     "b": 2,
+     "ab": 3,
+     "▁": 4,
+     "▁a": 5,
+     "<0xC3>": 6,
+     "<0xA9>": 7,
+     "<0xF0>": 8,
+     "<0x9F>": 9,
+     "<0x98>": 10,
+     "<0x80>": 11,
+     "<0xE2>": 12,
+     "<0x41>": 13,
+     "<bos>": 14,
+     "<eos>": 15
+    },
+    "merges": [
+     [
+      "a",
+      "b"
+     ],
+     [
+      "▁",
+      "a"
+     ]
+    ]
+   }
+  },
+  "no-unk": {
+   "version": "1.0",
+   "truncation": null,
+   "padding": null,
+   "added_tokens": [
+    {
+     "id": 14,
+     "content": "<bos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 15,
+     "content": "<eos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    }
+   ],
+   "normalizer": {
+    "type": "Replace",
+    "pattern": {
+     "String": " "
+    },
+    "content": "▁"
+   },
+   "pre_tokenizer": {
+    "type": "Split",
+    "pattern": {
+     "String": " "
+    },
+    "behavior": "MergedWithPrevious",
+    "invert": false
+   },
+   "post_processor": null,
+   "decoder": {
+    "type": "Sequence",
+    "decoders": [
+     {
+      "type": "Replace",
+      "pattern": {
+       "String": "▁"
+      },
+      "content": " "
+     },
+     {
+      "type": "ByteFallback"
+     },
+     {
+      "type": "Fuse"
+     }
+    ]
+   },
+   "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": null,
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": true,
+    "byte_fallback": true,
+    "ignore_merges": false,
+    "vocab": {
+     "<unk>": 0,
+     "a": 1,
+     "b": 2,
+     "ab": 3,
+     "▁": 4,
+     "▁a": 5,
+     "<0xC3>": 6,
+     "<0xA9>": 7,
+     "<0xF0>": 8,
+     "<0x9F>": 9,
+     "<0x98>": 10,
+     "<0x80>": 11,
+     "<0xE2>": 12,
+     "<0x41>": 13,
+     "<bos>": 14,
+     "<eos>": 15
+    },
+    "merges": [
+     [
+      "a",
+      "b"
+     ],
+     [
+      "▁",
+      "a"
+     ]
+    ]
+   }
+  },
+  "split-invert": {
+   "version": "1.0",
+   "truncation": null,
+   "padding": null,
+   "added_tokens": [
+    {
+     "id": 14,
+     "content": "<bos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 15,
+     "content": "<eos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    }
+   ],
+   "normalizer": {
+    "type": "Replace",
+    "pattern": {
+     "String": " "
+    },
+    "content": "▁"
+   },
+   "pre_tokenizer": {
+    "type": "Split",
+    "pattern": {
+     "String": "a"
+    },
+    "behavior": "Removed",
+    "invert": true
+   },
+   "post_processor": null,
+   "decoder": {
+    "type": "Sequence",
+    "decoders": [
+     {
+      "type": "Replace",
+      "pattern": {
+       "String": "▁"
+      },
+      "content": " "
+     },
+     {
+      "type": "ByteFallback"
+     },
+     {
+      "type": "Fuse"
+     }
+    ]
+   },
+   "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "<unk>",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": true,
+    "byte_fallback": true,
+    "ignore_merges": false,
+    "vocab": {
+     "<unk>": 0,
+     "a": 1,
+     "b": 2,
+     "ab": 3,
+     "▁": 4,
+     "▁a": 5,
+     "<0xC3>": 6,
+     "<0xA9>": 7,
+     "<0xF0>": 8,
+     "<0x9F>": 9,
+     "<0x98>": 10,
+     "<0x80>": 11,
+     "<0xE2>": 12,
+     "<0x41>": 13,
+     "<bos>": 14,
+     "<eos>": 15
+    },
+    "merges": [
+     [
+      "a",
+      "b"
+     ],
+     [
+      "▁",
+      "a"
+     ]
+    ]
+   }
+  },
+  "split-Removed": {
+   "version": "1.0",
+   "truncation": null,
+   "padding": null,
+   "added_tokens": [
+    {
+     "id": 14,
+     "content": "<bos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 15,
+     "content": "<eos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    }
+   ],
+   "normalizer": {
+    "type": "Replace",
+    "pattern": {
+     "String": " "
+    },
+    "content": "▁"
+   },
+   "pre_tokenizer": {
+    "type": "Split",
+    "pattern": {
+     "String": "▁"
+    },
+    "behavior": "Removed",
+    "invert": false
+   },
+   "post_processor": null,
+   "decoder": {
+    "type": "Sequence",
+    "decoders": [
+     {
+      "type": "Replace",
+      "pattern": {
+       "String": "▁"
+      },
+      "content": " "
+     },
+     {
+      "type": "ByteFallback"
+     },
+     {
+      "type": "Fuse"
+     }
+    ]
+   },
+   "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "<unk>",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": true,
+    "byte_fallback": true,
+    "ignore_merges": false,
+    "vocab": {
+     "<unk>": 0,
+     "a": 1,
+     "b": 2,
+     "ab": 3,
+     "▁": 4,
+     "▁a": 5,
+     "<0xC3>": 6,
+     "<0xA9>": 7,
+     "<0xF0>": 8,
+     "<0x9F>": 9,
+     "<0x98>": 10,
+     "<0x80>": 11,
+     "<0xE2>": 12,
+     "<0x41>": 13,
+     "<bos>": 14,
+     "<eos>": 15
+    },
+    "merges": [
+     [
+      "a",
+      "b"
+     ],
+     [
+      "▁",
+      "a"
+     ]
+    ]
+   }
+  },
+  "split-Isolated": {
+   "version": "1.0",
+   "truncation": null,
+   "padding": null,
+   "added_tokens": [
+    {
+     "id": 14,
+     "content": "<bos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 15,
+     "content": "<eos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    }
+   ],
+   "normalizer": {
+    "type": "Replace",
+    "pattern": {
+     "String": " "
+    },
+    "content": "▁"
+   },
+   "pre_tokenizer": {
+    "type": "Split",
+    "pattern": {
+     "String": "▁"
+    },
+    "behavior": "Isolated",
+    "invert": false
+   },
+   "post_processor": null,
+   "decoder": {
+    "type": "Sequence",
+    "decoders": [
+     {
+      "type": "Replace",
+      "pattern": {
+       "String": "▁"
+      },
+      "content": " "
+     },
+     {
+      "type": "ByteFallback"
+     },
+     {
+      "type": "Fuse"
+     }
+    ]
+   },
+   "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "<unk>",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": true,
+    "byte_fallback": true,
+    "ignore_merges": false,
+    "vocab": {
+     "<unk>": 0,
+     "a": 1,
+     "b": 2,
+     "ab": 3,
+     "▁": 4,
+     "▁a": 5,
+     "<0xC3>": 6,
+     "<0xA9>": 7,
+     "<0xF0>": 8,
+     "<0x9F>": 9,
+     "<0x98>": 10,
+     "<0x80>": 11,
+     "<0xE2>": 12,
+     "<0x41>": 13,
+     "<bos>": 14,
+     "<eos>": 15
+    },
+    "merges": [
+     [
+      "a",
+      "b"
+     ],
+     [
+      "▁",
+      "a"
+     ]
+    ]
+   }
+  },
+  "split-MergedWithPrevious": {
+   "version": "1.0",
+   "truncation": null,
+   "padding": null,
+   "added_tokens": [
+    {
+     "id": 14,
+     "content": "<bos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 15,
+     "content": "<eos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    }
+   ],
+   "normalizer": {
+    "type": "Replace",
+    "pattern": {
+     "String": " "
+    },
+    "content": "▁"
+   },
+   "pre_tokenizer": {
+    "type": "Split",
+    "pattern": {
+     "String": "▁"
+    },
+    "behavior": "MergedWithPrevious",
+    "invert": false
+   },
+   "post_processor": null,
+   "decoder": {
+    "type": "Sequence",
+    "decoders": [
+     {
+      "type": "Replace",
+      "pattern": {
+       "String": "▁"
+      },
+      "content": " "
+     },
+     {
+      "type": "ByteFallback"
+     },
+     {
+      "type": "Fuse"
+     }
+    ]
+   },
+   "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "<unk>",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": true,
+    "byte_fallback": true,
+    "ignore_merges": false,
+    "vocab": {
+     "<unk>": 0,
+     "a": 1,
+     "b": 2,
+     "ab": 3,
+     "▁": 4,
+     "▁a": 5,
+     "<0xC3>": 6,
+     "<0xA9>": 7,
+     "<0xF0>": 8,
+     "<0x9F>": 9,
+     "<0x98>": 10,
+     "<0x80>": 11,
+     "<0xE2>": 12,
+     "<0x41>": 13,
+     "<bos>": 14,
+     "<eos>": 15
+    },
+    "merges": [
+     [
+      "a",
+      "b"
+     ],
+     [
+      "▁",
+      "a"
+     ]
+    ]
+   }
+  },
+  "split-MergedWithNext": {
+   "version": "1.0",
+   "truncation": null,
+   "padding": null,
+   "added_tokens": [
+    {
+     "id": 14,
+     "content": "<bos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 15,
+     "content": "<eos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    }
+   ],
+   "normalizer": {
+    "type": "Replace",
+    "pattern": {
+     "String": " "
+    },
+    "content": "▁"
+   },
+   "pre_tokenizer": {
+    "type": "Split",
+    "pattern": {
+     "String": "▁"
+    },
+    "behavior": "MergedWithNext",
+    "invert": false
+   },
+   "post_processor": null,
+   "decoder": {
+    "type": "Sequence",
+    "decoders": [
+     {
+      "type": "Replace",
+      "pattern": {
+       "String": "▁"
+      },
+      "content": " "
+     },
+     {
+      "type": "ByteFallback"
+     },
+     {
+      "type": "Fuse"
+     }
+    ]
+   },
+   "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "<unk>",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": true,
+    "byte_fallback": true,
+    "ignore_merges": false,
+    "vocab": {
+     "<unk>": 0,
+     "a": 1,
+     "b": 2,
+     "ab": 3,
+     "▁": 4,
+     "▁a": 5,
+     "<0xC3>": 6,
+     "<0xA9>": 7,
+     "<0xF0>": 8,
+     "<0x9F>": 9,
+     "<0x98>": 10,
+     "<0x80>": 11,
+     "<0xE2>": 12,
+     "<0x41>": 13,
+     "<bos>": 14,
+     "<eos>": 15
+    },
+    "merges": [
+     [
+      "a",
+      "b"
+     ],
+     [
+      "▁",
+      "a"
+     ]
+    ]
+   }
+  },
+  "split-Contiguous": {
+   "version": "1.0",
+   "truncation": null,
+   "padding": null,
+   "added_tokens": [
+    {
+     "id": 14,
+     "content": "<bos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 15,
+     "content": "<eos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    }
+   ],
+   "normalizer": {
+    "type": "Replace",
+    "pattern": {
+     "String": " "
+    },
+    "content": "▁"
+   },
+   "pre_tokenizer": {
+    "type": "Split",
+    "pattern": {
+     "String": "▁"
+    },
+    "behavior": "Contiguous",
+    "invert": false
+   },
+   "post_processor": null,
+   "decoder": {
+    "type": "Sequence",
+    "decoders": [
+     {
+      "type": "Replace",
+      "pattern": {
+       "String": "▁"
+      },
+      "content": " "
+     },
+     {
+      "type": "ByteFallback"
+     },
+     {
+      "type": "Fuse"
+     }
+    ]
+   },
+   "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "<unk>",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": true,
+    "byte_fallback": true,
+    "ignore_merges": false,
+    "vocab": {
+     "<unk>": 0,
+     "a": 1,
+     "b": 2,
+     "ab": 3,
+     "▁": 4,
+     "▁a": 5,
+     "<0xC3>": 6,
+     "<0xA9>": 7,
+     "<0xF0>": 8,
+     "<0x9F>": 9,
+     "<0x98>": 10,
+     "<0x80>": 11,
+     "<0xE2>": 12,
+     "<0x41>": 13,
+     "<bos>": 14,
+     "<eos>": 15
+    },
+    "merges": [
+     [
+      "a",
+      "b"
+     ],
+     [
+      "▁",
+      "a"
+     ]
+    ]
+   }
+  },
+  "byte-token-lookalikes": {
+   "version": "1.0",
+   "truncation": null,
+   "padding": null,
+   "added_tokens": [
+    {
+     "id": 14,
+     "content": "<bos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 15,
+     "content": "<eos>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": true
+    },
+    {
+     "id": 16,
+     "content": "<0x+A>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": false
+    },
+    {
+     "id": 17,
+     "content": "<0xe9>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": false
+    },
+    {
+     "id": 18,
+     "content": "<0xc3>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": false
+    },
+    {
+     "id": 19,
+     "content": "<0x-1>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": false
+    },
+    {
+     "id": 20,
+     "content": "<0xé>",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": false
+    },
+    {
+     "id": 21,
+     "content": "<0xA9 >",
+     "single_word": false,
+     "lstrip": false,
+     "rstrip": false,
+     "normalized": false,
+     "special": false
+    }
+   ],
+   "normalizer": {
+    "type": "Replace",
+    "pattern": {
+     "String": " "
+    },
+    "content": "▁"
+   },
+   "pre_tokenizer": {
+    "type": "Split",
+    "pattern": {
+     "String": " "
+    },
+    "behavior": "MergedWithPrevious",
+    "invert": false
+   },
+   "post_processor": null,
+   "decoder": {
+    "type": "Sequence",
+    "decoders": [
+     {
+      "type": "Replace",
+      "pattern": {
+       "String": "▁"
+      },
+      "content": " "
+     },
+     {
+      "type": "ByteFallback"
+     },
+     {
+      "type": "Fuse"
+     }
+    ]
+   },
+   "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "<unk>",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": true,
+    "byte_fallback": true,
+    "ignore_merges": false,
+    "vocab": {
+     "<unk>": 0,
+     "a": 1,
+     "b": 2,
+     "ab": 3,
+     "▁": 4,
+     "▁a": 5,
+     "<0xC3>": 6,
+     "<0xA9>": 7,
+     "<0xF0>": 8,
+     "<0x9F>": 9,
+     "<0x98>": 10,
+     "<0x80>": 11,
+     "<0xE2>": 12,
+     "<0x41>": 13,
+     "<bos>": 14,
+     "<eos>": 15
+    },
+    "merges": [
+     [
+      "a",
+      "b"
+     ],
+     [
+      "▁",
+      "a"
+     ]
+    ]
+   }
+  }
+ },
+ "cases": [
+  {
+   "tokenizer": "base",
+   "text": "ab é😀€€a",
+   "ids": [
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    0,
+    1
+   ],
+   "tokens": [
+    "ab",
+    "▁",
+    "<0xC3>",
+    "<0xA9>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<unk>",
+    "a"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "decode": "ab é😀<unk>a"
+  },
+  {
+   "tokenizer": "base",
+   "text": "€é€ b",
+   "ids": [
+    6,
+    7,
+    0,
+    4,
+    2
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>",
+    "▁",
+    "b"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "decode": "é<unk> b"
+  },
+  {
+   "tokenizer": "base",
+   "text": " a  ab ",
+   "ids": [
+    5,
+    4,
+    4,
+    3,
+    4
+   ],
+   "tokens": [
+    "▁a",
+    "▁",
+    "▁",
+    "ab",
+    "▁"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": " a  ab "
+  },
+  {
+   "tokenizer": "base",
+   "text": "xéy",
+   "ids": [
+    6,
+    7,
+    0
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ]
+   ],
+   "decode": "é<unk>"
+  },
+  {
+   "tokenizer": "base",
+   "text": "a<bos>é",
+   "ids": [
+    1,
+    14,
+    6,
+    7
+   ],
+   "tokens": [
+    "a",
+    "<bos>",
+    "<0xC3>",
+    "<0xA9>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": "a<bos>é"
+  },
+  {
+   "tokenizer": "base",
+   "text": "",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "base",
+   "text": "€",
+   "ids": [
+    0
+   ],
+   "tokens": [
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ]
+   ],
+   "decode": "<unk>"
+  },
+  {
+   "tokenizer": "base",
+   "text": "😀😀 €",
+   "ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9,
+    10,
+    11,
+    4,
+    0
+   ],
+   "tokens": [
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "▁",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "decode": "😀😀 <unk>"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    6
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    8,
+    9,
+    10
+   ],
+   "keep": "���",
+   "skip": "���"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "keep": "😀",
+   "skip": "😀"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    4,
+    6,
+    1,
+    7,
+    4
+   ],
+   "keep": " �a� ",
+   "skip": " �a� "
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    13,
+    6,
+    7,
+    13
+   ],
+   "keep": "AéA",
+   "skip": "AéA"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    0,
+    6,
+    14,
+    7
+   ],
+   "keep": "<unk>�<bos>�",
+   "skip": "<unk>é"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    99,
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    16
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    18,
+    7
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    6,
+    17
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    19
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    20
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    6,
+    21
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    6,
+    16
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "base",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9
+   ],
+   "keep": "������",
+   "skip": "������"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "text": "ab é😀€€a",
+   "ids": [
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    0,
+    0,
+    1
+   ],
+   "tokens": [
+    "ab",
+    "▁",
+    "<0xC3>",
+    "<0xA9>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<unk>",
+    "<unk>",
+    "a"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "decode": "ab é😀<unk><unk>a"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "text": "€é€ b",
+   "ids": [
+    6,
+    7,
+    0,
+    0,
+    4,
+    2
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>",
+    "<unk>",
+    "▁",
+    "b"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "decode": "é<unk><unk> b"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "text": " a  ab ",
+   "ids": [
+    5,
+    4,
+    4,
+    3,
+    4
+   ],
+   "tokens": [
+    "▁a",
+    "▁",
+    "▁",
+    "ab",
+    "▁"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": " a  ab "
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "text": "xéy",
+   "ids": [
+    6,
+    7,
+    0,
+    0
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ]
+   ],
+   "decode": "é<unk><unk>"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "text": "a<bos>é",
+   "ids": [
+    1,
+    14,
+    6,
+    7
+   ],
+   "tokens": [
+    "a",
+    "<bos>",
+    "<0xC3>",
+    "<0xA9>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": "a<bos>é"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "text": "",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "text": "€",
+   "ids": [
+    0
+   ],
+   "tokens": [
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ]
+   ],
+   "decode": "<unk>"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "text": "😀😀 €",
+   "ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9,
+    10,
+    11,
+    4,
+    0
+   ],
+   "tokens": [
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "▁",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "decode": "😀😀 <unk>"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    6
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    8,
+    9,
+    10
+   ],
+   "keep": "���",
+   "skip": "���"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "keep": "😀",
+   "skip": "😀"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    4,
+    6,
+    1,
+    7,
+    4
+   ],
+   "keep": " �a� ",
+   "skip": " �a� "
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    13,
+    6,
+    7,
+    13
+   ],
+   "keep": "AéA",
+   "skip": "AéA"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    0,
+    6,
+    14,
+    7
+   ],
+   "keep": "<unk>�<bos>�",
+   "skip": "<unk>é"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    99,
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    16
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    18,
+    7
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    6,
+    17
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    19
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    20
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    6,
+    21
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    6,
+    16
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "unk-unfused",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9
+   ],
+   "keep": "������",
+   "skip": "������"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "text": "ab é😀€€a",
+   "ids": [
+    3,
+    4,
+    0,
+    1
+   ],
+   "tokens": [
+    "ab",
+    "▁",
+    "<unk>",
+    "a"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     7
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "decode": "ab <unk>a"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "text": "€é€ b",
+   "ids": [
+    0,
+    4,
+    2
+   ],
+   "tokens": [
+    "<unk>",
+    "▁",
+    "b"
+   ],
+   "offsets": [
+    [
+     0,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "decode": "<unk> b"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "text": " a  ab ",
+   "ids": [
+    5,
+    4,
+    4,
+    3,
+    4
+   ],
+   "tokens": [
+    "▁a",
+    "▁",
+    "▁",
+    "ab",
+    "▁"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": " a  ab "
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "text": "xéy",
+   "ids": [
+    0
+   ],
+   "tokens": [
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     3
+    ]
+   ],
+   "decode": "<unk>"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "text": "a<bos>é",
+   "ids": [
+    1,
+    14,
+    0
+   ],
+   "tokens": [
+    "a",
+    "<bos>",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": "a<bos><unk>"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "text": "",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "text": "€",
+   "ids": [
+    0
+   ],
+   "tokens": [
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ]
+   ],
+   "decode": "<unk>"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "text": "😀😀 €",
+   "ids": [
+    0,
+    4,
+    0
+   ],
+   "tokens": [
+    "<unk>",
+    "▁",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "decode": "<unk> <unk>"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    6
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    8,
+    9,
+    10
+   ],
+   "keep": "���",
+   "skip": "���"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "keep": "😀",
+   "skip": "😀"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    4,
+    6,
+    1,
+    7,
+    4
+   ],
+   "keep": " �a� ",
+   "skip": " �a� "
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    13,
+    6,
+    7,
+    13
+   ],
+   "keep": "AéA",
+   "skip": "AéA"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    0,
+    6,
+    14,
+    7
+   ],
+   "keep": "<unk>�<bos>�",
+   "skip": "<unk>é"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    99,
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    16
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    18,
+    7
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    6,
+    17
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    19
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    20
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    6,
+    21
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    6,
+    16
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "no-byte-fallback",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9
+   ],
+   "keep": "������",
+   "skip": "������"
+  },
+  {
+   "tokenizer": "no-unk",
+   "text": "ab é😀€€a",
+   "ids": [
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    1
+   ],
+   "tokens": [
+    "ab",
+    "▁",
+    "<0xC3>",
+    "<0xA9>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "a"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ]
+   ],
+   "decode": "ab é😀a"
+  },
+  {
+   "tokenizer": "no-unk",
+   "text": "€é€ b",
+   "ids": [
+    6,
+    7,
+    4,
+    2
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "▁",
+    "b"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ]
+   ],
+   "decode": "é b"
+  },
+  {
+   "tokenizer": "no-unk",
+   "text": " a  ab ",
+   "ids": [
+    5,
+    4,
+    4,
+    3,
+    4
+   ],
+   "tokens": [
+    "▁a",
+    "▁",
+    "▁",
+    "ab",
+    "▁"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": " a  ab "
+  },
+  {
+   "tokenizer": "no-unk",
+   "text": "xéy",
+   "ids": [
+    6,
+    7
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ]
+   ],
+   "decode": "é"
+  },
+  {
+   "tokenizer": "no-unk",
+   "text": "a<bos>é",
+   "ids": [
+    1,
+    14,
+    6,
+    7
+   ],
+   "tokens": [
+    "a",
+    "<bos>",
+    "<0xC3>",
+    "<0xA9>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": "a<bos>é"
+  },
+  {
+   "tokenizer": "no-unk",
+   "text": "",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "no-unk",
+   "text": "€",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "no-unk",
+   "text": "😀😀 €",
+   "ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9,
+    10,
+    11,
+    4
+   ],
+   "tokens": [
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "▁"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ]
+   ],
+   "decode": "😀😀 "
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    6
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    8,
+    9,
+    10
+   ],
+   "keep": "���",
+   "skip": "���"
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "keep": "😀",
+   "skip": "😀"
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    4,
+    6,
+    1,
+    7,
+    4
+   ],
+   "keep": " �a� ",
+   "skip": " �a� "
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    13,
+    6,
+    7,
+    13
+   ],
+   "keep": "AéA",
+   "skip": "AéA"
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    0,
+    6,
+    14,
+    7
+   ],
+   "keep": "<unk>�<bos>�",
+   "skip": "<unk>é"
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    99,
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    16
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    18,
+    7
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    6,
+    17
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    19
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    20
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    6,
+    21
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    6,
+    16
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "no-unk",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9
+   ],
+   "keep": "������",
+   "skip": "������"
+  },
+  {
+   "tokenizer": "split-invert",
+   "text": "ab é😀€€a",
+   "ids": [
+    1,
+    1
+   ],
+   "tokens": [
+    "a",
+    "a"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "decode": "aa"
+  },
+  {
+   "tokenizer": "split-invert",
+   "text": "€é€ b",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "split-invert",
+   "text": " a  ab ",
+   "ids": [
+    1,
+    1
+   ],
+   "tokens": [
+    "a",
+    "a"
+   ],
+   "offsets": [
+    [
+     1,
+     2
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "decode": "aa"
+  },
+  {
+   "tokenizer": "split-invert",
+   "text": "xéy",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "split-invert",
+   "text": "a<bos>é",
+   "ids": [
+    1,
+    14
+   ],
+   "tokens": [
+    "a",
+    "<bos>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     6
+    ]
+   ],
+   "decode": "a<bos>"
+  },
+  {
+   "tokenizer": "split-invert",
+   "text": "",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "split-invert",
+   "text": "€",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "split-invert",
+   "text": "😀😀 €",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    6
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    8,
+    9,
+    10
+   ],
+   "keep": "���",
+   "skip": "���"
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "keep": "😀",
+   "skip": "😀"
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    4,
+    6,
+    1,
+    7,
+    4
+   ],
+   "keep": " �a� ",
+   "skip": " �a� "
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    13,
+    6,
+    7,
+    13
+   ],
+   "keep": "AéA",
+   "skip": "AéA"
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    0,
+    6,
+    14,
+    7
+   ],
+   "keep": "<unk>�<bos>�",
+   "skip": "<unk>é"
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    99,
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    16
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    18,
+    7
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    6,
+    17
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    19
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    20
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    6,
+    21
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    6,
+    16
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-invert",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9
+   ],
+   "keep": "������",
+   "skip": "������"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "text": "ab é😀€€a",
+   "ids": [
+    3,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    0,
+    1
+   ],
+   "tokens": [
+    "ab",
+    "<0xC3>",
+    "<0xA9>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<unk>",
+    "a"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "decode": "abé😀<unk>a"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "text": "€é€ b",
+   "ids": [
+    6,
+    7,
+    0,
+    2
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>",
+    "b"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "decode": "é<unk>b"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "text": " a  ab ",
+   "ids": [
+    1,
+    3
+   ],
+   "tokens": [
+    "a",
+    "ab"
+   ],
+   "offsets": [
+    [
+     1,
+     2
+    ],
+    [
+     4,
+     6
+    ]
+   ],
+   "decode": "aab"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "text": "xéy",
+   "ids": [
+    6,
+    7,
+    0
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ]
+   ],
+   "decode": "é<unk>"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "text": "a<bos>é",
+   "ids": [
+    1,
+    14,
+    6,
+    7
+   ],
+   "tokens": [
+    "a",
+    "<bos>",
+    "<0xC3>",
+    "<0xA9>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": "a<bos>é"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "text": "",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "split-Removed",
+   "text": "€",
+   "ids": [
+    0
+   ],
+   "tokens": [
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ]
+   ],
+   "decode": "<unk>"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "text": "😀😀 €",
+   "ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9,
+    10,
+    11,
+    0
+   ],
+   "tokens": [
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "decode": "😀😀<unk>"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    6
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    8,
+    9,
+    10
+   ],
+   "keep": "���",
+   "skip": "���"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "keep": "😀",
+   "skip": "😀"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    4,
+    6,
+    1,
+    7,
+    4
+   ],
+   "keep": " �a� ",
+   "skip": " �a� "
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    13,
+    6,
+    7,
+    13
+   ],
+   "keep": "AéA",
+   "skip": "AéA"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    0,
+    6,
+    14,
+    7
+   ],
+   "keep": "<unk>�<bos>�",
+   "skip": "<unk>é"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    99,
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    16
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    18,
+    7
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    6,
+    17
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    19
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    20
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    6,
+    21
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    6,
+    16
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Removed",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9
+   ],
+   "keep": "������",
+   "skip": "������"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "text": "ab é😀€€a",
+   "ids": [
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    0,
+    1
+   ],
+   "tokens": [
+    "ab",
+    "▁",
+    "<0xC3>",
+    "<0xA9>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<unk>",
+    "a"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "decode": "ab é😀<unk>a"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "text": "€é€ b",
+   "ids": [
+    6,
+    7,
+    0,
+    4,
+    2
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>",
+    "▁",
+    "b"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "decode": "é<unk> b"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "text": " a  ab ",
+   "ids": [
+    4,
+    1,
+    4,
+    4,
+    3,
+    4
+   ],
+   "tokens": [
+    "▁",
+    "a",
+    "▁",
+    "▁",
+    "ab",
+    "▁"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": " a  ab "
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "text": "xéy",
+   "ids": [
+    6,
+    7,
+    0
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ]
+   ],
+   "decode": "é<unk>"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "text": "a<bos>é",
+   "ids": [
+    1,
+    14,
+    6,
+    7
+   ],
+   "tokens": [
+    "a",
+    "<bos>",
+    "<0xC3>",
+    "<0xA9>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": "a<bos>é"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "text": "",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "text": "€",
+   "ids": [
+    0
+   ],
+   "tokens": [
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ]
+   ],
+   "decode": "<unk>"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "text": "😀😀 €",
+   "ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9,
+    10,
+    11,
+    4,
+    0
+   ],
+   "tokens": [
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "▁",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "decode": "😀😀 <unk>"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    6
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    8,
+    9,
+    10
+   ],
+   "keep": "���",
+   "skip": "���"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "keep": "😀",
+   "skip": "😀"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    4,
+    6,
+    1,
+    7,
+    4
+   ],
+   "keep": " �a� ",
+   "skip": " �a� "
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    13,
+    6,
+    7,
+    13
+   ],
+   "keep": "AéA",
+   "skip": "AéA"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    0,
+    6,
+    14,
+    7
+   ],
+   "keep": "<unk>�<bos>�",
+   "skip": "<unk>é"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    99,
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    16
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    18,
+    7
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    6,
+    17
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    19
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    20
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    6,
+    21
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    6,
+    16
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Isolated",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9
+   ],
+   "keep": "������",
+   "skip": "������"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "text": "ab é😀€€a",
+   "ids": [
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    0,
+    1
+   ],
+   "tokens": [
+    "ab",
+    "▁",
+    "<0xC3>",
+    "<0xA9>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<unk>",
+    "a"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "decode": "ab é😀<unk>a"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "text": "€é€ b",
+   "ids": [
+    6,
+    7,
+    0,
+    4,
+    2
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>",
+    "▁",
+    "b"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "decode": "é<unk> b"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "text": " a  ab ",
+   "ids": [
+    4,
+    1,
+    4,
+    4,
+    3,
+    4
+   ],
+   "tokens": [
+    "▁",
+    "a",
+    "▁",
+    "▁",
+    "ab",
+    "▁"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": " a  ab "
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "text": "xéy",
+   "ids": [
+    6,
+    7,
+    0
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ]
+   ],
+   "decode": "é<unk>"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "text": "a<bos>é",
+   "ids": [
+    1,
+    14,
+    6,
+    7
+   ],
+   "tokens": [
+    "a",
+    "<bos>",
+    "<0xC3>",
+    "<0xA9>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": "a<bos>é"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "text": "",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "text": "€",
+   "ids": [
+    0
+   ],
+   "tokens": [
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ]
+   ],
+   "decode": "<unk>"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "text": "😀😀 €",
+   "ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9,
+    10,
+    11,
+    4,
+    0
+   ],
+   "tokens": [
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "▁",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "decode": "😀😀 <unk>"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    6
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    8,
+    9,
+    10
+   ],
+   "keep": "���",
+   "skip": "���"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "keep": "😀",
+   "skip": "😀"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    4,
+    6,
+    1,
+    7,
+    4
+   ],
+   "keep": " �a� ",
+   "skip": " �a� "
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    13,
+    6,
+    7,
+    13
+   ],
+   "keep": "AéA",
+   "skip": "AéA"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    0,
+    6,
+    14,
+    7
+   ],
+   "keep": "<unk>�<bos>�",
+   "skip": "<unk>é"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    99,
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    16
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    18,
+    7
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    6,
+    17
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    19
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    20
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    6,
+    21
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    6,
+    16
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-MergedWithPrevious",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9
+   ],
+   "keep": "������",
+   "skip": "������"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "text": "ab é😀€€a",
+   "ids": [
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    0,
+    1
+   ],
+   "tokens": [
+    "ab",
+    "▁",
+    "<0xC3>",
+    "<0xA9>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<unk>",
+    "a"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "decode": "ab é😀<unk>a"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "text": "€é€ b",
+   "ids": [
+    6,
+    7,
+    0,
+    4,
+    2
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>",
+    "▁",
+    "b"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "decode": "é<unk> b"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "text": " a  ab ",
+   "ids": [
+    5,
+    4,
+    4,
+    3,
+    4
+   ],
+   "tokens": [
+    "▁a",
+    "▁",
+    "▁",
+    "ab",
+    "▁"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": " a  ab "
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "text": "xéy",
+   "ids": [
+    6,
+    7,
+    0
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ]
+   ],
+   "decode": "é<unk>"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "text": "a<bos>é",
+   "ids": [
+    1,
+    14,
+    6,
+    7
+   ],
+   "tokens": [
+    "a",
+    "<bos>",
+    "<0xC3>",
+    "<0xA9>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": "a<bos>é"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "text": "",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "text": "€",
+   "ids": [
+    0
+   ],
+   "tokens": [
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ]
+   ],
+   "decode": "<unk>"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "text": "😀😀 €",
+   "ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9,
+    10,
+    11,
+    4,
+    0
+   ],
+   "tokens": [
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "▁",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "decode": "😀😀 <unk>"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    6
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    8,
+    9,
+    10
+   ],
+   "keep": "���",
+   "skip": "���"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "keep": "😀",
+   "skip": "😀"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    4,
+    6,
+    1,
+    7,
+    4
+   ],
+   "keep": " �a� ",
+   "skip": " �a� "
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    13,
+    6,
+    7,
+    13
+   ],
+   "keep": "AéA",
+   "skip": "AéA"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    0,
+    6,
+    14,
+    7
+   ],
+   "keep": "<unk>�<bos>�",
+   "skip": "<unk>é"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    99,
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    16
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    18,
+    7
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    6,
+    17
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    19
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    20
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    6,
+    21
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    6,
+    16
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-MergedWithNext",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9
+   ],
+   "keep": "������",
+   "skip": "������"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "text": "ab é😀€€a",
+   "ids": [
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    0,
+    1
+   ],
+   "tokens": [
+    "ab",
+    "▁",
+    "<0xC3>",
+    "<0xA9>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<unk>",
+    "a"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "decode": "ab é😀<unk>a"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "text": "€é€ b",
+   "ids": [
+    6,
+    7,
+    0,
+    4,
+    2
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>",
+    "▁",
+    "b"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "decode": "é<unk> b"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "text": " a  ab ",
+   "ids": [
+    4,
+    1,
+    4,
+    4,
+    3,
+    4
+   ],
+   "tokens": [
+    "▁",
+    "a",
+    "▁",
+    "▁",
+    "ab",
+    "▁"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": " a  ab "
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "text": "xéy",
+   "ids": [
+    6,
+    7,
+    0
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ]
+   ],
+   "decode": "é<unk>"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "text": "a<bos>é",
+   "ids": [
+    1,
+    14,
+    6,
+    7
+   ],
+   "tokens": [
+    "a",
+    "<bos>",
+    "<0xC3>",
+    "<0xA9>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": "a<bos>é"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "text": "",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "text": "€",
+   "ids": [
+    0
+   ],
+   "tokens": [
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ]
+   ],
+   "decode": "<unk>"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "text": "😀😀 €",
+   "ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9,
+    10,
+    11,
+    4,
+    0
+   ],
+   "tokens": [
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "▁",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "decode": "😀😀 <unk>"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    6
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    8,
+    9,
+    10
+   ],
+   "keep": "���",
+   "skip": "���"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "keep": "😀",
+   "skip": "😀"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    4,
+    6,
+    1,
+    7,
+    4
+   ],
+   "keep": " �a� ",
+   "skip": " �a� "
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    13,
+    6,
+    7,
+    13
+   ],
+   "keep": "AéA",
+   "skip": "AéA"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    0,
+    6,
+    14,
+    7
+   ],
+   "keep": "<unk>�<bos>�",
+   "skip": "<unk>é"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    99,
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    16
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    18,
+    7
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    6,
+    17
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    19
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    20
+   ],
+   "keep": "",
+   "skip": ""
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    6,
+    21
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    6,
+    16
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "split-Contiguous",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9
+   ],
+   "keep": "������",
+   "skip": "������"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "text": "ab é😀€€a",
+   "ids": [
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    0,
+    1
+   ],
+   "tokens": [
+    "ab",
+    "▁",
+    "<0xC3>",
+    "<0xA9>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<unk>",
+    "a"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "decode": "ab é😀<unk>a"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "text": "€é€ b",
+   "ids": [
+    6,
+    7,
+    0,
+    4,
+    2
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>",
+    "▁",
+    "b"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "decode": "é<unk> b"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "text": " a  ab ",
+   "ids": [
+    5,
+    4,
+    4,
+    3,
+    4
+   ],
+   "tokens": [
+    "▁a",
+    "▁",
+    "▁",
+    "ab",
+    "▁"
+   ],
+   "offsets": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": " a  ab "
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "text": "xéy",
+   "ids": [
+    6,
+    7,
+    0
+   ],
+   "tokens": [
+    "<0xC3>",
+    "<0xA9>",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ]
+   ],
+   "decode": "é<unk>"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "text": "a<bos>é",
+   "ids": [
+    1,
+    14,
+    6,
+    7
+   ],
+   "tokens": [
+    "a",
+    "<bos>",
+    "<0xC3>",
+    "<0xA9>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "decode": "a<bos>é"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "text": "",
+   "ids": [],
+   "tokens": [],
+   "offsets": [],
+   "decode": ""
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "text": "€",
+   "ids": [
+    0
+   ],
+   "tokens": [
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ]
+   ],
+   "decode": "<unk>"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "text": "😀😀 €",
+   "ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9,
+    10,
+    11,
+    4,
+    0
+   ],
+   "tokens": [
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "<0xF0>",
+    "<0x9F>",
+    "<0x98>",
+    "<0x80>",
+    "▁",
+    "<unk>"
+   ],
+   "offsets": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "decode": "😀😀 <unk>"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    6
+   ],
+   "keep": "�",
+   "skip": "�"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    8,
+    9,
+    10
+   ],
+   "keep": "���",
+   "skip": "���"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "keep": "😀",
+   "skip": "😀"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    4,
+    6,
+    1,
+    7,
+    4
+   ],
+   "keep": " �a� ",
+   "skip": " �a� "
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    13,
+    6,
+    7,
+    13
+   ],
+   "keep": "AéA",
+   "skip": "AéA"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    0,
+    6,
+    14,
+    7
+   ],
+   "keep": "<unk>�<bos>�",
+   "skip": "<unk>é"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    99,
+    6,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    16
+   ],
+   "keep": "\n",
+   "skip": "\n"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    18,
+    7
+   ],
+   "keep": "é",
+   "skip": "é"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    6,
+    17
+   ],
+   "keep": "��",
+   "skip": "��"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    19
+   ],
+   "keep": "<0x-1>",
+   "skip": "<0x-1>"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    20
+   ],
+   "keep": "<0xé>",
+   "skip": "<0xé>"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    6,
+    21
+   ],
+   "keep": "�<0xA9 >",
+   "skip": "�<0xA9 >"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    6,
+    16
+   ],
+   "keep": "��",
+   "skip": "��"
+  },
+  {
+   "tokenizer": "byte-token-lookalikes",
+   "decode_ids": [
+    8,
+    9,
+    10,
+    11,
+    8,
+    9
+   ],
+   "keep": "������",
+   "skip": "������"
+  }
+ ]
+}

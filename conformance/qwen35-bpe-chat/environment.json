@@ -1,0 +1,80 @@
+{
+  "fixture_format_version": 1,
+  "runner": "model-pipeline/reference/qwen-bpe/run_qwen_bpe_tokenizer.py",
+  "runner_repository_commit": "1b38cf9dc2b2886d43aea5ea61c010738dfc3e9e",
+  "profile": "qwen35-bpe-chat",
+  "runtime_loaded": {
+    "repo": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17"
+  },
+  "asset": {
+    "repo": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "file": "transformers-5.18.0/tokenizer.json",
+    "derivation": "backend_tokenizer.to_str(pretty=True) under transformers 5.18.0",
+    "sha256": "a5cd9732badce41de57e6efce8302930ded1c1188c5f81feb2bd6c24c4a1941f",
+    "size": 19989339
+  },
+  "snapshot_files": [
+    {
+      "path": "tokenizer.json",
+      "sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+      "size": 12807982
+    },
+    {
+      "path": "tokenizer_config.json",
+      "sha256": "49e2b6e395f959f077f1e992b338919c0d4a9732fc6e613995e06557f843500c",
+      "size": 16709
+    },
+    {
+      "path": "vocab.json",
+      "sha256": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003",
+      "size": 6722759
+    },
+    {
+      "path": "merges.txt",
+      "sha256": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d",
+      "size": 3353259
+    },
+    {
+      "path": "config.json",
+      "sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+      "size": 2907
+    }
+  ],
+  "reference": "tokenizers 0.23.2 Tokenizer.from_file(asset)",
+  "corpora": [
+    {
+      "path": "tokenizer-corpus-v1.jsonl",
+      "sha256": "8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199",
+      "size": 17785
+    },
+    {
+      "path": "tokenizer-corpus-qwen-bpe-v1.jsonl",
+      "sha256": "8a95607487e6cb9a9c7aabeebbbc93bb5c62b206364db43e0c419061e9c2aed3",
+      "size": 11269
+    }
+  ],
+  "offset_units": {
+    "source": "tokenizers Python binding, indices into the Python str (Unicode scalar values)",
+    "recorded": [
+      "unicode-scalars",
+      "utf16-code-units",
+      "utf8-bytes"
+    ],
+    "end": "exclusive",
+    "special_tokens": "(0, 0)"
+  },
+  "environment": {
+    "python": "3.11.16",
+    "platform": "Linux-7.2.5-3-omarchy-x86_64-with-glibc2.44",
+    "machine": "x86_64",
+    "cpu": "Intel(R) Core(TM) i7-5820K CPU @ 3.30GHz",
+    "cpu_count": 12,
+    "packages": {
+      "transformers": "5.18.0",
+      "tokenizers": "0.23.2",
+      "huggingface-hub": "1.33.0"
+    }
+  }
+}

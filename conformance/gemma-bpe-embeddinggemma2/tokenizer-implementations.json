@@ -1,0 +1,26 @@
+{
+  "reference": "tokenizers library reading tokenizer.json as is",
+  "transformers_class": "GemmaTokenizer",
+  "transformers_pipeline_vs_tokenizer_json": [],
+  "transformers_ids_differ": [
+    {
+      "id": "pair-empty-second",
+      "tokenizer_json": [
+        2,
+        8960,
+        1171,
+        1,
+        2,
+        1
+      ],
+      "transformers": [
+        2,
+        8960,
+        1171,
+        1
+      ]
+    }
+  ],
+  "sentence_transformers_preprocess": "SentenceTransformer.preprocess (message modality: chat_template.jinja renders the prompt as a system message followed by the text, then the processor tokenizes with special tokens)",
+  "sentence_transformers_ids_differ_from_tokenizer_json_of_prompt_plus_text": []
+}

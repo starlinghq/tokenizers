@@ -1,0 +1,14 @@
+# Default owner
+*                         @MarkWalls
+
+# Protected evidence: reference expectations are never edited to make code pass (AGENTS.md).
+/conformance/             @MarkWalls
+/tests/*/TestData/        @MarkWalls
+/tools/pinned-assets.txt  @MarkWalls
+
+# Release and CI authority
+/.github/                 @MarkWalls
+/global.json              @MarkWalls
+/Directory.Build.props    @MarkWalls
+/Directory.Packages.props @MarkWalls
+**/packages.lock.json     @MarkWalls

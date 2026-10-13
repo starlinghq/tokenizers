@@ -1,0 +1,23 @@
+name: Bug
+description: A crash, a wrong exception, an API problem or a packaging problem.
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Starling.Tokenizers version, .NET runtime and OS
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproducer
+      render: csharp
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true

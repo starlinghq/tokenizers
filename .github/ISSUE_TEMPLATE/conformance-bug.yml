@@ -1,0 +1,31 @@
+name: Output differs from the reference
+description: Token ids, offsets, masks or decoded text differ from huggingface/tokenizers.
+labels: [conformance]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Starling.Tokenizers version and profile
+      placeholder: 0.2.0-preview.1, qwen35-bpe-chat
+    validations:
+      required: true
+  - type: input
+    id: asset
+    attributes:
+      label: tokenizer.json (repository, revision, SHA-256)
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Input text
+      description: Paste as-is. Mention invisible characters, normalization form or encoding, or give the code points.
+    validations:
+      required: true
+  - type: textarea
+    id: diff
+    attributes:
+      label: Reference output and Starling output
+      description: Name the reference implementation and its exact version (for example tokenizers 0.23.2).
+    validations:
+      required: true

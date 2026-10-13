@@ -1,0 +1,146 @@
+# Starling.Tokenizers
+
+> Managed .NET (net10.0) library that loads Hugging Face `tokenizer.json` files (format 1.0) and encodes and decodes text with output identical to huggingface/tokenizers (Python/Rust) on the conformance fixtures of each supported profile. NuGet package `Starling.Tokenizers`, namespace `Starling.Tokenizers`, licensed MIT OR Apache-2.0 (your choice). No native code, no package dependencies. Preview: versions are `0.MINOR.PATCH-preview.N`.
+
+Use it when a .NET application needs the exact token ids a Hugging Face model expects: embeddings, rerankers, NER, local LLM prompts. It replaces calling Python, and replaces approximate tokenizers whose ids drift from the reference. It does not download files. Get `tokenizer.json` from the model's Hugging Face repository at a pinned revision.
+
+## Install
+
+```sh
+dotnet add package Starling.Tokenizers --prerelease
+```
+
+## Complete public API
+
+```csharp
+namespace Starling.Tokenizers;
+
+public sealed class Tokenizer                       // immutable, thread-safe
+{
+    public static Tokenizer FromFile(string path);
+    public static Tokenizer FromStream(Stream utf8Json);
+    public static Tokenizer FromUtf8Json(ReadOnlyMemory<byte> utf8Json);
+
+    public Tokenizer WithTruncation(TruncationOptions? truncation); // new instance, shares the pipeline
+    public Tokenizer WithPadding(PaddingOptions? padding);          // new instance, shares the pipeline
+    public TruncationOptions? Truncation { get; }                   // starts as the file's "truncation" section
+    public PaddingOptions? Padding { get; }                         // starts as the file's "padding" section
+    public IReadOnlyList<string> Components { get; }                // e.g. "normalizer:NFC", "model:BPE"
+
+    public TokenEncoding Encode(string text, bool addSpecialTokens = true);
+    public TokenEncoding Encode(string text, string pair, bool addSpecialTokens = true);
+    public IReadOnlyList<TokenEncoding> EncodeBatch(IReadOnlyList<string> texts, bool addSpecialTokens = true);
+    public IReadOnlyList<TokenEncoding> EncodeBatch(IReadOnlyList<(string Text, string Pair)> pairs, bool addSpecialTokens = true);
+
+    public string Decode(ReadOnlySpan<int> ids, bool skipSpecialTokens); // unknown ids are skipped, as upstream
+    public int? TokenToId(string token);           // added tokens first, then the model vocabulary
+    public string? IdToToken(int id);
+    public int GetVocabularySize(bool includeAddedTokens);
+}
+
+public sealed class TokenEncoding                   // one entry per token, including special and padding tokens
+{
+    public int Count { get; }
+    public ImmutableArray<int> Ids { get; }
+    public ImmutableArray<string> Tokens { get; }
+    public ImmutableArray<int> TypeIds { get; }
+    public ImmutableArray<int> AttentionMask { get; }
+    public ImmutableArray<int> SpecialTokensMask { get; }   // 1 = added by post-processing or padding
+    public ImmutableArray<TokenOffset> Offsets { get; }        // UTF-16 code units (slice the C# string)
+    public ImmutableArray<TokenOffset> ScalarOffsets { get; }  // Unicode scalar values (the Python unit)
+    public ImmutableArray<int?> SequenceIds { get; }        // 0 or 1 per input of a pair; null for template/padding tokens
+}
+
+public readonly record struct TokenOffset(int Start, int End) { public int Length { get; } } // End exclusive
+
+public sealed record TruncationOptions(int MaxLength,
+    TruncationStrategy Strategy = TruncationStrategy.LongestFirst,   // LongestFirst | OnlyFirst | OnlySecond
+    TruncationDirection Direction = TruncationDirection.Right);      // Right | Left
+
+public sealed record PaddingOptions(int PadId, string PadToken,
+    int? FixedLength = null,                                         // null: pad a batch to its longest encoding
+    PaddingDirection Direction = PaddingDirection.Right,             // Right | Left
+    int PadTypeId = 0, int? PadToMultipleOf = null);
+
+public class TokenizerFormatException : Exception;                   // malformed tokenizer.json
+public sealed class UnsupportedTokenizerComponentException : TokenizerFormatException
+{
+    public string Component { get; }   // JSON path and type, e.g. "pre_tokenizer.type=Digits"
+}
+```
+
+That is the whole public surface. There is no `Tokenizer.FromPretrained`, no download helper, no chat-template renderer, no streaming decoder, no word ids, and no pre-tokenized input.
+
+## Examples
+
+```csharp
+using Starling.Tokenizers;
+
+// Embedding model input: ids and attention mask for a padded batch, truncated to the model's limit.
+Tokenizer loaded = Tokenizer.FromFile("tokenizer.json");
+int padId = loaded.TokenToId("<pad>") ?? throw new InvalidOperationException("no <pad> token");
+Tokenizer tok = loaded
+    .WithTruncation(new TruncationOptions(MaxLength: 512))
+    .WithPadding(new PaddingOptions(PadId: padId, PadToken: "<pad>"));
+IReadOnlyList<TokenEncoding> batch = tok.EncodeBatch(["query: first", "query: second text"]);
+long[] inputIds = [.. batch.SelectMany(e => e.Ids).Select(i => (long)i)];
+long[] attention = [.. batch.SelectMany(e => e.AttentionMask).Select(m => (long)m)];
+int seqLen = batch[0].Count;   // every row has the same length after padding
+
+// Cross-encoder / reranker: a text pair; TypeIds and SequenceIds tell the halves apart.
+TokenEncoding pair = tok.Encode("what is a starling?", "A starling is a small passerine bird.");
+
+// Highlight tokens in the original C# string (Offsets are UTF-16, so Substring is safe).
+string text = "Grüße aus Köln 👋";
+TokenEncoding e = Tokenizer.FromFile("tokenizer.json").Encode(text);
+for (int i = 0; i < e.Count; i++)
+{
+    if (e.SpecialTokensMask[i] == 1) continue;
+    TokenOffset o = e.Offsets[i];
+    Console.WriteLine($"{e.Ids[i],7} {text.Substring(o.Start, o.Length)}");
+}
+
+// LLM prompt ids without BOS/EOS added by the post-processor; then decode generated ids.
+int[] promptIds = [.. tok.Encode(prompt, addSpecialTokens: false).Ids];
+string reply = tok.Decode(generatedIds, skipSpecialTokens: true);
+
+// Find out whether a model's tokenizer.json is supported before relying on it.
+try { Tokenizer.FromFile(path); }
+catch (UnsupportedTokenizerComponentException ex) { Console.WriteLine($"not supported: {ex.Component}"); }
+```
+
+Pad tokens differ by model (`<pad>`, `[PAD]`, `<|endoftext|>`). If the file has its own `padding` section, `loaded.Padding` already holds it.
+
+## Rules that prevent wrong output
+
+- **Use the model's own `tokenizer.json` at a pinned revision.** Different revisions of the same model can tokenize differently. Some runtimes do not use the Hub file at all. For example, transformers builds Qwen3.5's pipeline from a class (see profile `qwen35-bpe-chat`).
+- **Pick the right offsets.** `Offsets` are UTF-16 code units, for slicing .NET strings. `ScalarOffsets` are Unicode code points, matching Python `str` indices and huggingface/tokenizers. They differ for characters outside the BMP, such as emoji. For a pair, offsets index into the input that `SequenceIds` names. Special and padding tokens have offsets (0, 0).
+- **Check special tokens.** `addSpecialTokens: true` (the default) runs the file's post-processor, for example `[CLS] … [SEP]` or `<s> … </s>`. Byte-level BPE files such as Qwen add nothing there. Special tokens typed literally in the input are always matched as tokens.
+- **Know the input limits.** Unpaired UTF-16 surrogates throw `ArgumentException`. Truncation with a stride (overflowing windows) is not supported, and a file that sets one fails at load.
+- **Decode prefixes with care.** Decoding growing prefixes during generation can end with U+FFFD for an incomplete UTF-8 character. Hold that back until the next token completes it. There is no incremental decode API.
+- **Treat load failures as answers.** An `UnsupportedTokenizerComponentException` means the file needs a component that is not implemented. Do not edit the file to get around it: the resulting ids would not match the model. Ask for support (below).
+
+## Supported components (summary)
+
+- Models: `Unigram`, `BPE` (byte-level, or SentencePiece-style with `byte_fallback`), `WordPiece` (experimental).
+- Normalizers: `Sequence`, `Precompiled`, `NFC`, `Strip`, `Replace` (string patterns and the regex `" {2,}"`), `BertNormalizer` (defaults only, experimental).
+- Pre-tokenizers: `Sequence`, `Metaspace`, `ByteLevel` (with `use_regex` false), `Split` (string patterns, or the Qwen2/Qwen3 and Qwen3.5 regexes), `BertPreTokenizer` (experimental).
+- Post-processors: `TemplateProcessing`, `ByteLevel`.
+- Decoders: `Metaspace`, `ByteLevel`, `Sequence`, `Replace`, `ByteFallback`, `Fuse`, `WordPiece` (experimental).
+- Everything else fails at load. The authoritative table with every option is docs/supported-components.md.
+
+Profiles with exact-match evidence (all experimental): `xlmr-unigram-e5` (intfloat/multilingual-e5-small), `gliner2-base-v1-unigram` (fastino/gliner2-base-v1, partial), `qwen2-bpe-kev` (Qwen2/Qwen3 regex), `qwen35-bpe-chat` (Qwen/Qwen3.5-0.8B), `gemma-bpe-embeddinggemma2` (google/embeddinggemma-2). A file that loads but has no profile is untested, not guaranteed.
+
+## Docs
+
+- [README](https://github.com/starlinghq/tokenizers/blob/main/README.md): overview, usage, profiles
+- [Supported components](https://github.com/starlinghq/tokenizers/blob/main/docs/supported-components.md): every component and option, byte fallback, regex scanner
+- [Profiles](https://github.com/starlinghq/tokenizers/tree/main/profiles): per-profile pinned asset, pipeline, evidence and capability status
+- [Changelog](https://github.com/starlinghq/tokenizers/blob/main/CHANGELOG.md): behavior changes by version
+- [Tokenizer request](https://github.com/starlinghq/tokenizers/issues/new?template=tokenizer-request.yml): ask for a model's tokenizer to be supported
+
+## Optional
+
+- [Adding a tokenizer](https://github.com/starlinghq/tokenizers/blob/main/docs/adding-a-tokenizer.md): how profiles are made (for contributors)
+- [Architecture](https://github.com/starlinghq/tokenizers/blob/main/docs/architecture.md): interpreter internals
+- [AGENTS.md](https://github.com/starlinghq/tokenizers/blob/main/AGENTS.md): rules for coding agents changing this repository

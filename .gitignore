@@ -1,0 +1,25 @@
+# .NET
+bin/
+obj/
+artifacts/
+*.user
+*.suo
+.vs/
+TestResults/
+BenchmarkDotNet.Artifacts/
+*.nupkg
+*.snupkg
+
+# Python (reference runners)
+__pycache__/
+*.py[cod]
+.venv/
+.ruff_cache/
+
+# Pinned tokenizer.json assets are model-owner files and never committed: tools/fetch-assets.sh.
+.models/
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store

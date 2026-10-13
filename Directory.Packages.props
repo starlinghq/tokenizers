@@ -1,0 +1,10 @@
+<Project>
+  <!--
+    Production projects under src/ must never reference Microsoft.ML.Tokenizers, directly or
+    transitively (see AGENTS.md, "Hard rules"). Comparison packages belong in test or tool projects only.
+    tools/check-independence.sh enforces this in CI.
+  -->
+  <ItemGroup>
+    <PackageVersion Include="xunit.v3" Version="4.0.1" />
+  </ItemGroup>
+</Project>

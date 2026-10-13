@@ -1,0 +1,97 @@
+{
+  "fixture_format_version": 1,
+  "runner": "model-pipeline/reference/gliner2/run_gliner2_tokenizer.py",
+  "runner_repository_commit": "001ced60d8d3f843168f97efc3f247495bdb97e2",
+  "model": {
+    "repo": "fastino/gliner2-base-v1",
+    "revision": "f9634218e53580c56edf0de97ca1a7d3f1c2354e"
+  },
+  "gliner2_source": {
+    "url": "https://github.com/fastino-ai/GLiNER2",
+    "revision": "55656fbfa01d3d4a77485e1a1eeeaf682990ccdf",
+    "version": "2.0.0"
+  },
+  "schema": {
+    "json_structures": [],
+    "classifications": [],
+    "entities": {
+      "person": "",
+      "location": ""
+    },
+    "relations": [],
+    "json_descriptions": {},
+    "entity_descriptions": {},
+    "relation_descriptions": {}
+  },
+  "processor": {
+    "entry_point": "SchemaTransformer.transform_record",
+    "token_pooling": "first"
+  },
+  "assets": [
+    {
+      "path": "tokenizer.json",
+      "sha256": "1b7fbabfb4c690bed84c6793bfecae9b8dfe205751b04f9ffd1e76a1e7df9c16",
+      "size": 8650701
+    },
+    {
+      "path": "tokenizer_config.json",
+      "sha256": "4e6c6a8d26478b670692916266438485403b0c54af31fd1a12bab8a465d062e9",
+      "size": 3240
+    },
+    {
+      "path": "special_tokens_map.json",
+      "sha256": "84ea70143f533d7e99b393d87f20010887a9ac2cba955828ef313886e4e83f4f",
+      "size": 2414
+    },
+    {
+      "path": "added_tokens.json",
+      "sha256": "3c274ca559be8b7b18febf616724ec05f8a8abccd428bd2744608f45f7a0b067",
+      "size": 230
+    },
+    {
+      "path": "spm.model",
+      "sha256": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+      "size": 2464616
+    },
+    {
+      "path": "config.json",
+      "sha256": "33d8aa009deed4b5435d162e08b5a720b252a0084e59d30d366b37da8c0193c5",
+      "size": 236
+    },
+    {
+      "path": "encoder_config/config.json",
+      "sha256": "9840a4db70bc007e6b65d336ebe2bddc53bc2ce210dc5757e50d5bb17122f7cd",
+      "size": 823
+    }
+  ],
+  "corpus": {
+    "path": "tokenizer-corpus-v1.jsonl",
+    "sha256": "8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199",
+    "size": 17785
+  },
+  "offset_units": {
+    "source": "gliner2 word splitter, indices into the normalized Python str (Unicode scalar values)",
+    "normalized_text": "text after SchemaTransformer._normalize_text (appends '.' unless it ends in . ! or ?)",
+    "recorded": [
+      "unicode-scalars",
+      "utf16-code-units",
+      "utf8-bytes"
+    ],
+    "end": "exclusive"
+  },
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Linux-6.18.44-fc-v70-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "cpu_count": 4,
+    "packages": {
+      "gliner2": "2.0.0",
+      "transformers": "4.57.6",
+      "tokenizers": "0.22.2",
+      "sentencepiece": "0.2.2",
+      "torch": "2.14.1+cpu",
+      "protobuf": "7.36.2"
+    }
+  }
+}

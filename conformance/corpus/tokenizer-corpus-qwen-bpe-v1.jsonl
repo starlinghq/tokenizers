@@ -1,0 +1,88 @@
+{"id": "bpe-contractions-lower", "category": "contraction", "text": "I'm sure you're right: they've said it's what we'd do, and we'll see."}
+{"id": "bpe-contractions-upper", "category": "contraction", "text": "I'M SURE YOU'RE RIGHT: THEY'VE SAID IT'S WHAT WE'D DO, AND WE'LL SEE."}
+{"id": "bpe-contractions-mixed", "category": "contraction", "text": "You'Re they'vE it'S We'Ll I'm I'M i'D don'T can'T SHE'Ll"}
+{"id": "bpe-contractions-long-s", "category": "contraction", "text": "itſ ſtate IT'ſ 'ſ"}
+{"id": "bpe-contractions-edge", "category": "contraction", "text": "'s 's' ''s 'sa 'll' 'L 'LL'x 're're 'ree 'v 've'd ' s"}
+{"id": "bpe-contractions-typographic", "category": "contraction", "text": "it’s don’t ‘quoted’ “double”"}
+{"id": "bpe-contraction-after-digit", "category": "contraction", "text": "1990's 3'd 7'LL x'S"}
+{"id": "bpe-digits-runs", "category": "digits", "text": "1234567890 3.14159 0x1F 1,000,000 -42 +7e10 2026-10-10T12:00"}
+{"id": "bpe-digits-scripts", "category": "digits", "text": "٠١٢٣ ১২৩ १२३ １２３ ½ Ⅷ ①"}
+{"id": "bpe-digits-letters", "category": "digits", "text": "abc123def 4th 2nd a1b2c3 x86_64 H2O"}
+{"id": "bpe-ws-runs", "category": "whitespace", "text": "a  b   c    d\t\te \t f"}
+{"id": "bpe-newline-runs", "category": "whitespace", "text": "line1\n\nline2\r\n\r\nline3\n \n  line4  \n\n"}
+{"id": "bpe-ws-trailing", "category": "whitespace", "text": "end with spaces   "}
+{"id": "bpe-ws-leading-newlines", "category": "whitespace", "text": "\n\n\nstart"}
+{"id": "bpe-ws-only-mixed", "category": "whitespace", "text": " \t\n \r\n  "}
+{"id": "bpe-ws-unicode", "category": "whitespace", "text": "a b  c 　d e  fg\u000bh\fi j"}
+{"id": "bpe-ws-before-punct", "category": "whitespace", "text": "word  !  ?\n!\n\n?? ..\r\n"}
+{"id": "bpe-marks-precomposed", "category": "combining", "text": "café ångström naïve ệ"}
+{"id": "bpe-marks-decomposed", "category": "combining", "text": "café ångström naïve ệ"}
+{"id": "bpe-marks-noncomposing", "category": "combining", "text": "q̇ x̣̂ ḿ́ z͠z"}
+{"id": "bpe-marks-reorder", "category": "combining", "text": "ậ ậ ḉ ợ́"}
+{"id": "bpe-marks-leading", "category": "combining", "text": "́alone ̀́ab ́ ̂"}
+{"id": "bpe-marks-after-punct", "category": "combining", "text": "!́ .̀a 1́ -̈x (̃) ́́"}
+{"id": "bpe-marks-after-space", "category": "combining", "text": "x ́y ́ z\t̀w"}
+{"id": "bpe-nfc-singletons", "category": "normalization", "text": "Ω Å K ά ̀́ ̈́"}
+{"id": "bpe-nfc-hangul", "category": "normalization", "text": "각 한 각 ᄀ가"}
+{"id": "bpe-devanagari-marks", "category": "multilingual", "text": "क्षत्रिय हिन्दी किताब"}
+{"id": "bpe-thai-marks", "category": "multilingual", "text": "ภาษาไทย น้ำ กิ่ง"}
+{"id": "bpe-arabic-harakat", "category": "multilingual", "text": "مُحَمَّد السَّلَامُ"}
+{"id": "bpe-hebrew-points", "category": "multilingual", "text": "שָׁלוֹם"}
+{"id": "bpe-tamil-composing", "category": "multilingual", "text": "கொ கொ வணக்கம்"}
+{"id": "bpe-cjk-mixed", "category": "multilingual", "text": "日本語と中文混合テキスト。你好，世界！"}
+{"id": "bpe-mixed-scripts", "category": "multilingual", "text": "Hello世界Привет123مرحباαβγ"}
+{"id": "bpe-emoji-sequences", "category": "astral", "text": "👩🏽‍💻 🧑‍🤝‍🧑 ❤️‍🔥 👍🏻👍"}
+{"id": "bpe-emoji-flags-keycaps", "category": "astral", "text": "🇩🇪🇫🇷 #️⃣ 🏴󠁧󠁢󠁳󠁣󠁴󠁿"}
+{"id": "bpe-astral-letters", "category": "astral", "text": "𝐀𝐁𝐂 x𝐀y 𐌰𐌱𐌲 𞤀𞤁 𠀀𪛖"}
+{"id": "bpe-astral-digits", "category": "astral", "text": "𝟏𝟐𝟑 𑁦𑁧 𞥐 a𝟏b"}
+{"id": "bpe-astral-marks", "category": "astral", "text": "a𝅧𝅨 𑌀x 󠄀y"}
+{"id": "bpe-private-use", "category": "astral", "text": " 󰀀 􏿽 text"}
+{"id": "bpe-code-python", "category": "code", "text": "def f(x):\n    return x**2  # comment\n\tif x != None:\n        print(f\"{x!r}\")\n"}
+{"id": "bpe-code-json", "category": "code", "text": "{\"key\": [1, 2.5, null, true], \"nested\": {\"a\": \"b\\n\"}}"}
+{"id": "bpe-punct-runs", "category": "punctuation", "text": "!!! ??? ... --- *** ''' \"\"\" ;;; ((())) <<>> ~~ @@ ##"}
+{"id": "bpe-punct-newline", "category": "punctuation", "text": "end.\n\nNext!\r\n\r\n...\n"}
+{"id": "bpe-url-email", "category": "punctuation", "text": "https://example.com/path?q=1&r=two#frag mailto:user.name+tag@example.co.uk"}
+{"id": "bpe-long-word", "category": "stress", "text": "PneumonoultramicroscopicsilicovolcanoconiosisPneumonoultramicroscopicsilicovolcanoconiosisPneumonoultramicroscopicsilicovolcanoconiosisPneumonoultramicroscopicsilicovolcanoconiosisPneumonoultramicroscopicsilicovolcanoconiosisPneumonoultramicroscopicsilicovolcanoconiosisPneumonoultramicroscopicsilicovolcanoconiosisPneumonoultramicroscopicsilicovolcanoconiosisPneumonoultramicroscopicsilicovolcanoconiosisPneumonoultramicroscopicsilicovolcanoconiosisPneumonoultramicroscopicsilicovolcanoconiosisPneumonoultramicroscopicsilicovolcanoconiosis"}
+{"id": "bpe-long-cjk-run", "category": "stress", "text": "漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢漢"}
+{"id": "bpe-long-digits", "category": "stress", "text": "999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"}
+{"id": "bpe-long-spaces", "category": "stress", "text": "a                                                                                                                                                                                                        b"}
+{"id": "bpe-long-base64", "category": "stress", "text": "QmFzZTY0IGVuY29kZWQgdGV4dCB3aXRoIG5vIHNwYWNlcwQmFzZTY0IGVuY29kZWQgdGV4dCB3aXRoIG5vIHNwYWNlcwQmFzZTY0IGVuY29kZWQgdGV4dCB3aXRoIG5vIHNwYWNlcwQmFzZTY0IGVuY29kZWQgdGV4dCB3aXRoIG5vIHNwYWNlcwQmFzZTY0IGVuY29kZWQgdGV4dCB3aXRoIG5vIHNwYWNlcwQmFzZTY0IGVuY29kZWQgdGV4dCB3aXRoIG5vIHNwYWNlcwQmFzZTY0IGVuY29kZWQgdGV4dCB3aXRoIG5vIHNwYWNlcwQmFzZTY0IGVuY29kZWQgdGV4dCB3aXRoIG5vIHNwYWNlcw=="}
+{"id": "bpe-special-adjacent", "category": "added-token", "text": "<|im_start|>user\nHello<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\nHi!<|im_end|>"}
+{"id": "bpe-special-repeated", "category": "added-token", "text": "<|endoftext|><|endoftext|> <|endoftext|>x<|endoftext|>"}
+{"id": "bpe-special-near-miss", "category": "added-token-lookalike", "text": "<|im_start| <|im_start <|IM_START|> < |im_start|> <|im_start |> <think > </think <tool_call/> <|unknown_token|>"}
+{"id": "bpe-special-nested", "category": "added-token-lookalike", "text": "<<|im_end|>> <|<|im_start|>|> <||> <|> |> <| <|fim_prefix|<|fim_middle|>"}
+{"id": "bpe-special-lookalike-fullwidth", "category": "added-token-lookalike", "text": "＜|im_start|＞ <｜im_start｜> <¦im_start¦>"}
+{"id": "bpe-added-00", "category": "added-token", "text": "before <|endoftext|> after<|endoftext|>end"}
+{"id": "bpe-added-01", "category": "added-token", "text": "before <|im_start|> after<|im_start|>end"}
+{"id": "bpe-added-02", "category": "added-token", "text": "before <|im_end|> after<|im_end|>end"}
+{"id": "bpe-added-03", "category": "added-token", "text": "before <|object_ref_start|> after<|object_ref_start|>end"}
+{"id": "bpe-added-04", "category": "added-token", "text": "before <|object_ref_end|> after<|object_ref_end|>end"}
+{"id": "bpe-added-05", "category": "added-token", "text": "before <|box_start|> after<|box_start|>end"}
+{"id": "bpe-added-06", "category": "added-token", "text": "before <|box_end|> after<|box_end|>end"}
+{"id": "bpe-added-07", "category": "added-token", "text": "before <|quad_start|> after<|quad_start|>end"}
+{"id": "bpe-added-08", "category": "added-token", "text": "before <|quad_end|> after<|quad_end|>end"}
+{"id": "bpe-added-09", "category": "added-token", "text": "before <|vision_start|> after<|vision_start|>end"}
+{"id": "bpe-added-10", "category": "added-token", "text": "before <|vision_end|> after<|vision_end|>end"}
+{"id": "bpe-added-11", "category": "added-token", "text": "before <|vision_pad|> after<|vision_pad|>end"}
+{"id": "bpe-added-12", "category": "added-token", "text": "before <|image_pad|> after<|image_pad|>end"}
+{"id": "bpe-added-13", "category": "added-token", "text": "before <|video_pad|> after<|video_pad|>end"}
+{"id": "bpe-added-14", "category": "added-token", "text": "before <tool_call> after<tool_call>end"}
+{"id": "bpe-added-15", "category": "added-token", "text": "before </tool_call> after</tool_call>end"}
+{"id": "bpe-added-16", "category": "added-token", "text": "before <|fim_prefix|> after<|fim_prefix|>end"}
+{"id": "bpe-added-17", "category": "added-token", "text": "before <|fim_middle|> after<|fim_middle|>end"}
+{"id": "bpe-added-18", "category": "added-token", "text": "before <|fim_suffix|> after<|fim_suffix|>end"}
+{"id": "bpe-added-19", "category": "added-token", "text": "before <|fim_pad|> after<|fim_pad|>end"}
+{"id": "bpe-added-20", "category": "added-token", "text": "before <|repo_name|> after<|repo_name|>end"}
+{"id": "bpe-added-21", "category": "added-token", "text": "before <|file_sep|> after<|file_sep|>end"}
+{"id": "bpe-added-22", "category": "added-token", "text": "before <tool_response> after<tool_response>end"}
+{"id": "bpe-added-23", "category": "added-token", "text": "before </tool_response> after</tool_response>end"}
+{"id": "bpe-added-24", "category": "added-token", "text": "before <think> after<think>end"}
+{"id": "bpe-added-25", "category": "added-token", "text": "before </think> after</think>end"}
+{"id": "bpe-added-26", "category": "added-token", "text": "before <|audio_start|> after<|audio_start|>end"}
+{"id": "bpe-added-27", "category": "added-token", "text": "before <|audio_end|> after<|audio_end|>end"}
+{"id": "bpe-added-28", "category": "added-token", "text": "before <tts_pad> after<tts_pad>end"}
+{"id": "bpe-added-29", "category": "added-token", "text": "before <tts_text_bos> after<tts_text_bos>end"}
+{"id": "bpe-added-30", "category": "added-token", "text": "before <tts_text_eod> after<tts_text_eod>end"}
+{"id": "bpe-added-31", "category": "added-token", "text": "before <tts_text_bos_single> after<tts_text_bos_single>end"}
+{"id": "bpe-added-32", "category": "added-token", "text": "before <|audio_pad|> after<|audio_pad|>end"}
+{"id": "bpe-pair-special", "category": "pair", "text": "Q: it's <think>", "pair": "  A:́ <|im_end|> 42 "}

@@ -1,0 +1,33 @@
+{
+  "reference": "sentence-transformers modules (Transformer, Pooling, Normalize) on the tokenizer.json ids of prompt + text, PyTorch fp32 CPU, sdpa attention, one row per call, full checkpoint",
+  "rows": 138,
+  "prompts": {
+    "none": "",
+    "query": "task: search result | query: ",
+    "document": "title: none | text: "
+  },
+  "max_tokens": 1750,
+  "padded_batch16_vs_single": {
+    "max_abs": 4.6938657760620117e-07,
+    "mean_abs": 2.1196536081902195e-08,
+    "p99_abs": 8.940696716308594e-08
+  },
+  "eager_attention_vs_sdpa": {
+    "max_abs": 2.738088369369507e-07,
+    "mean_abs": 1.8542886337513664e-08,
+    "p99_abs": 7.497146725654602e-08
+  },
+  "text_only_load_vs_full_every_third_row": {
+    "max_abs": 8.940696716308594e-08,
+    "mean_abs": 4.311172308035793e-09,
+    "p99_abs": 4.0978193283081055e-08
+  },
+  "one_thread_vs_default_every_third_row": {
+    "max_abs": 3.129243850708008e-07,
+    "mean_abs": 3.452695684913465e-09,
+    "p99_abs": 3.725290298461914e-08
+  },
+  "default_threads": 6,
+  "encode_end_to_end_vs_reference_max_abs": 0.0,
+  "nan_or_inf_rows": []
+}

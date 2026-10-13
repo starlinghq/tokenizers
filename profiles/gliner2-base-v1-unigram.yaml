@@ -1,0 +1,52 @@
+# Tokenizer profile (second Unigram asset, planned for M2). See profiles/README.md.
+# Status values: supported, unsupported, experimental, untested.
+profile: gliner2-base-v1-unigram
+status: experimental  # partial fixtures only; GLiNER2 revision and contract settled 2026-10-08 (docs/kickoff.md)
+backlog: P-024 (stretch), P-014
+library: Starling.Tokenizers 0.2.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
+
+asset:
+  repo: fastino/gliner2-base-v1
+  revision: f9634218e53580c56edf0de97ca1a7d3f1c2354e
+  file: tokenizer.json
+  sha256: 1b7fbabfb4c690bed84c6793bfecae9b8dfe205751b04f9ffd1e76a1e7df9c16
+  size: 8650701
+  format_version: "1.0"
+  acquisition: tools/fetch-assets.sh
+
+reference:
+  implementation: huggingface/tokenizers 0.22.2 via transformers 4.57.6 DebertaV2TokenizerFast  # GLiNER2 pins transformers < 5
+  note: the interpreter follows tokenizers 0.23.2 source; no 0.22.2/0.23.2 difference was found for these components, but none was checked line by line
+
+pipeline:
+  normalizer: Sequence[Strip(left, right), Precompiled(precompiled_charsmap), Replace(Regex " {2,}" -> " ")]
+  pre_tokenizer: Sequence[Metaspace(replacement "▁", prepend_scheme always, split true)]
+  model: Unigram(vocab 128000, unk_id 3, byte_fallback false)
+  post_processor: TemplateProcessing(single "[CLS] $A [SEP]", pair "[CLS] $A [SEP] $B:1 [SEP]:1")
+  decoder: Metaspace(replacement "▁", prepend_scheme always, split true)
+  added_tokens: 15 special tokens; [UNK] (3) has normalized true; GLiNER2 tokens 128001 to 128010
+  missing_components: none   # every component is implemented
+
+conformance:
+  fixtures: conformance/gliner2-base-v1-unigram/  # accepted as development fixtures 2026-10-08 (PR #4)
+  tests: tests/Starling.Tokenizers.Tests/Gliner2ConformanceTests.cs
+  result: # 2026-10-08
+    per_word_tokens: 46/46 cases exact (every word of the whitespace splitter, and of the char splitter where recorded), add_special_tokens false
+    per_word_input_ids: 46/46 cases, text part of input_ids exact (subword strings mapped with token_to_id, unknown -> 3)
+    whole_text_ids_and_tokens: 10/10 recorded cases exact (the cases where slow or raw SentencePiece differ; only those carry reference ids)
+
+capabilities:
+  per_word_encode_without_special_tokens: experimental   # matches all recorded words
+  whole_text_encode_with_template: experimental          # 10 of 46 cases have reference ids
+  offsets: untested             # fixtures record word offsets of GLiNER2's splitter, not token offsets
+  pair_encode: untested
+  decode: untested
+  truncation_padding: untested
+  schema_prefix_tokens: untested   # GLiNER2 schema construction is model code, not tokenizer code (P-014)
+
+known_divergences:
+  against_reference: none on the recorded cases
+  other_implementations_vs_reference: slow DebertaV2Tokenizer differs on 11 of 46 per-word cases (byte fallback, zero-width characters, Hangul jamo, Unigram tie order); docs/m0/reference-runs.md section 2
+
+to_reach_supported:
+  - a whole-text fixture for all 46 cases with token offsets, decode and pairs from the reference runner

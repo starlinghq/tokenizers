@@ -1,0 +1,6 @@
+# Generic tokenizer.json fixture runner: huggingface/tokenizers only. 0.23.3 is the newest reference
+# version an accepted profile uses (gemma-bpe-embeddinggemma2); its library changes against 0.23.2
+# touch only truncation with overflowing windows, which this library does not offer. Bumping it is a
+# deliberate change: regenerate or recheck the fixtures of every profile that uses this runner.
+tokenizers==0.23.3
+huggingface-hub==1.33.0  # dependency of tokenizers, pinned as in ../gemma-bpe/requirements.in

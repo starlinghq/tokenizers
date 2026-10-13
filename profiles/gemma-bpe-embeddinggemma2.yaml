@@ -1,0 +1,91 @@
+# Tokenizer profile: a tested combination of one pinned asset and the interpreter components it
+# uses (profiles/README.md). Status values: supported, unsupported, experimental, untested.
+# Release qualification is a maintainer decision; this file does not grant a badge.
+profile: gemma-bpe-embeddinggemma2   # EmbeddingGemma 2 (model-pipeline/admissions/embeddinggemma-2.md), text path
+status: experimental  # 49/49 accepted fixture cases exact; 0 differential mismatches (conformance.result)
+backlog: EmbeddingGemma 2 admission (plan section 7, P1); docs/m0/embeddinggemma2-spike.md section 5
+library: Starling.Tokenizers 0.2.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
+
+asset:
+  repo: google/embeddinggemma-2
+  revision: 914f7f89142e33e77833254d9c9b90c3cef7303b
+  file: tokenizer.json
+  sha256: 4d777ef5bdc1aa36227abdfb77c3e49e7b9c892d16e1b6bda41c393504828be4
+  size: 32170510
+  format_version: "1.0"
+  acquisition: tools/fetch-assets.sh   # never committed (plan section 9)
+
+runtime_pipeline:   # conformance/gemma-bpe-embeddinggemma2/tokenizer-implementations.json
+  transformers: 5.19.0 GemmaTokenizer; its live pipeline equals this file field by field
+  sentence_transformers: 6.1.0 preprocessing (chat template, prompt as a system message) gives the same ids as this file on prompt + text (46 texts x 3 prompt settings)
+  known_difference: transformers drops an empty second sequence of a pair (pair-empty-second); this file and the owned tokenizer encode <bos><eos> for it
+
+reference:
+  implementation: huggingface/tokenizers 0.23.3 (Python binding, Tokenizer.from_file(asset)); the version the accepted fixtures were generated with
+  source_revision: 88a4498ad4ea1a9487b0a9b0ff881383fd5a06a3   # v0.23.2, the interpreter's behavioral spec; v0.23.3 (9ab7691f497eff905f961aba51a4bb9be3e9555c) changes only truncation with overflowing windows (rejected here) and Python stubs
+  offsets_unit: unicode-scalars   # reference unit; the .NET API also gives utf16-code-units
+
+pipeline:   # exactly what the pinned file declares
+  normalizer: Replace(String " " -> "▁")   # one byte to three; every "▁" byte aligns to the replaced space
+  pre_tokenizer: Split(String " ", MergedWithPrevious, invert false)   # never fires after the normalizer (no U+0020 left): each added-token-free segment is one BPE word
+  model: BPE(vocab 262144 incl. 256 <0xNN> byte tokens, merges 514906 in pair form, unk_token "<unk>" (id 3), fuse_unk true, byte_fallback true, ignore_merges false, dropout null, prefix and suffix null)
+  post_processor: TemplateProcessing(single "<bos> $A <eos>", pair "<bos> $A <eos> <bos> $B <eos>" with type id 1 for the second sequence)
+  decoder: Sequence[Replace(String "▁" -> " "), ByteFallback, Fuse]
+  added_tokens: 24, all special, normalized false, no strip or single-word flags; ids 0-4 (<pad> <eos> <bos> <unk> <mask>), 46-52 (tool markers, <|"|>), 98 (<|think|>), 100-101 (channel), 105-106 (turn), 255999 (<|image>), 256000 (<|audio>), 258880-258884 (<|image|> <|audio|> <image|> <audio|> <|video|>)
+  truncation: null
+  padding: null
+
+conformance:
+  fixtures: conformance/gemma-bpe-embeddinggemma2/   # accepted as development fixtures by Mark on 2026-10-10 (PR #29): tokenizer.jsonl, tokenizer-batch.json, tokenizer-implementations.json
+  corpus: conformance/corpus/tokenizer-corpus-v1.jsonl (49 cases, sha256 8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199)
+  differential: reference/gemma-bpe/run_gemma_bpe_tokenizer.py (requirements.txt: tokenizers 0.23.3)
+  tests:
+    - tests/Starling.Tokenizers.Tests/GemmaBpeConformanceTests.cs
+    - tests/Starling.Tokenizers.Tests/GemmaBpeDifferentialTests.cs
+    - tests/Starling.Tokenizers.Tests/GemmaBpeComponentTests.cs
+    - tests/Starling.Tokenizers.Tests/BpeLoaderTests.cs   # fast path equals document path on the asset
+  result: # 2026-10-10, Linux x64, .NET SDK 10.0.100, runtime 10.0.12, Release
+    encode: "49/49 cases exact (46 single, 3 pairs): ids, tokens, type_ids, attention_mask, special_tokens_mask, sequence_ids, offsets in unicode scalars, UTF-16 code units and UTF-8 bytes; 9 cases contain byte-fallback tokens; without special tokens only the template tokens are dropped"
+    decode: 49/49 cases exact, skip_special_tokens true and false
+    batch: 6-row right-padded batch exact (pad id 0, 1,743 columns), rows equal single encodes
+    differential_committed: "2,000 generated strings (80 pairs) on the asset + 300 on each of 10 option variants, 1,000 random id sequences (seed 20261011): 0 mismatches"
+    differential_large: "1,000,000 generated strings + 50,000 per variant and 100,000 id sequences (seed 8), plus 100,000 + 10,000 per variant and 20,000 id sequences (seed 7): 0 mismatches; dumps kept outside Git"
+    components: "synthetic tokenizers (byte tokens partly missing, unknown token fused and unfused, every Split behavior and invert, byte-token look-alikes in decode), tokenizers 0.23.3 reference in TestData/gemma-bpe/components.json: exact"
+
+capabilities:
+  encode_single: supported
+  encode_pair: experimental            # 3 corpus pairs and 4% of generated cases; embeddings do not use pairs
+  encode_batch: supported              # batch of single encodes
+  padding_right_batch_longest: supported   # tokenizer-batch.json
+  offsets_utf16_code_units: supported
+  offsets_unicode_scalars: supported
+  sequence_ids: supported
+  special_tokens_mask: supported
+  added_tokens_special_in_text: supported   # every added literal and fragments in the differential corpus; literals split out of the text
+  byte_fallback: supported             # one <0xNN> token per UTF-8 byte, each with the character's offsets
+  decode_skip_special_tokens: supported
+  decode_keep_special_tokens: supported
+  decode_invalid_byte_sequences: supported   # ByteFallback: one U+FFFD per byte token of an invalid run (random id sequences)
+  truncation: experimental             # generic code path; no Gemma fixture (no case reaches 8,192 tokens)
+  padding_left_fixed_multiple: experimental   # generic code path; no Gemma fixture
+  bpe_unk_token_fuse_unk: experimental        # unreachable with this asset (all 256 byte tokens exist); 0 mismatches on the unk-fused and unk-unfused variants
+  bpe_ignore_merges_true: experimental        # not in the asset; 0 mismatches on the differential variant
+  split_string_other_behaviors_and_invert: experimental   # not in the asset; 0 mismatches on the split-* variants
+  replace_multi_character_patterns: experimental          # not in the asset; 0 mismatches on the replace-multi variant
+  bpe_dropout_affixes: unsupported     # rejected at load
+  unk_token_missing_from_vocabulary: unsupported   # rejected at load (upstream fails at encode time when it is needed)
+  incremental_decode_stream: unsupported   # no streaming API; see tokenizers-dotnet/README.md (decode is not prefix-stable after an invalid byte run)
+  multimodal_placeholders: unsupported # <|image|>, <|audio|>, <|video|> literals tokenize to their placeholder ids; rejecting them is the model package's job (spike section 6)
+  thread_safety: untested              # immutable by design
+  performance: experimental            # exploratory numbers, docs/benchmarks/tokenizer-gemma-bpe-2026-10-10.md
+
+known_divergences:
+  against_reference: none on the fixtures or the differential runs
+  other_pipelines:
+    - transformers 5.19.0 GemmaTokenizer drops an empty second pair sequence (pair-empty-second); this profile follows tokenizer.json
+  reference_quirks_reproduced:
+    - an unknown character pending fusion is emitted only at the next in-vocabulary character or the end of the word, after any byte-fallback tokens in between (unreachable with this asset; synthetic components)
+    - ByteFallback decode turns an invalid run into one U+FFFD per byte token, not per ill-formed subsequence; byte-token names parse as Rust u8::from_str_radix ("<0x+A>" and lower-case hex are bytes)
+    - Replace content characters all take the alignment of the last replaced byte
+  risks:
+    - each added-token-free segment is one BPE word (no pre-tokenization), so a long text is merged as one word: cost grows with the segment length (docs/benchmarks/tokenizer-gemma-bpe-2026-10-10.md)

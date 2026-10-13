@@ -1,0 +1,135 @@
+name: release
+
+# Release Starling.Tokenizers (docs/releasing.md).
+#
+#   git tag v0.2.0-preview.1 && git push origin v0.2.0-preview.1
+#
+# 1. candidate: the tag must equal the version in Directory.Build.props, point at a commit on main and
+#    have a CHANGELOG.md section. The release drill then tests with every asset required, packs, and
+#    installs the package into a clean consumer outside the checkout. The exact .nupkg/.snupkg the
+#    drill verified are uploaded as the `package` artifact.
+# 2. publish: waits for approval on the `release` environment, pushes those bytes to nuget.org with
+#    NuGet trusted publishing (a short-lived key from GitHub OIDC; no stored API key), and creates the
+#    GitHub release with the CHANGELOG section as notes.
+#
+# Run by hand (workflow_dispatch) it builds the candidate only and never publishes.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  candidate:
+    name: release candidate
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+      - name: Boundary check
+        run: python3 -I tools/check-boundary.py
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          global-json-file: global.json
+      - name: Version
+        id: version
+        run: |
+          version="$(dotnet msbuild src/Starling.Tokenizers -getProperty:Version)"
+          echo "version=${version}" >>"$GITHUB_OUTPUT"
+          echo "version ${version}"
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            if [[ "${GITHUB_REF_NAME}" != "v${version}" ]]; then
+              echo "::error::Tag ${GITHUB_REF_NAME} does not match the project version ${version} (Directory.Build.props)."
+              exit 1
+            fi
+            git fetch --quiet origin main
+            if ! git merge-base --is-ancestor "${GITHUB_SHA}" origin/main; then
+              echo "::error::Tag ${GITHUB_REF_NAME} points at ${GITHUB_SHA}, which is not on main."
+              exit 1
+            fi
+          fi
+          if ! grep -qE "^## \[${version//./\\.}\]" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no '## [${version}]' section."
+            exit 1
+          fi
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: .models
+          key: tokenizer-assets-${{ hashFiles('tools/pinned-assets.txt', 'tools/fetch-assets.sh') }}
+      - name: Fetch pinned assets
+        run: tools/fetch-assets.sh
+      # Tests (assets required, locked restore), independence check, pack, nuspec checks, local-feed
+      # push and clean consumer outside the checkout.
+      - name: Release drill
+        run: tools/release-drill.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: package
+          path: artifacts/release-drill/
+          if-no-files-found: error
+          retention-days: 90
+
+  publish:
+    name: publish to nuget.org
+    needs: candidate
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    environment: release # required reviewer; NUGET_USER is a variable of this environment
+    permissions:
+      contents: write # create the GitHub release
+      id-token: write # NuGet trusted publishing
+    env:
+      VERSION: ${{ needs.candidate.outputs.version }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          global-json-file: global.json
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: package
+          path: package
+      - name: Package is the drilled candidate
+        run: |
+          ls -l package
+          test -f "package/Starling.Tokenizers.${VERSION}.nupkg"
+          test -f "package/Starling.Tokenizers.${VERSION}.snupkg"
+          grep -qx 'RESULT: PASS' package/consumer.log
+          sha256sum package/*.nupkg package/*.snupkg
+      - name: NuGet login (OIDC)
+        id: nuget
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+        with:
+          user: ${{ vars.NUGET_USER }}
+      # No --skip-duplicate: a published version is immutable, so pushing one twice must fail.
+      - name: Push to nuget.org
+        run: >
+          dotnet nuget push "package/Starling.Tokenizers.${VERSION}.nupkg"
+          --api-key "${{ steps.nuget.outputs.NUGET_API_KEY }}"
+          --source https://api.nuget.org/v3/index.json
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          awk -v v="${VERSION}" '
+            $0 ~ "^## \\[" { if (found) exit; if (index($0, "## [" v "]") == 1) { found = 1; next } }
+            found { print }
+          ' CHANGELOG.md >notes.md
+          prerelease=()
+          [[ "${VERSION}" == *-* ]] && prerelease=(--prerelease)
+          gh release create "${GITHUB_REF_NAME}" "${prerelease[@]}" \
+            --title "Starling.Tokenizers ${VERSION}" --notes-file notes.md \
+            "package/Starling.Tokenizers.${VERSION}.nupkg" "package/Starling.Tokenizers.${VERSION}.snupkg"

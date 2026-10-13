@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.cs text diff=csharp
+*.ps1 text eol=crlf
+*.json text
+# Conformance fixtures and reference-written test data are byte-exact expectations: never normalize.
+conformance/** -text
+tests/*/TestData/** -text

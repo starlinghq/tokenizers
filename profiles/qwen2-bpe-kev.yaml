@@ -1,0 +1,93 @@
+# Tokenizer profile: a tested combination of one pinned asset and the interpreter components it
+# uses (profiles/README.md). Status values: supported, unsupported, experimental, untested.
+# Release qualification is a maintainer decision; this file does not grant a badge.
+profile: qwen2-bpe-kev   # Kev-0.8B (P-027); same vocabulary and merges as qwen35-bpe-chat, regex without \p{M}
+status: experimental  # 137/137 fixture cases exact; fixtures proposed, not yet accepted (see conformance.fixtures)
+backlog: P-024 (follow-up), P-027
+library: Starling.Tokenizers 0.2.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
+
+asset:
+  repo: jaredpalmer/kev-0.8b
+  revision: 9a45d25eb2ab761841196625383fa1dff0e56c1e
+  file: tokenizer.json
+  sha256: 06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523
+  size: 19989325
+  format_version: "1.0"
+  acquisition: tools/fetch-assets.sh   # never committed (plan section 9)
+
+runtime_pipeline:   # what Kev actually runs (model-pipeline/admissions/kev.md, "Tokenizer profile")
+  loader: transformers 5.17.0 AutoTokenizer.from_pretrained("Qwen/Qwen3.5-0.8B-Base", revision dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68)
+  class: Qwen2Tokenizer   # built from the class, not from the base snapshot's tokenizer.json (fe000e3e...)
+  live_backend_tokenizer: backend_tokenizer.to_str(pretty=True) equals this asset byte for byte (sha256 06b95093...), checked 2026-10-10 by the reference runner
+
+reference:
+  implementation: huggingface/tokenizers 0.23.2 (Python binding, Tokenizer.from_file(asset)); the version transformers 5.17.0 uses
+  source_revision: 88a4498ad4ea1a9487b0a9b0ff881383fd5a06a3
+  runner: reference/qwen-bpe/run_qwen_bpe_tokenizer.py --profile kev (requirements-kev.txt)
+  transformers_cross_check: 137/137 cases, tokenizer(text, add_special_tokens=False) ids equal the reference
+  offsets_unit: unicode-scalars   # reference unit; the .NET API also gives utf16-code-units
+
+pipeline:   # exactly what the pinned file declares
+  normalizer: NFC   # Unicode 9.0.0 data, as the reference's crate unicode-normalization-alignments 0.1.12
+  pre_tokenizer: Sequence[Split(Regex "(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+", Isolated, invert false), ByteLevel(add_prefix_space false, trim_offsets true, use_regex false)]
+  model: BPE(vocab 248044, merges 247587, unk_token null, byte_fallback false, ignore_merges false, dropout null, empty prefix and suffix)
+  post_processor: ByteLevel(add_prefix_space false, trim_offsets false)   # adds no tokens
+  decoder: ByteLevel   # options unused by the decoder
+  added_tokens: 33 (ids 248044-248076, all normalized false); special true 248044-248057 (<|endoftext|> to <|video_pad|>) and 248070-248076 (audio and TTS markers); special false 248058-248069 (<tool_call>, </tool_call>, fim/repo/file markers, <tool_response>, </tool_response>, <think>, </think>)
+  truncation: null
+  padding: null
+
+conformance:
+  fixtures: conformance/qwen2-bpe-kev/   # proposed, not yet accepted by a maintainer (PROPOSED.md in that directory)
+  corpus:
+    - conformance/corpus/tokenizer-corpus-v1.jsonl (49 cases, sha256 8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199)
+    - conformance/corpus/tokenizer-corpus-qwen-bpe-v1.jsonl (88 cases)
+  tests:
+    - tests/Starling.Tokenizers.Tests/QwenBpeConformanceTests.cs
+    - tests/Starling.Tokenizers.Tests/QwenBpeDifferentialTests.cs
+    - tests/Starling.Tokenizers.Tests/QwenSplitPatternTests.cs
+    - tests/Starling.Tokenizers.Tests/BpeLoaderTests.cs
+  result: # 2026-10-10, Linux x64, .NET SDK 10.0.100, runtime 10.0.12, Release
+    encode: "137/137 cases exact (134 single, 3 pairs): ids, tokens, type_ids, attention_mask, special_tokens_mask, utf16 and scalar offsets, sequence_ids; add_special_tokens true and false give the same ids"
+    decode: 137/137 cases exact, skip_special_tokens true and false
+    differential_committed: "1,500 generated strings (+ 300 on each of 3 option variants) and 500 random id sequences (seed 20261010): 0 mismatches"
+    differential_large: "1,000,000 generated strings (+ 50,000 per variant) and 100,000 id sequences (seed 8), plus 100,000 (seed 7): 0 mismatches; dumps kept outside Git"
+    regex_classes: \p{L}, \p{N}, \p{M} and \s equal to the reference engine for all 1,112,064 scalar values
+
+capabilities:
+  encode_single: supported
+  encode_pair: experimental            # 3 corpus pairs and 4% of generated cases; Kev does not encode pairs
+  encode_batch: supported              # batch of single encodes
+  offsets_utf16_code_units: supported
+  offsets_unicode_scalars: supported
+  sequence_ids: supported
+  special_tokens_mask: supported
+  added_tokens_special_and_non_special_in_text: supported   # every literal and near-misses in the corpus
+  decode_skip_special_tokens: supported
+  decode_keep_special_tokens: supported
+  decode_invalid_utf8: supported       # U+FFFD per maximal ill-formed subsequence, as Rust from_utf8_lossy (random id sequences)
+  truncation: experimental             # generic code path; no Qwen fixture
+  padding: experimental                # generic code path; no Qwen fixture
+  post_processor_trim_offsets_true: experimental    # not in the asset; 0 mismatches on the differential variant
+  byte_level_add_prefix_space_true: experimental    # not in the asset; 0 mismatches on the differential variant
+  bpe_ignore_merges_true: experimental              # not in the asset; 0 mismatches on the differential variant
+  bpe_dropout_unk_token_byte_fallback_affixes: unsupported   # rejected at load
+  byte_level_use_regex_true_pre_tokenizer: unsupported       # rejected at load
+  other_split_regexes: unsupported     # only the two Qwen regexes are recognized; others fail at load
+  kev_text_escaping: unsupported       # Kev's <|name|> -> <¦name¦> escaping is application code, not tokenizer behavior
+  chat_template: unsupported           # P-029
+  incremental_decode_stream: unsupported
+  thread_safety: untested              # immutable by design
+  performance: experimental            # exploratory numbers, docs/benchmarks/tokenizer-qwen-bpe-2026-10-10.md
+
+known_divergences:
+  against_reference: none on the fixtures or the differential runs
+  other_pipelines:
+    - the base Qwen/Qwen3.5-0.8B-Base tokenizer.json (fe000e3e...) and profile qwen35-bpe-chat use the \p{M} regex and give different ids on text with combining marks (6 of 137 corpus cases: devanagari, thai, bpe-devanagari-marks, bpe-thai-marks, bpe-arabic-harakat, bpe-tamil-composing)
+  reference_quirks_reproduced:
+    - NFC with Unicode 9.0.0 data (the reference's crate), not the runtime's Unicode 16
+    - a composed character keeps the alignment of its first original character (offsets of e + U+0301 are (0, 1))
+    - characters outside the vocabulary are dropped without a token (cannot happen with byte-level input)
+    - the case-insensitive contractions also match U+017F LATIN SMALL LETTER LONG S for s, as Oniguruma's case folding does
+  risks:
+    - regex character classes are generated tables probed from the reference (tools/generate-unicode-tables.py); a different reference build (another Oniguruma Unicode version) would need a regeneration and requalification

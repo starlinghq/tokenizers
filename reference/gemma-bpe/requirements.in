@@ -1,0 +1,4 @@
+# Gemma BPE tokenizer differential and component references: tokenizers 0.23.3, the version the accepted
+# EmbeddingGemma 2 fixtures were generated with (conformance/gemma-bpe-embeddinggemma2/environment.json).
+tokenizers==0.23.3
+huggingface-hub==1.33.0  # dependency of tokenizers, pinned as in ../embeddinggemma2/requirements.txt

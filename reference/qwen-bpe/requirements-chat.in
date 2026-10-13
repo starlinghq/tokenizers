@@ -1,0 +1,4 @@
+# Qwen BPE tokenizer reference, chat profile: the pilot LLM reference runtime (transformers 5.18.0).
+transformers==5.18.0
+tokenizers==0.23.2
+huggingface-hub==1.33.0

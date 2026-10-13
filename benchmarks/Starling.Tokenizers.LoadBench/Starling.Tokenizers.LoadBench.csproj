@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Load-time benchmark for the owned tokenizer: Tokenizer.FromFile in fresh processes (cold) and repeated in one
+    process (warm), with GC allocated bytes and peak working set. Not packed; never run in CI.
+    Usage: docs/performance.md.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <ServerGarbageCollection>false</ServerGarbageCollection>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/Starling.Tokenizers/Starling.Tokenizers.csproj" />
+  </ItemGroup>
+
+</Project>
