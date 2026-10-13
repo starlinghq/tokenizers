@@ -5,8 +5,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: StarlingHq.Tokenizers version and profile
-      placeholder: 0.2.0-preview.1, qwen35-bpe-chat
+      label: Starlings.Tokenizers version and profile
+      placeholder: 0.3.0-preview.1, qwen35-bpe-chat
     validations:
       required: true
   - type: input
