@@ -56,7 +56,7 @@ These are account settings. An agent or contributor cannot apply them.
 1. **GitHub environment.** In the repository, go to Settings > Environments > New environment, and name it `release`.
    - Add the maintainers as required reviewers.
    - Under deployment branches and tags, allow only tags matching `v*`.
-   - Add the environment variable `NUGET_USER`: the nuget.org **user name** (not the organization) of the account that owns the trusted publishing policy.
+   - Add the environment variable `NUGET_USER`: the nuget.org **user name of the person who created** the trusted publishing policy, not the organization that owns it. With the organization's name, the token exchange fails with "No matching trust policy owned by user ... was found".
    - No secret is needed.
 2. **nuget.org trusted publishing.** Sign in as that user and open Trusted Publishing. Create a policy with:
 
@@ -68,7 +68,7 @@ These are account settings. An agent or contributor cannot apply them.
    | Workflow file | `release.yml` |
    | Environment | `release` |
 
-   The user must be an administrator of the `starlinghq` organization on nuget.org.
+   The user must be an administrator of the `starlinghq` organization on nuget.org, and the organization needs a confirmed email address (organization Settings on nuget.org); without one the token exchange fails with "The organization ... does not have a confirmed email address".
 3. **NuGet ID prefix.** The `Starling` prefix is reserved on nuget.org by another owner, which is why the package ID is `StarlingHq.Tokenizers` (a push under `Starling.` fails with 409 "The package ID is reserved"). Optionally ask account@nuget.org to reserve `StarlingHq` for the `starlinghq` organization; see the NuGet ID prefix reservation documentation. Reservation is not required to publish, but it marks packages as verified and stops others from publishing under the prefix.
 4. **Branch protection.** Protect `main`: require pull requests, require the `ci` checks (`boundary`, `test (ubuntu-latest)`, `test (windows-latest)`, `release drill`, `reference runners (ruff)`), and require review from code owners. `CODEOWNERS` covers `conformance/`, `tests/*/TestData/`, `tools/pinned-assets.txt` and the release files.
 5. **Actions.** Keep the default workflow token read-only (Settings > Actions > General). The release workflow asks for `contents: write` and `id-token: write` on the publish job only.
