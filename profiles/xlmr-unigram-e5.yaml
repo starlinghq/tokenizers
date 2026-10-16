@@ -5,7 +5,7 @@
 profile: xlmr-unigram-e5   # name used by the ai-dotnet IEncoderTokenizer seam
 status: experimental  # P0 encoder settled (docs/kickoff.md); release qualification (G1) is the maintainer's call.
 backlog: P-024
-library: Starlings.Tokenizers 0.3.0-preview.1   # results first recorded on the planning-era package 0.1.0-preview.4; rerun on this version before release
+library: Starlings.Tokenizers 0.3.0   # results first recorded on the planning-era package 0.1.0-preview.4; conformance rerun on 0.3.0 (same code as 0.3.0-preview.1)
 
 asset:
   repo: intfloat/multilingual-e5-small

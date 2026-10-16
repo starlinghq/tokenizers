@@ -4,6 +4,18 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-16
+
+The first release without a preview suffix, so that the ai-dotnet model packages (0.2.0, the first release with Stable model profiles) can depend on a non-prerelease tokenizer. The code is the code of 0.3.0-preview.1; only the version and documentation changed.
+
+### Changed
+
+- Version scheme: releases are `0.MINOR.PATCH`; `-preview.N` is kept for candidates. The API can still change between minor versions (0.x). Install without `--prerelease`.
+
+### Behavior
+
+- No change in output for any profile: the same conformance fixtures pass unchanged.
+
 ## [0.3.0-preview.1] - 2026-10-13
 
 ### Changed
