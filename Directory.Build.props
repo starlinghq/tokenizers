@@ -15,12 +15,11 @@
     <RestoreLockedMode Condition="'$(CI)' == 'true'">true</RestoreLockedMode>
 
     <!--
-      Version (docs/releasing.md): SemVer 2, 0.MINOR.PATCH-preview.N until the first Stable release.
+      Version (docs/releasing.md): SemVer 2, 0.MINOR.PATCH-preview.N for candidates, 0.MINOR.PATCH for releases.
       A published version is immutable. The release tag is v$(Version); the release workflow refuses
       a tag that differs.
     -->
     <VersionPrefix>0.3.0</VersionPrefix>
-    <VersionSuffix>preview.1</VersionSuffix>
 
     <Authors>StarlingHq</Authors>
     <Company>StarlingHq</Company>

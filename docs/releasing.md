@@ -4,10 +4,10 @@ Starlings.Tokenizers ships often: a new tokenizer profile, a component that unlo
 
 ## Versions
 
-- **Scheme.** SemVer 2, set in [`Directory.Build.props`](../Directory.Build.props) (`VersionPrefix`, `VersionSuffix`). Until the first Stable release, versions are `0.MINOR.PATCH-preview.N`.
+- **Scheme.** SemVer 2, set in [`Directory.Build.props`](../Directory.Build.props) (`VersionPrefix`, `VersionSuffix`). Releases are `0.MINOR.PATCH` (from 0.3.0); a candidate before a release may be `0.MINOR.PATCH-preview.N`. Earlier releases were all previews. The 0.x major keeps the API-stability signal honest: the API can change between minor versions.
   - **MINOR**: the public API changes, or a profile is dropped.
   - **PATCH**: a behavior fix, a new component, or a new profile.
-  - **preview.N**: counts candidates of the same version.
+  - **preview.N**: counts candidates of the same version (optional).
 - **Tokenizer output is behavior.** A change in token ids, offsets or decoded text is a behavior change even if no C# signature moves. It needs a `CHANGELOG.md` entry and a rerun of the conformance tests of every profile it touches.
 - **Immutability.** A published version is never replaced. Any change to shipped bytes needs a new version. The release workflow pushes without `--skip-duplicate`, so publishing an existing version fails.
 - **Consumers pin.** Model packages pin the tokenizer version they were qualified with. A newer tokenizer is not automatically certified for existing model bundles.
@@ -20,8 +20,8 @@ Starlings.Tokenizers ships often: a new tokenizer profile, a component that unlo
 
    ```sh
    git switch main && git pull
-   git tag v0.3.0-preview.1
-   git push origin v0.3.0-preview.1
+   git tag v0.3.0
+   git push origin v0.3.0
    ```
 
 4. The [`release`](../.github/workflows/release.yml) workflow runs:

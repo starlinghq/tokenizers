@@ -16,12 +16,12 @@ string text = tokenizer.Decode(encoding.Ids.AsSpan(), skipSpecialTokens: true);
 
 Part of [Starling](https://github.com/starlinghq), .NET implementations of AI models with reproducible evidence of what works.
 
-> **Preview.** Every profile is experimental until it is qualified for a Stable release. The API can still change between minor versions.
+> **0.x.** The public API can still change between minor versions. A profile's status is in its file under `profiles/`; the Starling model profiles that use a profile pin the exact tokenizer version they were qualified with.
 
 ## Install
 
 ```sh
-dotnet add package Starlings.Tokenizers --prerelease
+dotnet add package Starlings.Tokenizers
 ```
 
 ## Usage
