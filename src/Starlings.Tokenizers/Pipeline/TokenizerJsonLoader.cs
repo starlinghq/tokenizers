@@ -609,18 +609,17 @@ internal static class TokenizerJsonLoader
                 string where = $"added_tokens[{i++}]";
                 RequireObject(t, where);
                 AllowKeys(t, where, "id", "content", "single_word", "lstrip", "rstrip", "normalized", "special");
-                foreach (string option in new[] { "single_word", "lstrip", "rstrip" })
+                if (RequireBool(t, "single_word", where))
                 {
-                    if (RequireBool(t, option, where))
-                    {
-                        throw new UnsupportedTokenizerComponentException($"{where}.{option}", "added-token option is not implemented.");
-                    }
+                    throw new UnsupportedTokenizerComponentException($"{where}.single_word", "added-token option is not implemented.");
                 }
 
                 var token = new AddedToken(
                     RequireString(t, "content", where),
                     RequireBool(t, "special", where),
-                    RequireBool(t, "normalized", where));
+                    RequireBool(t, "normalized", where),
+                    RequireBool(t, "lstrip", where),
+                    RequireBool(t, "rstrip", where));
                 tokens.Add((Require(t, "id", where).GetInt32(), token));
             }
         }

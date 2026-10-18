@@ -81,6 +81,30 @@ public class PipelineBehaviorTests
     }
 
     [Fact]
+    public void LstripAndRstripAbsorbAdjacentWhitespace()
+    {
+        string json = Mutate(r =>
+        {
+            r["added_tokens"]![1]!["lstrip"] = true;
+            r["added_tokens"]![1]!["rstrip"] = true;
+        });
+        // <s> is normalized:false so it matches the raw text; lstrip+rstrip pull the
+        // surrounding spaces into the match (upstream added_vocabulary semantics).
+        TokenEncoding e = Load(json).Encode(" <s> ", addSpecialTokens: false);
+        Assert.Equal([" <s> "], e.Tokens);
+        Assert.Equal([5], e.Ids);
+    }
+
+    [Fact]
+    public void LstripDoesNotAbsorbNonWhitespace()
+    {
+        string json = Mutate(r => r["added_tokens"]![1]!["lstrip"] = true);
+        // "x<s>" has no whitespace before <s>; lstrip must not eat the "x".
+        TokenEncoding e = Load(json).Encode("x<s>", addSpecialTokens: false);
+        Assert.Contains("<s>", e.Tokens);
+    }
+
+    [Fact]
     public void PairUsesTemplateTypeIdsAndSequenceIds()
     {
         TokenEncoding e = Load(_minimal).Encode("a", "b");
@@ -139,7 +163,7 @@ public class PipelineBehaviorTests
         { Mutate(r => r["pre_tokenizer"]!["unexpected"] = 1), "pre_tokenizer.type=Metaspace.unexpected" },
         { Mutate(r => r["model"]!["type"] = "UnknownModel"), "model.type=UnknownModel" },
         { Mutate(r => r["model"]!["byte_fallback"] = true), "model.type=Unigram.byte_fallback" },
-        { Mutate(r => r["added_tokens"]![0]!["lstrip"] = true), "added_tokens[0].lstrip" },
+        { Mutate(r => r["added_tokens"]![0]!["single_word"] = true), "added_tokens[0].single_word" },
         { Mutate(r => r["post_processor"] = new JsonObject { ["type"] = "BertProcessing" }), "post_processor.type=BertProcessing" },
         { Mutate(r => r["decoder"] = new JsonObject { ["type"] = "BPEDecoder" }), "decoder.type=BPEDecoder" },
         { Mutate(r => r["truncation"] = new JsonObject { ["direction"] = "Right", ["max_length"] = 8, ["strategy"] = "LongestFirst", ["stride"] = 2 }), "truncation.stride" },
