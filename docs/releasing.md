@@ -20,8 +20,8 @@ Starlings.Tokenizers ships often: a new tokenizer profile, a component that unlo
 
    ```sh
    git switch main && git pull
-   git tag v0.3.0
-   git push origin v0.3.0
+   git tag v0.3.1
+   git push origin v0.3.1
    ```
 
 4. The [`release`](../.github/workflows/release.yml) workflow runs:

@@ -4,6 +4,14 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-10-19
+
+The code of 0.3.1-preview.1 released without a preview suffix, so that a non-prerelease ai-dotnet package can pin it (NuGet NU5104). Only the version and documentation changed.
+
+### Behavior
+
+- No change in output for any existing profile: none declares `lstrip` or `rstrip` (0.3.0 refused to load such tokenizers), and the same conformance fixtures pass unchanged.
+
 ## [0.3.1-preview.1] - 2026-10-18
 
 ### Added

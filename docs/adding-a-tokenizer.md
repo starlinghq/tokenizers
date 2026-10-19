@@ -98,7 +98,7 @@ Copy the closest existing profile under [`profiles/`](../profiles/) and edit it.
 ```yaml
 profile: bert-wordpiece-bge-small
 status: experimental   # supported | experimental | untested | unsupported
-library: Starlings.Tokenizers 0.3.1-preview.1
+library: Starlings.Tokenizers 0.3.1
 
 asset:
   repo: BAAI/bge-small-en-v1.5
