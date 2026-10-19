@@ -20,7 +20,6 @@
       a tag that differs.
     -->
     <VersionPrefix>0.3.1</VersionPrefix>
-    <VersionSuffix>preview.1</VersionSuffix>
 
     <Authors>StarlingHq</Authors>
     <Company>StarlingHq</Company>

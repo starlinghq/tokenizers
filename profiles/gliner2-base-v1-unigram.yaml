@@ -3,7 +3,7 @@
 profile: gliner2-base-v1-unigram
 status: experimental  # partial fixtures only; GLiNER2 revision and contract settled 2026-10-08 (docs/kickoff.md)
 backlog: P-024 (stretch), P-014
-library: Starlings.Tokenizers 0.3.0   # results first recorded on the planning-era package 0.1.0-preview.4; conformance rerun on 0.3.0 (same code as 0.3.0-preview.1)
+library: Starlings.Tokenizers 0.3.1   # results first recorded on the planning-era package 0.1.0-preview.4; conformance rerun on 0.3.1 (adds lstrip/rstrip, which this profile does not use)
 
 asset:
   repo: fastino/gliner2-base-v1

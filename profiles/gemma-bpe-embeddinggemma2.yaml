@@ -4,7 +4,7 @@
 profile: gemma-bpe-embeddinggemma2   # EmbeddingGemma 2 (model-pipeline/admissions/embeddinggemma-2.md), text path
 status: experimental  # 49/49 accepted fixture cases exact; 0 differential mismatches (conformance.result)
 backlog: EmbeddingGemma 2 admission (plan section 7, P1); docs/m0/embeddinggemma2-spike.md section 5
-library: Starlings.Tokenizers 0.3.0   # results first recorded on the planning-era package 0.1.0-preview.4; conformance rerun on 0.3.0 (same code as 0.3.0-preview.1)
+library: Starlings.Tokenizers 0.3.1   # results first recorded on the planning-era package 0.1.0-preview.4; conformance rerun on 0.3.1 (adds lstrip/rstrip, which this profile does not use)
 
 asset:
   repo: google/embeddinggemma-2
