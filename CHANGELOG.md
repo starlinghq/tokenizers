@@ -4,6 +4,16 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+## [0.3.1-preview.1] - 2026-10-18
+
+### Added
+
+- `lstrip` and `rstrip` added-token options: an added token can absorb the whitespace on its left/right, matching upstream `AddedVocabulary` semantics (`space_leftmost_at_end` / `space_rightmost_at_start`). `single_word` remains rejected at load time.
+
+### Behavior
+
+- Tokenizers whose added tokens declare `lstrip` or `rstrip` now load instead of failing with `UnsupportedTokenizerComponentException`; matching absorbs adjacent whitespace. No change for profiles that do not use these options.
+
 ## [0.3.0] - 2026-10-16
 
 The first release without a preview suffix, so that the ai-dotnet model packages (0.2.0, the first release with Stable model profiles) can depend on a non-prerelease tokenizer. The code is the code of 0.3.0-preview.1; only the version and documentation changed.

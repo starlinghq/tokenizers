@@ -4,15 +4,15 @@
 // tokenizers/src/tokenizer/added_vocabulary.rs and serialization.rs (id assignment),
 // Copyright The HuggingFace Inc. team, Apache License 2.0 (see THIRD-PARTY-NOTICES.md).
 // Modified by StarlingHq: translated to C#; leftmost-longest matching uses a byte trie
-// instead of an Aho-Corasick automaton (same matches); single_word, lstrip and rstrip are
-// rejected at load time rather than implemented.
+// instead of an Aho-Corasick automaton (same matches); lstrip and rstrip are implemented;
+// single_word is rejected at load time rather than implemented.
 
 using System.Text;
 
 namespace Starlings.Tokenizers.Pipeline;
 
 /// <summary>An entry of the <c>added_tokens</c> list.</summary>
-internal sealed record AddedToken(string Content, bool Special, bool Normalized);
+internal sealed record AddedToken(string Content, bool Special, bool Normalized, bool Lstrip, bool Rstrip);
 
 /// <summary>Upstream <c>AddedVocabulary</c>: tokens matched in the text before the model runs.</summary>
 internal sealed class AddedVocabulary
@@ -129,7 +129,7 @@ internal sealed class AddedVocabulary
         return pretokenized;
     }
 
-    private static List<Split> SplitWithIndices(NormalizedString sentence, ByteTrie? trie)
+    private List<Split> SplitWithIndices(NormalizedString sentence, ByteTrie? trie)
     {
         var result = new List<Split>();
         foreach ((int? id, int start, int end) in FindMatches(sentence.Normalized, trie))
@@ -150,7 +150,7 @@ internal sealed class AddedVocabulary
         return result;
     }
 
-    private static List<(int? Id, int Start, int End)> FindMatches(byte[] sentence, ByteTrie? trie)
+    private List<(int? Id, int Start, int End)> FindMatches(byte[] sentence, ByteTrie? trie)
     {
         if (sentence.Length == 0)
         {
@@ -173,14 +173,28 @@ internal sealed class AddedVocabulary
                 continue;
             }
 
-            if (startOffset < pos)
+            int start = pos;
+            int stop = pos + match.Length;
+            AddedToken token = _idToToken[match.Id];
+
+            if (token.Lstrip)
             {
-                splits.Add((null, startOffset, pos));
+                start = Math.Max(SpaceLeftmostAtEnd(sentence, start), startOffset);
             }
 
-            splits.Add((match.Id, pos, pos + match.Length));
-            pos += match.Length;
-            startOffset = pos;
+            if (token.Rstrip)
+            {
+                stop += SpaceRightmostAtStart(sentence, stop);
+            }
+
+            if (startOffset < start)
+            {
+                splits.Add((null, startOffset, start));
+            }
+
+            splits.Add((match.Id, start, stop));
+            pos = stop;
+            startOffset = stop;
         }
 
         if (startOffset != sentence.Length)
@@ -189,6 +203,49 @@ internal sealed class AddedVocabulary
         }
 
         return splits;
+    }
+
+    /// <summary>Upstream <c>space_leftmost_at_end</c>: index where the trailing whitespace run
+    /// ending at <paramref name="end"/> starts (byte offset).</summary>
+    private static int SpaceLeftmostAtEnd(byte[] sentence, int end)
+    {
+        int i = end;
+        while (i > 0)
+        {
+            int start = i - 1;
+            while (start > 0 && (sentence[start] & 0xC0) == 0x80)
+            {
+                start--;
+            }
+
+            if (!UnicodeData.IsWhiteSpace(Utf8Util.DecodeAt(sentence, start, out _)))
+            {
+                break;
+            }
+
+            i = start;
+        }
+
+        return i;
+    }
+
+    /// <summary>Upstream <c>space_rightmost_at_start</c>: length of the leading whitespace run
+    /// at <paramref name="start"/> (byte count).</summary>
+    private static int SpaceRightmostAtStart(byte[] sentence, int start)
+    {
+        int i = start;
+        while (i < sentence.Length)
+        {
+            Rune r = Utf8Util.DecodeAt(sentence, i, out int len);
+            if (!UnicodeData.IsWhiteSpace(r))
+            {
+                break;
+            }
+
+            i += len;
+        }
+
+        return i - start;
     }
 
     /// <summary>Byte trie giving the longest pattern that starts at a position.</summary>
