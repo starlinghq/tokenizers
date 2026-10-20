@@ -32,7 +32,7 @@ env:
 jobs:
   candidate:
     name: release candidate
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, omarchy]
     outputs:
       version: ${{ steps.version.outputs.version }}
     steps:
@@ -86,7 +86,7 @@ jobs:
     name: publish to nuget.org
     needs: candidate
     if: github.ref_type == 'tag'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, omarchy]
     environment: release # required reviewer; NUGET_USER is a variable of this environment
     permissions:
       contents: write # create the GitHub release

@@ -23,7 +23,7 @@ jobs:
   # Names of an unrelated older project must never enter this repository (tools/check-boundary.py).
   boundary:
     name: boundary
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, omarchy]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -36,7 +36,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os == 'ubuntu-latest' && fromJSON('["self-hosted", "omarchy"]') || matrix.os }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
@@ -61,7 +61,7 @@ jobs:
   # Clean clone, pack, local folder feed, clean consumer outside the checkout. Nothing is published.
   release-drill:
     name: release drill
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, omarchy]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
@@ -78,7 +78,7 @@ jobs:
 
   python:
     name: reference runners (ruff)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, omarchy]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: pipx run ruff==0.16.9 check .
