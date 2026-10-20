@@ -336,13 +336,8 @@ internal static class TokenizerJsonLoader
             case "ByteLevel":
                 {
                     (bool addPrefixSpace, _, bool useRegex) = ReadByteLevel(e, where);
-                    if (useRegex)
-                    {
-                        throw new UnsupportedTokenizerComponentException($"{where}.use_regex", "the built-in GPT-2 split (use_regex true) is not implemented.");
-                    }
-
                     components.Add("pre_tokenizer:ByteLevel");
-                    return new ByteLevelPreTokenizer(addPrefixSpace);
+                    return new ByteLevelPreTokenizer(addPrefixSpace, useRegex);
                 }
 
             case "BertPreTokenizer":

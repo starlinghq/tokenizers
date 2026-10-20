@@ -159,7 +159,6 @@ public class PipelineBehaviorTests
         { Mutate(r => r["version"] = "2.0"), "version=2.0" },
         { Mutate(r => r["normalizer"] = new JsonObject { ["type"] = "NFKC" }), "normalizer.type=NFKC" },
         { Mutate(r => r["normalizer"] = new JsonObject { ["type"] = "Replace", ["pattern"] = new JsonObject { ["Regex"] = "\\s+" }, ["content"] = " " }), "normalizer.type=Replace" },
-        { Mutate(r => r["pre_tokenizer"] = new JsonObject { ["type"] = "ByteLevel", ["add_prefix_space"] = false, ["trim_offsets"] = true, ["use_regex"] = true }), "pre_tokenizer.type=ByteLevel.use_regex" },
         { Mutate(r => r["pre_tokenizer"]!["unexpected"] = 1), "pre_tokenizer.type=Metaspace.unexpected" },
         { Mutate(r => r["model"]!["type"] = "UnknownModel"), "model.type=UnknownModel" },
         { Mutate(r => r["model"]!["byte_fallback"] = true), "model.type=Unigram.byte_fallback" },

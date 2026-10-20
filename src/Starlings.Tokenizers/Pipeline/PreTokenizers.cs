@@ -78,13 +78,15 @@ internal sealed class SplitPreTokenizer(IPattern pattern, SplitDelimiterBehavior
 }
 
 /// <summary>
-/// <c>ByteLevel</c> pre-tokenizer with <c>use_regex</c> false (upstream
-/// <c>tokenizers/src/pre_tokenizers/byte_level.rs</c>): optionally prepends a space to each piece,
-/// then maps every UTF-8 byte of each piece to its byte-level character. <c>trim_offsets</c> has
-/// no effect in this stage.
+/// <c>ByteLevel</c> pre-tokenizer (upstream <c>tokenizers/src/pre_tokenizers/byte_level.rs</c>):
+/// optionally prepends a space to each piece, then — when <c>use_regex</c> — splits on the GPT-2
+/// byte-level regex (Isolated), and maps every UTF-8 byte of each piece to its byte-level
+/// character. <c>trim_offsets</c> has no effect in this stage.
 /// </summary>
-internal sealed class ByteLevelPreTokenizer(bool addPrefixSpace) : IPreTokenizer
+internal sealed class ByteLevelPreTokenizer(bool addPrefixSpace, bool useRegex) : IPreTokenizer
 {
+    private static readonly Gpt2SplitPattern Gpt2 = new();
+
     public void PreTokenize(PreTokenizedString pretokenized)
     {
         if (addPrefixSpace)
@@ -98,6 +100,14 @@ internal sealed class ByteLevelPreTokenizer(bool addPrefixSpace) : IPreTokenizer
 
                 return [new Split(normalized)];
             });
+        }
+
+        if (useRegex)
+        {
+            pretokenized.SplitEach(normalized =>
+                normalized
+                    .Split(Gpt2.FindMatches(normalized.Normalized), SplitDelimiterBehavior.Isolated)
+                    .Select(n => new Split(n)));
         }
 
         pretokenized.NormalizeEach(normalized => normalized.ByteLevelTransform());

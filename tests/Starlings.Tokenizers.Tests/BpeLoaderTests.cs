@@ -183,7 +183,6 @@ public class BpeLoaderTests
         { Mutate(r => r["pre_tokenizer"]!["pretokenizers"]![0]!["pattern"] = new JsonObject { ["String"] = " ", ["Regex"] = " " }), "pre_tokenizer.pretokenizers[0].type=Split.pattern" },
         { Mutate(r => r["pre_tokenizer"]!["pretokenizers"]![0]!["behavior"] = "Removed"), "pre_tokenizer.pretokenizers[0].type=Split.behavior" },
         { Mutate(r => r["pre_tokenizer"]!["pretokenizers"]![0]!["invert"] = true), "pre_tokenizer.pretokenizers[0].type=Split.invert" },
-        { Mutate(r => r["pre_tokenizer"]!["pretokenizers"]![1]!.AsObject().Remove("use_regex")), "pre_tokenizer.pretokenizers[1].type=ByteLevel.use_regex" },
         { Mutate(r => r["normalizer"] = new JsonObject { ["type"] = "NFKC" }), "normalizer.type=NFKC" },
         { Mutate(r => r["post_processor"] = new JsonObject { ["type"] = "RobertaProcessing" }), "post_processor.type=RobertaProcessing" },
         { Mutate(r => r["decoder"] = new JsonObject { ["type"] = "Strip", ["content"] = " ", ["start"] = 1, ["stop"] = 0 }), "decoder.type=Strip" },
