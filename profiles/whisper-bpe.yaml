@@ -1,0 +1,73 @@
+# Tokenizer profile: a tested combination of one pinned asset and the interpreter components it
+# uses (profiles/README.md). Status values: supported, unsupported, experimental, untested.
+# Release qualification is a maintainer decision; this file does not grant a badge.
+profile: whisper-bpe   # OpenAI Whisper (openai/whisper-large-v3-turbo); GPT-2 byte-level BPE
+status: experimental  # 49/49 fixture cases exact; fixtures proposed, not yet accepted (conformance.fixtures)
+backlog: Whisper ASR admission (starlinghq/starling#132)
+library: Starlings.Tokenizers 0.3.2-preview.1   # first version with the GPT-2 split regex (use_regex true)
+
+asset:
+  repo: openai/whisper-large-v3-turbo
+  revision: 41f01f3fe87f28c78e2fbf8b568835947dd65ed9
+  file: tokenizer.json
+  sha256: 297b13372ac43916285644fb9687add3cc62ee2a1adb60da3dc25cc94c1871fd
+  size: 2710337
+  format_version: "1.0"
+  acquisition: tools/fetch-assets.sh   # never committed
+
+runtime_pipeline:   # the Hub tokenizer.json is exactly what transformers 5.18.0 WhisperTokenizer runs
+  transformers: 5.18.0 WhisperTokenizerFast (GPT2TokenizerFast); its live pipeline equals this file field by field
+
+reference:
+  implementation: huggingface/tokenizers 0.23.2 (Python binding, Tokenizer.from_file(asset)); the version the proposed fixtures were generated with
+  source_revision: 88a4498ad4ea1a9487b0a9b0ff881383fd5a06a3   # v0.23.2, the interpreter's behavioral spec
+  offsets_unit: unicode-scalars   # reference unit; the .NET API also gives utf16-code-units
+
+pipeline:   # exactly what the pinned file declares
+  normalizer: null
+  pre_tokenizer: ByteLevel(add_prefix_space false, trim_offsets true, use_regex true)   # the GPT-2 split regex, then byte-level transform
+  model: BPE(vocab 50257, merges 50000, unk_token null, byte_fallback false, fuse_unk false, dropout null, ignore_merges false, empty prefix and suffix)
+  post_processor: TemplateProcessing(single [<|startoftranscript|>, <|notimestamps|>, A, <|endoftext|>], pair [.., B, ..])
+  decoder: ByteLevel   # options unused by the decoder
+  added_tokens: "1609 (ids 50257-51865, all normalized false, special true): <|endoftext|>, <|startoftranscript|>, <|startoftranslation|>, <|startoflm|>, <|startofprev|>, <|nospeech|>, <|notimestamps|>, 50 language tokens (<|en|> ...), 50 translate tokens, and 1500 timestamp tokens <|0.00|> ... <|29.98|>"
+  truncation: null
+  padding: null
+
+conformance:
+  fixtures: conformance/whisper-bpe/   # proposed, not yet accepted by a maintainer (PROPOSED.md)
+  corpus:
+    - conformance/corpus/tokenizer-corpus-v1.jsonl (49 cases, sha256 8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199)
+  tests:
+    - tests/Starlings.Tokenizers.Tests/ProfileConformanceTests.cs   # data-driven, no new test code
+    - tests/Starlings.Tokenizers.Tests/WhisperBpeConformanceTests.cs
+  result: # 2026-10-19, Linux x64, .NET SDK 10.0.100, Release
+    encode: "49/49 cases exact: ids, tokens, type_ids, attention_mask, special_tokens_mask, utf16 and scalar offsets, sequence_ids; add_special_tokens true and false"
+    decode: 49/49 cases exact, skip_special_tokens true and false
+
+capabilities:
+  encode_single: supported
+  encode_pair: experimental            # 3 corpus pairs
+  encode_batch: supported              # batch of single encodes
+  offsets_utf16_code_units: supported
+  offsets_unicode_scalars: supported
+  sequence_ids: supported
+  special_tokens_mask: supported
+  added_tokens_special_and_non_special_in_text: supported   # every literal and near-misses in the corpus
+  decode_skip_special_tokens: supported
+  decode_keep_special_tokens: supported
+  decode_invalid_utf8: supported       # U+FFFD per maximal ill-formed subsequence, as Rust from_utf8_lossy
+  truncation: untested                 # null in the asset; no Whisper fixture
+  padding: untested                    # null in the asset; no Whisper fixture
+  byte_level_use_regex_true: supported # the GPT-2 split regex (this profile's pre-tokenizer)
+  bpe_dropout_unk_token_byte_fallback_affixes: unsupported   # rejected at load
+  single_word_added_token: unsupported # rejected at load
+  thread_safety: untested              # immutable by design
+  performance: untested
+
+known_divergences:
+  against_reference: none on the fixtures
+  reference_quirks_reproduced:
+    - the GPT-2 split regex is matched over Unicode scalar values with the reference's character classes (generated tables), not .NET Regex (which matches UTF-16 code units)
+    - characters outside the vocabulary are dropped without a token (cannot happen with byte-level input)
+  risks:
+    - regex character classes are generated tables probed from the reference (tools/generate-unicode-tables.py); a different reference build (another Oniguruma Unicode version) would need a regeneration and requalification

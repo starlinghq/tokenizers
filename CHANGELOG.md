@@ -4,6 +4,17 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+## [0.3.2-preview.1] - 2026-10-19
+
+### Added
+
+- `ByteLevel` pre-tokenizer `use_regex: true`: the GPT-2 split regex (`'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+`), matched over Unicode scalar values with the reference's character classes (a new `Gpt2SplitPattern`). Previously `use_regex: true` was rejected at load.
+- Profile `whisper-bpe`: OpenAI Whisper's GPT-2 byte-level BPE tokenizer (vocab 50257 + 1609 added tokens, `ByteLevel(add_prefix_space false, use_regex true)` + `TemplateProcessing`).
+
+### Behavior
+
+- Tokenizers whose ByteLevel pre-tokenizer declares `use_regex: true` now load and split on the GPT-2 regex instead of failing with `UnsupportedTokenizerComponentException`. No change for profiles that declare `use_regex: false`.
+
 ## [0.3.1] - 2026-10-19
 
 The code of 0.3.1-preview.1 released without a preview suffix, so that a non-prerelease ai-dotnet package can pin it (NuGet NU5104). Only the version and documentation changed.
