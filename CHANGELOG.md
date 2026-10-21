@@ -4,6 +4,14 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-10-20
+
+The code of 0.3.2-preview.1 released without a preview suffix, so that a non-prerelease ai-dotnet package can pin it (NuGet NU5104). Only the version and documentation changed.
+
+### Behavior
+
+- No change in output for any existing profile; the whisper-bpe profile and the GPT-2 split behave exactly as in 0.3.2-preview.1.
+
 ## [0.3.2-preview.1] - 2026-10-19
 
 ### Added
