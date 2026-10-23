@@ -1,0 +1,85 @@
+# Tokenizer profile: a tested combination of one pinned asset and the interpreter components it
+# uses (profiles/README.md). Status values: supported, unsupported, experimental, untested.
+# Release qualification is a maintainer decision; this file does not grant a badge.
+profile: qwen3-bpe-chat   # Qwen/Qwen3-Reranker-0.6B, byte-identical to the Qwen/Qwen3-0.6B tokenizer.json; adds no tokens
+status: experimental  # 137/137 fixture cases exact; fixtures proposed, not yet accepted (conformance.fixtures)
+backlog: Qwen3 Embedding series 0.6B, reranker (starlinghq/starling#144, #100)
+library: Starlings.Tokenizers 0.3.3
+
+asset:
+  repo: Qwen/Qwen3-Reranker-0.6B
+  revision: e61197ed45024b0ed8a2d74b80b4d909f1255473
+  file: tokenizer.json
+  sha256: aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4
+  size: 11422654
+  format_version: "1.0"
+  acquisition: tools/fetch-assets.sh   # never committed; Qwen/Qwen3-0.6B serves the same bytes (Hub LFS etag aeb13307..., checked 2026-10-22 at c1899de289a04d12100db370d81485cdf75e47ca)
+
+runtime_pipeline:   # checked 2026-10-22 (conformance/qwen3-bpe-chat/PROPOSED.md)
+  transformers_4: transformers 4.57.6 Qwen2TokenizerFast; its live pipeline equals this file field by field
+  transformers_5: transformers 5.18.0 Qwen2Tokenizer rebuilds the pipeline from the class; it differs from this file only in ByteLevel options the reference ignores (pre-tokenizer trim_offsets true; decoder add_prefix_space, trim_offsets, use_regex true). Post-processor equal
+  padding: tokenizer_config.json pad_token <|endoftext|> (151643), padding_side right
+
+reference:
+  implementation: huggingface/tokenizers 0.23.3 (Python binding, Tokenizer.from_file(asset)); reference/tokenizer-json/requirements.txt
+  source_revision: 88a4498ad4ea1a9487b0a9b0ff881383fd5a06a3   # v0.23.2; processors/ is unchanged in v0.23.3
+  runner: reference/tokenizer-json/run_tokenizer_json.py --truncate 16 --without-special-tokens --batch ... --pad-token "<|endoftext|>" --pair-batch ...
+  offsets_unit: unicode-scalars   # reference unit; the .NET API also gives utf16-code-units
+
+pipeline:   # exactly what the pinned file declares
+  normalizer: NFC   # Unicode 9.0.0 data, as the reference's crate unicode-normalization-alignments 0.1.12
+  pre_tokenizer: Sequence[Split(Regex "(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+", Isolated, invert false), ByteLevel(add_prefix_space false, trim_offsets false, use_regex false)]
+  model: BPE(vocab 151643, merges 151387, unk_token null, byte_fallback false, ignore_merges false, dropout null, empty prefix and suffix)
+  post_processor: ByteLevel(add_prefix_space false, trim_offsets false)   # adds no tokens
+  decoder: ByteLevel   # options unused by the decoder
+  added_tokens: "26 (ids 151643-151668, all normalized false), the same as qwen3-bpe-embedding"
+  truncation: null
+  padding: null
+
+conformance:
+  fixtures: conformance/qwen3-bpe-chat/   # proposed, not yet accepted by a maintainer (PROPOSED.md)
+  corpus:
+    - conformance/corpus/tokenizer-corpus-v1.jsonl (49 cases, sha256 8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199)
+    - conformance/corpus/tokenizer-corpus-qwen-bpe-v1.jsonl (88 cases)
+  tests:
+    - tests/Starlings.Tokenizers.Tests/ProfileConformanceTests.cs   # data-driven: encode, decode, truncated, without_special_tokens
+    - tests/Starlings.Tokenizers.Tests/Qwen3BpeConformanceTests.cs  # pipeline, equality with qwen3-bpe-embedding minus <|endoftext|>, padded batches
+  result: # 2026-10-22, Linux x64, .NET SDK 10.0.100, Debug and Release
+    encode: "137/137 cases exact (133 single, 4 pairs): ids, tokens, type_ids, attention_mask, special_tokens_mask, utf16 and scalar offsets, sequence_ids; equal to qwen3-bpe-embedding without the appended 151643"
+    encode_without_special_tokens: 137/137 cases exact (the same encodings; this post-processor adds nothing)
+    truncation: "42/42 truncated records exact (max_length 16, longest_first, right; 1 pair), and 42/42 with add_special_tokens false"
+    batch: 6 single texts and 4 pairs right-padded with <|endoftext|> 151643, exact, each row equal to its single encode
+    decode: 137/137 cases exact, skip_special_tokens true and false
+
+capabilities:
+  encode_single: supported
+  encode_pair: experimental            # 4 corpus pairs and a padded pair batch
+  encode_batch: supported              # batch of single encodes
+  add_special_tokens_false: supported  # nothing to add; every case recorded both ways
+  offsets_utf16_code_units: supported
+  offsets_unicode_scalars: supported
+  sequence_ids: supported
+  special_tokens_mask: supported
+  added_tokens_special_and_non_special_in_text: supported   # every literal and near-misses in the corpus
+  decode_skip_special_tokens: supported
+  decode_keep_special_tokens: supported
+  decode_invalid_utf8: experimental    # shared ByteLevel decoder; no random id sequences for this profile
+  truncation_right_longest_first: supported   # max_length 16 over the corpus (single and pair)
+  truncation_left_only_first_only_second: experimental   # generic code path; no fixture for this profile
+  padding_right_batch_longest: supported   # tokenizer-batch.json, pad <|endoftext|> 151643, singles and pairs
+  padding_left_fixed_multiple: experimental   # generic code path; no fixture for this profile
+  bpe_dropout_unk_token_byte_fallback_affixes: unsupported   # rejected at load
+  single_word_added_token: unsupported # rejected at load
+  reranker_prompt_format: unsupported  # the reranker's prefix/suffix and yes/no scoring are model-library behavior (starlinghq/starling)
+  chat_template: unsupported
+  incremental_decode_stream: unsupported
+  thread_safety: untested              # immutable by design
+  performance: untested
+
+known_divergences:
+  against_reference: none on the fixtures
+  reference_quirks_reproduced:
+    - NFC with Unicode 9.0.0 data (the reference's crate), not the runtime's Unicode 16
+  risks:
+    - regex character classes are generated tables probed from the reference (tools/generate-unicode-tables.py); a different reference build would need a regeneration and requalification
+    - transformers 5 rebuilds this pipeline from the Qwen2Tokenizer class; a later transformers version could change the live pipeline without changing this file

@@ -45,7 +45,7 @@ For one text (`Tokenizer.EncodeCore`), in upstream order:
 | `Pipeline/UnigramVocabulary*.cs`, `VocabularyTrie.cs`, `ThirdParty/MLNet/` | Unigram vocabulary, trie construction, best-path search |
 | `Pipeline/BpeModel.cs`, `BpeModelReader.cs`, `BpeVocabulary.cs` | BPE model, vocabulary and merges reader, UTF-8 hash tables |
 | `Pipeline/BertTokenizerComponents.cs` | `BertNormalizer`, `BertPreTokenizer`, `WordPiece` model and decoder |
-| `Pipeline/PostProcessorsAndDecoders.cs`, `Decoders.cs` | `TemplateProcessing`, `ByteLevel` post-processor, and the decoders |
+| `Pipeline/PostProcessorsAndDecoders.cs`, `Decoders.cs` | `TemplateProcessing`, `ByteLevel` and `Sequence` post-processors (upstream `process_encodings` shape; `PostProcessing.Process` is the trait's provided `process`), and the decoders |
 | `Pipeline/SerdeJsonNumber.cs` | Parses JSON numbers with `serde_json`'s rounding (which can differ from a correctly rounded parse by one unit in the last place), so Unigram scores sum and compare exactly as in the reference |
 | `Pipeline/*.g.cs` | Generated tables: NFC data from the reference's crate, and the `\p{L}`, `\p{N}`, `\p{M}` classes probed from the reference regex engine (`tools/generate-unicode-tables.py`) |
 

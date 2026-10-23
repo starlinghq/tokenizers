@@ -4,6 +4,19 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+## [0.3.3] - 2026-10-22
+
+### Added
+
+- Post-processor `Sequence`: children run in order on the previous child's output and the tokens it adds (which truncation reserves) are the sum over its children, as upstream `processors/sequence.rs`. Nested sequences load; a `Sequence` with more than one `TemplateProcessing` is rejected at load. Previously any `Sequence` post-processor was rejected.
+- Profile `qwen3-bpe-embedding` (Qwen/Qwen3-Embedding-0.6B at `97b0c614`), experimental: `Sequence[ByteLevel, TemplateProcessing]`, which appends `<|endoftext|>` (151643). 137/137 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, truncation to 16 tokens, and padded batches of single texts and pairs.
+- Profile `qwen3-bpe-chat` (Qwen/Qwen3-Reranker-0.6B at `e61197ed`, the same file as Qwen/Qwen3-0.6B), experimental: 137/137 cases exact on the same checks.
+- `reference/tokenizer-json/run_tokenizer_json.py` options `--without-special-tokens`, `--batch`, `--pair-batch` and `--pad-token`. Without them it writes the same bytes as before.
+
+### Behavior
+
+- Tokenizers whose post-processor is a `Sequence` now load instead of failing with `UnsupportedTokenizerComponentException`. Post-processors were restructured to upstream's `process_encodings` shape (merge once, at the end). No change in output for any existing profile: their conformance fixtures pass unchanged.
+
 ## [0.3.2] - 2026-10-20
 
 The code of 0.3.2-preview.1 released without a preview suffix, so that a non-prerelease ai-dotnet package can pin it (NuGet NU5104). Only the version and documentation changed.

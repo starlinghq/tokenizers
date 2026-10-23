@@ -73,6 +73,22 @@ internal static class TestAssets
         "tokenizer.json",
         "297b13372ac43916285644fb9687add3cc62ee2a1adb60da3dc25cc94c1871fd");
 
+    /// <summary>Profile qwen3-bpe-embedding: the Qwen/Qwen3-Embedding-0.6B tokenizer.json
+    /// (post-processor Sequence[ByteLevel, TemplateProcessing], appends &lt;|endoftext|&gt;).</summary>
+    public static readonly PinnedAsset Qwen3EmbeddingTokenizerJson = new(
+        "Qwen/Qwen3-Embedding-0.6B",
+        "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+        "tokenizer.json",
+        "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a");
+
+    /// <summary>Profile qwen3-bpe-chat: the Qwen/Qwen3-Reranker-0.6B tokenizer.json (byte-identical to
+    /// the Qwen/Qwen3-0.6B file; post-processor ByteLevel, adds no tokens).</summary>
+    public static readonly PinnedAsset Qwen3ChatTokenizerJson = new(
+        "Qwen/Qwen3-Reranker-0.6B",
+        "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+        "tokenizer.json",
+        "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4");
+
     private static readonly Lazy<string> _lazyRepoRoot = new(FindRepoRoot);
     private static readonly Dictionary<PinnedAsset, Tokenizer> _loaded = [];
     private static readonly Lock _loadLock = new();

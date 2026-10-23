@@ -8,7 +8,8 @@ namespace Starlings.Tokenizers.Tests;
 /// directory holds a fixture-format-1 <c>tokenizer.jsonl</c> (as written by
 /// <c>reference/tokenizer-json/run_tokenizer_json.py</c>): every case must match the reference exactly
 /// (ids, tokens, type ids, masks, sequence ids, offsets in all recorded units, decode with and without
-/// special tokens, and the truncated encoding where recorded). A new profile needs no test code.
+/// special tokens, and the truncated encoding where recorded; with <c>--without-special-tokens</c>, the
+/// same with <c>add_special_tokens</c> false). A new profile needs no test code.
 /// </summary>
 /// <remarks>
 /// Profile-specific test classes keep the checks a generic test cannot make (declared pipeline,
@@ -50,6 +51,23 @@ public sealed partial class ProfileConformanceTests
         return data;
     }
 
+    public static TheoryData<string, string> WithoutSpecialTokensCases()
+    {
+        var data = new TheoryData<string, string>();
+        foreach (Profile profile in _profiles.Value.Where(p => p.HasCaseFixtures))
+        {
+            foreach ((string id, JsonElement row) in profile.Cases.Value)
+            {
+                if (row.TryGetProperty("without_special_tokens", out _))
+                {
+                    data.Add(profile.Name, id);
+                }
+            }
+        }
+
+        return data;
+    }
+
     [Fact]
     public void EveryProfileDeclaresExistingFixtures()
     {
@@ -68,7 +86,7 @@ public sealed partial class ProfileConformanceTests
     {
         // Guards against a format change silently dropping a profile from the data-driven run.
         Assert.Superset(
-            new HashSet<string> { "gemma-bpe-embeddinggemma2", "qwen2-bpe-kev", "qwen35-bpe-chat", "xlmr-unigram-e5" },
+            new HashSet<string> { "gemma-bpe-embeddinggemma2", "qwen2-bpe-kev", "qwen35-bpe-chat", "qwen3-bpe-chat", "qwen3-bpe-embedding", "xlmr-unigram-e5" },
             _profiles.Value.Where(p => p.HasCaseFixtures).Select(p => p.Name).ToHashSet());
     }
 
@@ -108,14 +126,33 @@ public sealed partial class ProfileConformanceTests
         FixtureAssert.EncodingMatches(truncated.GetProperty("encoding"), Encode(truncating, row), $"{profile}/{caseId}/truncated");
     }
 
+    [Theory]
+    [MemberData(nameof(WithoutSpecialTokensCases))]
+    public void EncodeWithoutSpecialTokensMatchesReference(string profile, string caseId)
+    {
+        Profile p = Get(profile);
+        JsonElement row = p.Cases.Value[caseId];
+        JsonElement plain = row.GetProperty("without_special_tokens");
+        FixtureAssert.EncodingMatches(plain.GetProperty("encoding"), Encode(p.Load(), row, addSpecialTokens: false), $"{profile}/{caseId}/without_special_tokens");
+
+        if (plain.TryGetProperty("truncated", out JsonElement truncated))
+        {
+            Assert.Equal("longest_first", truncated.GetProperty("strategy").GetString());
+            Assert.Equal("right", truncated.GetProperty("direction").GetString());
+            Tokenizer truncating = p.Load().WithTruncation(new TruncationOptions(truncated.GetProperty("max_length").GetInt32()));
+            FixtureAssert.EncodingMatches(
+                truncated.GetProperty("encoding"), Encode(truncating, row, addSpecialTokens: false), $"{profile}/{caseId}/without_special_tokens/truncated");
+        }
+    }
+
     private static Profile Get(string name) => _profiles.Value.Single(p => p.Name == name);
 
-    private static TokenEncoding Encode(Tokenizer tokenizer, JsonElement row)
+    private static TokenEncoding Encode(Tokenizer tokenizer, JsonElement row, bool addSpecialTokens = true)
     {
         string text = row.GetProperty("text").GetString()!;
         return row.TryGetProperty("pair", out JsonElement pair)
-            ? tokenizer.Encode(text, pair.GetString()!)
-            : tokenizer.Encode(text);
+            ? tokenizer.Encode(text, pair.GetString()!, addSpecialTokens)
+            : tokenizer.Encode(text, addSpecialTokens);
     }
 
     private static List<Profile> LoadProfiles()
