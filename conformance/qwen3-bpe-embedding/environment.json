@@ -1,0 +1,54 @@
+{
+  "fixture_format_version": 1,
+  "runner": "reference/tokenizer-json/run_tokenizer_json.py",
+  "runner_repository_commit": "e6c7adae4c346e0641cab4f0dfa083c88989045e",
+  "profile": "qwen3-bpe-embedding",
+  "reference": "tokenizers.Tokenizer.from_file(asset)",
+  "truncate": 16,
+  "options": {
+    "without_special_tokens": true,
+    "batch": [
+      "empty",
+      "ascii-sentence",
+      "chinese",
+      "emoji-zwj",
+      "bpe-special-adjacent",
+      "bpe-code-python"
+    ],
+    "pair_batch": [
+      "pair-ascii",
+      "pair-multilingual",
+      "pair-empty-second",
+      "bpe-pair-special"
+    ],
+    "pad_token": "<|endoftext|>"
+  },
+  "asset": {
+    "path": "tokenizer.json",
+    "sha256": "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a",
+    "size": 11423705
+  },
+  "corpora": [
+    {
+      "path": "tokenizer-corpus-v1.jsonl",
+      "sha256": "8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199",
+      "size": 17785
+    },
+    {
+      "path": "tokenizer-corpus-qwen-bpe-v1.jsonl",
+      "sha256": "8a95607487e6cb9a9c7aabeebbbc93bb5c62b206364db43e0c419061e9c2aed3",
+      "size": 11269
+    }
+  ],
+  "cases": 137,
+  "environment": {
+    "python": "3.11.16",
+    "platform": "Linux-7.2.5-3-omarchy-x86_64-with-glibc2.44",
+    "machine": "x86_64",
+    "cpu": "Intel(R) Core(TM) i7-5820K CPU @ 3.30GHz",
+    "cpu_count": 12,
+    "packages": {
+      "tokenizers": "0.23.3"
+    }
+  }
+}

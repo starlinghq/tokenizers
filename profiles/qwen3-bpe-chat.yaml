@@ -17,7 +17,7 @@ asset:
 
 runtime_pipeline:   # checked 2026-10-22 (conformance/qwen3-bpe-chat/PROPOSED.md)
   transformers_4: transformers 4.57.6 Qwen2TokenizerFast; its live pipeline equals this file field by field
-  transformers_5: transformers 5.18.0 Qwen2Tokenizer rebuilds the pipeline from the class; it differs from this file only in ByteLevel options the reference ignores (pre-tokenizer trim_offsets true; decoder add_prefix_space, trim_offsets, use_regex true). Post-processor equal
+  transformers_5: transformers 5.18.0 Qwen2Tokenizer rebuilds the pipeline from the class; it differs from this file only in ByteLevel options the reference ignores (pre-tokenizer trim_offsets true; decoder add_prefix_space, trim_offsets, use_regex true). Post-processor equal. Ids, offsets and decode equal on all 137 corpus cases
   padding: tokenizer_config.json pad_token <|endoftext|> (151643), padding_side right
 
 reference:
