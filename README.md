@@ -61,8 +61,10 @@ A model is supported when its `tokenizer.json` uses only supported components. A
 | [`qwen2-bpe-kev`](https://github.com/starlinghq/tokenizers/blob/main/profiles/qwen2-bpe-kev.yaml) | `jaredpalmer/kev-0.8b` (Qwen2/Qwen3 regex) | byte-level BPE | 137/137 cases exact, 0 mismatches in 1.15 M randomized encodes |
 | [`qwen35-bpe-chat`](https://github.com/starlinghq/tokenizers/blob/main/profiles/qwen35-bpe-chat.yaml) | `Qwen/Qwen3.5-0.8B` | byte-level BPE | 137/137 cases exact, 0 mismatches in 1.15 M randomized encodes |
 | [`gemma-bpe-embeddinggemma2`](https://github.com/starlinghq/tokenizers/blob/main/profiles/gemma-bpe-embeddinggemma2.yaml) | `google/embeddinggemma-2` | SentencePiece-style BPE, byte fallback | 49/49 cases exact, 0 mismatches in 1.7 M randomized encodes |
+| [`qwen3-bpe-embedding`](https://github.com/starlinghq/tokenizers/blob/main/profiles/qwen3-bpe-embedding.yaml) | `Qwen/Qwen3-Embedding-0.6B` (appends `<\|endoftext\|>`) | byte-level BPE | 137/137 cases exact, with and without special tokens, truncation and padded batches |
+| [`qwen3-bpe-chat`](https://github.com/starlinghq/tokenizers/blob/main/profiles/qwen3-bpe-chat.yaml) | `Qwen/Qwen3-Reranker-0.6B` (same file as `Qwen/Qwen3-0.6B`) | byte-level BPE | 137/137 cases exact, with truncation and padded batches |
 
-All five are experimental. BERT-family WordPiece files (for example `sentence-transformers/all-MiniLM-L6-v2` and `BAAI/bge-small-en-v1.5`) load and pass component-level reference cases, but have no profile yet. Other files may load and work too. Without a profile, matching the reference is untested, not promised.
+All seven are experimental. BERT-family WordPiece files (for example `sentence-transformers/all-MiniLM-L6-v2` and `BAAI/bge-small-en-v1.5`) load and pass component-level reference cases, but have no profile yet. Other files may load and work too. Without a profile, matching the reference is untested, not promised.
 
 The full list of components and options, and what fails at load, is in [docs/supported-components.md](https://github.com/starlinghq/tokenizers/blob/main/docs/supported-components.md). Not offered: pre-tokenized input, word ids, overflowing windows (truncation stride), incremental (streaming) decode, and chat templates.
 

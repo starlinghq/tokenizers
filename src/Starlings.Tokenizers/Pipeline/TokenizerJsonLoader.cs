@@ -124,7 +124,7 @@ internal static class TokenizerJsonLoader
         IPreTokenizer? preTokenizer = ReadOptional(root, "pre_tokenizer", e => ReadPreTokenizer(e, "pre_tokenizer", components));
         IModel model = ReadModel(Require(root, "model", "tokenizer.json"), scannedVocab, scannedBpe, components);
         AddedVocabulary added = ReadAddedTokens(root, model, normalizer, components);
-        IPostProcessor? post = ReadOptional(root, "post_processor", e => ReadPostProcessor(e, components));
+        IPostProcessor? post = ReadOptional(root, "post_processor", e => ReadPostProcessor(e, "post_processor", components));
         IDecoder? decoder = ReadOptional(root, "decoder", e => ReadDecoder(e, components));
         TruncationOptions? truncation = ReadOptional(root, "truncation", ReadTruncation);
         PaddingOptions? padding = ReadOptional(root, "padding", ReadPadding);
@@ -623,15 +623,36 @@ internal static class TokenizerJsonLoader
         return new AddedVocabulary(tokens, model, normalizer);
     }
 
-    private static IPostProcessor ReadPostProcessor(JsonElement e, List<string> components)
+    private static IPostProcessor ReadPostProcessor(JsonElement e, string path, List<string> components)
     {
-        string type = RequireType(e, "post_processor");
-        string where = $"post_processor.type={type}";
+        string type = RequireType(e, path);
+        string where = $"{path}.type={type}";
         if (type == "ByteLevel")
         {
             (bool addPrefixSpace, bool trimOffsets, _) = ReadByteLevel(e, where);
             components.Add("post_processor:ByteLevel");
             return new ByteLevelPostProcessor(addPrefixSpace, trimOffsets);
+        }
+
+        if (type == "Sequence")
+        {
+            AllowKeys(e, where, "type", "processors");
+            var list = new List<IPostProcessor>();
+            int i = 0;
+            foreach (JsonElement child in RequireArray(e, "processors", where))
+            {
+                list.Add(ReadPostProcessor(child, $"{path}.processors[{i++}]", components));
+            }
+
+            // Upstream TemplateProcessing returns one encoding per template piece; a later
+            // TemplateProcessing would pick its template by that count (or panic above two).
+            if (Flatten(list).Count(p => p is TemplateProcessing) > 1)
+            {
+                throw new UnsupportedTokenizerComponentException(where, "more than one TemplateProcessing in a post-processor Sequence is not supported.");
+            }
+
+            components.Add("post_processor:Sequence");
+            return new SequencePostProcessor(list);
         }
 
         if (type != "TemplateProcessing")
@@ -662,6 +683,9 @@ internal static class TokenizerJsonLoader
         components.Add("post_processor:TemplateProcessing");
         return new TemplateProcessing(single, pair, special);
     }
+
+    private static IEnumerable<IPostProcessor> Flatten(IEnumerable<IPostProcessor> processors) =>
+        processors.SelectMany(p => p is SequencePostProcessor seq ? Flatten(seq.Processors) : [p]);
 
     private static List<TemplatePiece> ReadTemplate(
         JsonElement e, string where, Dictionary<string, TemplateSpecialToken> special, bool allowB)
