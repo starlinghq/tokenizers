@@ -4,6 +4,16 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-10-28
+
+### Added
+
+- Profile `clover-bpe-chat` (Diffuspace/Clover-35B-A3B-Preview at `4b0402b6`), experimental: byte-level BPE with the Qwen2 regex and the diffusion mask token `<|mask|>` at vocabulary id 151669, 137/137 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, truncation to 16 tokens, and padded batches of single texts and pairs. No library change.
+
+### Behavior
+
+- No change in output for any existing profile; no library change.
+
 ## [0.3.3] - 2026-10-28
 
 ### Added

@@ -64,8 +64,9 @@ A model is supported when its `tokenizer.json` uses only supported components. A
 | [`qwen3-bpe-embedding`](https://github.com/starlinghq/tokenizers/blob/main/profiles/qwen3-bpe-embedding.yaml) | `Qwen/Qwen3-Embedding-0.6B` (appends `<\|endoftext\|>`) | byte-level BPE | 137/137 cases exact, with and without special tokens, truncation and padded batches |
 | [`qwen3-bpe-chat`](https://github.com/starlinghq/tokenizers/blob/main/profiles/qwen3-bpe-chat.yaml) | `Qwen/Qwen3-Reranker-0.6B` (same file as `Qwen/Qwen3-0.6B`) | byte-level BPE | 137/137 cases exact, with truncation and padded batches |
 | [`lfm3-bpe-chat`](https://github.com/starlinghq/tokenizers/blob/main/profiles/lfm3-bpe-chat.yaml) | `LiquidAI/LFM3-1.7B` | byte-level BPE, Llama 3 regex | 137/137 cases exact, with truncation and padded batches |
+| [`clover-bpe-chat`](https://github.com/starlinghq/tokenizers/blob/main/profiles/clover-bpe-chat.yaml) | `Diffuspace/Clover-35B-A3B-Preview` (`<\|mask\|>` at id 151669) | byte-level BPE | 137/137 cases exact, with truncation and padded batches |
 
-All seven are experimental. BERT-family WordPiece files (for example `sentence-transformers/all-MiniLM-L6-v2` and `BAAI/bge-small-en-v1.5`) load and pass component-level reference cases, but have no profile yet. Other files may load and work too. Without a profile, matching the reference is untested, not promised.
+All nine are experimental. BERT-family WordPiece files (for example `sentence-transformers/all-MiniLM-L6-v2` and `BAAI/bge-small-en-v1.5`) load and pass component-level reference cases, but have no profile yet. Other files may load and work too. Without a profile, matching the reference is untested, not promised.
 
 The full list of components and options, and what fails at load, is in [docs/supported-components.md](https://github.com/starlinghq/tokenizers/blob/main/docs/supported-components.md). Not offered: pre-tokenized input, word ids, overflowing windows (truncation stride), incremental (streaming) decode, and chat templates.
 

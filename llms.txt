@@ -129,7 +129,7 @@ Pad tokens differ by model (`<pad>`, `[PAD]`, `<|endoftext|>`). If the file has 
 - Decoders: `Metaspace`, `ByteLevel`, `Sequence`, `Replace`, `ByteFallback`, `Fuse`, `WordPiece` (experimental).
 - Everything else fails at load. The authoritative table with every option is docs/supported-components.md.
 
-Profiles with exact-match evidence (all experimental): `xlmr-unigram-e5` (intfloat/multilingual-e5-small), `gliner2-base-v1-unigram` (fastino/gliner2-base-v1, partial), `qwen2-bpe-kev` (Qwen2/Qwen3 regex), `qwen35-bpe-chat` (Qwen/Qwen3.5-0.8B), `gemma-bpe-embeddinggemma2` (google/embeddinggemma-2), `qwen3-bpe-embedding` (Qwen/Qwen3-Embedding-0.6B, appends `<|endoftext|>`), `qwen3-bpe-chat` (Qwen/Qwen3-Reranker-0.6B, the same file as Qwen/Qwen3-0.6B), `lfm3-bpe-chat` (LiquidAI/LFM3-1.7B, Llama 3 regex). A file that loads but has no profile is untested, not guaranteed.
+Profiles with exact-match evidence (all experimental): `xlmr-unigram-e5` (intfloat/multilingual-e5-small), `gliner2-base-v1-unigram` (fastino/gliner2-base-v1, partial), `qwen2-bpe-kev` (Qwen2/Qwen3 regex), `qwen35-bpe-chat` (Qwen/Qwen3.5-0.8B), `gemma-bpe-embeddinggemma2` (google/embeddinggemma-2), `qwen3-bpe-embedding` (Qwen/Qwen3-Embedding-0.6B, appends `<|endoftext|>`), `qwen3-bpe-chat` (Qwen/Qwen3-Reranker-0.6B, the same file as Qwen/Qwen3-0.6B), `lfm3-bpe-chat` (LiquidAI/LFM3-1.7B, Llama 3 regex), `clover-bpe-chat` (Diffuspace/Clover-35B-A3B-Preview, Qwen2 regex, `<|mask|>` at id 151669). A file that loads but has no profile is untested, not guaranteed.
 
 ## Docs
 

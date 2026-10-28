@@ -1,0 +1,54 @@
+{
+  "fixture_format_version": 1,
+  "runner": "reference/tokenizer-json/run_tokenizer_json.py",
+  "runner_repository_commit": "78473b526ddd921f969e0ad515acacd2b1221cf7",
+  "profile": "clover-bpe-chat",
+  "reference": "tokenizers.Tokenizer.from_file(asset)",
+  "truncate": 16,
+  "options": {
+    "without_special_tokens": true,
+    "batch": [
+      "empty",
+      "ascii-sentence",
+      "chinese",
+      "emoji-zwj",
+      "bpe-special-adjacent",
+      "bpe-code-python"
+    ],
+    "pair_batch": [
+      "pair-ascii",
+      "pair-multilingual",
+      "pair-empty-second",
+      "bpe-pair-special"
+    ],
+    "pad_token": "<|endoftext|>"
+  },
+  "asset": {
+    "path": "tokenizer.json",
+    "sha256": "7c62ba7d8bb13291c94459896cd27537858beb58a88a037b09a150e213420988",
+    "size": 19989133
+  },
+  "corpora": [
+    {
+      "path": "tokenizer-corpus-v1.jsonl",
+      "sha256": "8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199",
+      "size": 17785
+    },
+    {
+      "path": "tokenizer-corpus-qwen-bpe-v1.jsonl",
+      "sha256": "8a95607487e6cb9a9c7aabeebbbc93bb5c62b206364db43e0c419061e9c2aed3",
+      "size": 11269
+    }
+  ],
+  "cases": 137,
+  "environment": {
+    "python": "3.13.17",
+    "platform": "Linux-6.18.44-fc-v180-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "cpu_count": 4,
+    "packages": {
+      "tokenizers": "0.23.3"
+    }
+  }
+}
