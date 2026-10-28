@@ -1,0 +1,90 @@
+# Tokenizer profile: a tested combination of one pinned asset and the interpreter components it
+# uses (profiles/README.md). Status values: supported, unsupported, experimental, untested.
+# Release qualification is a maintainer decision; this file does not grant a badge.
+profile: clover-bpe-chat   # Diffuspace/Clover-35B-A3B-Preview (block-diffusion fine-tune of Qwen/Qwen3.6-35B-A3B); adds no tokens
+status: experimental  # fixture results below; fixtures proposed, not yet accepted (conformance.fixtures)
+backlog: Clover-35B-A3B-Preview model request (starlinghq/starling)
+library: Starlings.Tokenizers 0.3.4
+
+asset:
+  repo: Diffuspace/Clover-35B-A3B-Preview
+  revision: 4b0402b65e523d0183a14c431955438714cb16ff
+  file: tokenizer.json
+  sha256: 7c62ba7d8bb13291c94459896cd27537858beb58a88a037b09a150e213420988
+  size: 19989133
+  format_version: "1.0"
+  acquisition: tools/fetch-assets.sh   # never committed; Apache-2.0 (the model's license)
+
+runtime_pipeline:   # checked 2026-10-28 (conformance/clover-bpe-chat/PROPOSED.md)
+  transformers_5: transformers 5.19.0 (the version the model card names) Qwen2Tokenizer (tokenizer_config.json tokenizer_class); its live pipeline equals this file as JSON
+  pretokenize_regex: tokenizer_config.json also carries a pretokenize_regex with \p{M} (the qwen35-bpe-chat regex); transformers 5.19.0 does not apply it, so the live pipeline keeps the file's Qwen2 regex
+  padding: tokenizer_config.json pad_token <|endoftext|> (248044)
+  mask: tokenizer_config.json mask_token <|mask|> (151669, config.json mask_token_id), the diffusion mask the model's decoder fills
+  bos: none; the chat template writes <|im_start|> itself and the post-processor adds nothing
+
+reference:
+  implementation: huggingface/tokenizers 0.23.3 (Python binding, Tokenizer.from_file(asset)); reference/tokenizer-json/requirements.txt
+  source_revision: 9ab7691f497eff905f961aba51a4bb9be3e9555c
+  runner: reference/tokenizer-json/run_tokenizer_json.py --truncate 16 --without-special-tokens --batch ... --pad-token "<|endoftext|>" --pair-batch ...
+  offsets_unit: unicode-scalars   # reference unit; the .NET API also gives utf16-code-units
+
+pipeline:   # exactly what the pinned file declares
+  normalizer: NFC   # Unicode 9.0.0 data, as the reference's crate unicode-normalization-alignments 0.1.12
+  pre_tokenizer: Sequence[Split(Regex "(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+", Isolated, invert false), ByteLevel(add_prefix_space false, trim_offsets true, use_regex false)]
+  model: BPE(vocab 248044, merges 247581, unk_token null, byte_fallback false, ignore_merges false, dropout null, empty prefix and suffix)
+  post_processor: ByteLevel(add_prefix_space false, trim_offsets false)   # adds no tokens
+  decoder: ByteLevel   # options unused by the decoder
+  added_tokens: "34: <|mask|> 151669 (special, normalized false; also the vocabulary entry with that id) and the 33 tokens of qwen35-bpe-chat (ids 248044-248076, all normalized false); special true 248044-248057 and 248070-248076, special false 248058-248069 (<tool_call>, </tool_call>, fim/repo/file markers, <tool_response>, </tool_response>, <think>, </think>)"
+  vocabulary_against_qwen35_bpe_chat: equal except id 151669, which holds <|mask|> instead of ĠãģĿãĤĮ (" それ"); the 6 merges that build ĠãģĿãĤĮ are absent (247581 against 247587)
+  truncation: null
+  padding: null
+
+conformance:
+  fixtures: conformance/clover-bpe-chat/   # proposed, not yet accepted by a maintainer (PROPOSED.md)
+  corpus:
+    - conformance/corpus/tokenizer-corpus-v1.jsonl (49 cases, sha256 8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199)
+    - conformance/corpus/tokenizer-corpus-qwen-bpe-v1.jsonl (88 cases, sha256 8a95607487e6cb9a9c7aabeebbbc93bb5c62b206364db43e0c419061e9c2aed3)
+  tests:
+    - tests/Starlings.Tokenizers.Tests/ProfileConformanceTests.cs   # data-driven: encode, decode, truncated, without_special_tokens
+  result: # 2026-10-28, Linux x64, .NET SDK 10.0.113, Debug
+    encode: "137/137 cases exact (133 single, 4 pairs): ids, tokens, type_ids, attention_mask, special_tokens_mask, utf16 and scalar offsets, sequence_ids"
+    encode_without_special_tokens: 137/137 cases exact (the same encodings; this post-processor adds nothing)
+    truncation: "40/40 truncated records exact (max_length 16, longest_first, right)"
+    batch: 6 single texts and 4 pairs right-padded with <|endoftext|> 248044, exact, each row equal to its single encode
+    decode: 137/137 cases exact, skip_special_tokens true and false
+    mask_token_check: "13/13 ad hoc cases exact against huggingface/tokenizers 0.23.3 (ids, scalar offsets, special_tokens_mask, decode both ways): <|mask|> alone, repeated, between letters and spaces, in a chat turn, near-miss spellings, \" それ\" (now [220, 73973]), and decoding ids around 151669; not a committed fixture (PROPOSED.md)"
+
+capabilities:
+  encode_single: supported
+  encode_pair: experimental            # 4 corpus pairs and a padded pair batch
+  encode_batch: supported              # batch of single encodes
+  add_special_tokens_false: supported  # nothing to add; every case recorded both ways
+  offsets_utf16_code_units: supported
+  offsets_unicode_scalars: supported
+  sequence_ids: supported
+  special_tokens_mask: supported
+  added_tokens_special_and_non_special_in_text: experimental   # the corpus has the generic literals, not <|mask|>; ad hoc check only
+  added_token_with_vocabulary_id: experimental   # <|mask|> shares id 151669 with its vocabulary entry; ad hoc check only
+  decode_skip_special_tokens: supported
+  decode_keep_special_tokens: supported
+  decode_invalid_utf8: experimental    # shared ByteLevel decoder; no random id sequences for this profile
+  truncation_right_longest_first: supported   # max_length 16 over the corpus (single and pair)
+  truncation_left_only_first_only_second: experimental   # generic code path; no fixture for this profile
+  padding_right_batch_longest: supported   # tokenizer-batch.json, pad <|endoftext|> 248044, singles and pairs
+  padding_left_fixed_multiple: experimental   # generic code path; no fixture for this profile
+  bpe_dropout_unk_token_byte_fallback_affixes: unsupported   # rejected at load
+  byte_level_use_regex_true_pre_tokenizer: unsupported       # rejected at load
+  other_split_regexes: unsupported     # only the regexes in docs/supported-components.md are recognized; others fail at load
+  chat_template: unsupported           # model-library behavior (starlinghq/starling)
+  incremental_decode_stream: unsupported
+  thread_safety: untested              # immutable by design
+  performance: untested
+
+known_divergences:
+  against_reference: none on the fixtures or the mask-token check
+  other_pipelines:
+    - profile qwen35-bpe-chat (the base family's pipeline, regex with \p{M}) gives different ids on text with combining marks (6 of 137 corpus cases: devanagari, thai, bpe-devanagari-marks, bpe-thai-marks, bpe-arabic-harakat, bpe-tamil-composing); Clover's file uses the Qwen2 regex, and that is what its transformers loader runs
+    - profile qwen2-bpe-kev (the same regex) gives the same ids on all 137 corpus cases; the pipelines differ only at id 151669 and the 6 merges
+  risks:
+    - regex character classes are generated tables probed from the reference (tools/generate-unicode-tables.py); a different reference build would need a regeneration and requalification
+    - a later transformers release could apply tokenizer_config.json pretokenize_regex (\p{M}) and change the live pipeline; recheck before raising the transformers version a model runtime pins

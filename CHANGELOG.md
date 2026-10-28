@@ -8,6 +8,7 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 - `Split` pre-tokenizer: the Llama 3 regex `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`, which groups digits in runs of up to three. It runs on the same hand-written scanner and reference-probed character classes as the two Qwen regexes. Previously it was rejected at load.
 - Profile `lfm3-bpe-chat` (LiquidAI/LFM3-1.7B at `40ebe0aa`), experimental: byte-level BPE with `ignore_merges`, 137/137 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, truncation to 16 tokens, and padded batches of single texts and pairs (starlinghq/starling#217).
+- Profile `clover-bpe-chat` (Diffuspace/Clover-35B-A3B-Preview at `4b0402b6`), experimental: byte-level BPE with the Qwen2 regex and the diffusion mask token `<|mask|>` at vocabulary id 151669, 137/137 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, truncation to 16 tokens, and padded batches of single texts and pairs. No library change.
 
 ### Behavior
 
