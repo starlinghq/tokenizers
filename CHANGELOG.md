@@ -4,6 +4,10 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-10-28
+
+0.3.3 was not published: the changes listed under 0.3.3 below ship first in this version.
+
 ### Added
 
 - `Split` pre-tokenizer: the Llama 3 regex `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`, which groups digits in runs of up to three. It runs on the same hand-written scanner and reference-probed character classes as the two Qwen regexes. Previously it was rejected at load.
