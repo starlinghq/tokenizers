@@ -63,6 +63,7 @@ A model is supported when its `tokenizer.json` uses only supported components. A
 | [`gemma-bpe-embeddinggemma2`](https://github.com/starlinghq/tokenizers/blob/main/profiles/gemma-bpe-embeddinggemma2.yaml) | `google/embeddinggemma-2` | SentencePiece-style BPE, byte fallback | 49/49 cases exact, 0 mismatches in 1.7 M randomized encodes |
 | [`qwen3-bpe-embedding`](https://github.com/starlinghq/tokenizers/blob/main/profiles/qwen3-bpe-embedding.yaml) | `Qwen/Qwen3-Embedding-0.6B` (appends `<\|endoftext\|>`) | byte-level BPE | 137/137 cases exact, with and without special tokens, truncation and padded batches |
 | [`qwen3-bpe-chat`](https://github.com/starlinghq/tokenizers/blob/main/profiles/qwen3-bpe-chat.yaml) | `Qwen/Qwen3-Reranker-0.6B` (same file as `Qwen/Qwen3-0.6B`) | byte-level BPE | 137/137 cases exact, with truncation and padded batches |
+| [`lfm3-bpe-chat`](https://github.com/starlinghq/tokenizers/blob/main/profiles/lfm3-bpe-chat.yaml) | `LiquidAI/LFM3-1.7B` | byte-level BPE, Llama 3 regex | 137/137 cases exact, with truncation and padded batches |
 
 All seven are experimental. BERT-family WordPiece files (for example `sentence-transformers/all-MiniLM-L6-v2` and `BAAI/bge-small-en-v1.5`) load and pass component-level reference cases, but have no profile yet. Other files may load and work too. Without a profile, matching the reference is untested, not promised.
 

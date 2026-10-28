@@ -74,7 +74,7 @@ capabilities:
   bpe_ignore_merges_true: experimental              # not in the asset; 0 mismatches on the differential variant
   bpe_dropout_unk_token_byte_fallback_affixes: unsupported   # rejected at load
   byte_level_use_regex_true_pre_tokenizer: unsupported       # rejected at load
-  other_split_regexes: unsupported     # only the two Qwen regexes are recognized; others fail at load
+  other_split_regexes: unsupported     # only the regexes in docs/supported-components.md are recognized; others fail at load
   chat_template: unsupported           # P-029
   incremental_decode_stream: unsupported
   thread_safety: untested              # immutable by design
