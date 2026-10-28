@@ -4,16 +4,7 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
-### Added
-
-- `Split` pre-tokenizer: the Llama 3 regex `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`, which groups digits in runs of up to three. It runs on the same hand-written scanner and reference-probed character classes as the two Qwen regexes. Previously it was rejected at load.
-- Profile `lfm3-bpe-chat` (LiquidAI/LFM3-1.7B at `40ebe0aa`), experimental: byte-level BPE with `ignore_merges`, 137/137 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, truncation to 16 tokens, and padded batches of single texts and pairs (starlinghq/starling#217).
-
-### Behavior
-
-- Tokenizers whose `Split` pre-tokenizer uses the Llama 3 regex now load instead of failing with `UnsupportedTokenizerComponentException`. No change in output for any existing profile.
-
-## [0.3.3] - 2026-10-22
+## [0.3.3] - 2026-10-28
 
 ### Added
 
@@ -21,10 +12,13 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 - Profile `qwen3-bpe-embedding` (Qwen/Qwen3-Embedding-0.6B at `97b0c614`), experimental: `Sequence[ByteLevel, TemplateProcessing]`, which appends `<|endoftext|>` (151643). 137/137 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, truncation to 16 tokens, and padded batches of single texts and pairs.
 - Profile `qwen3-bpe-chat` (Qwen/Qwen3-Reranker-0.6B at `e61197ed`, the same file as Qwen/Qwen3-0.6B), experimental: 137/137 cases exact on the same checks.
 - `reference/tokenizer-json/run_tokenizer_json.py` options `--without-special-tokens`, `--batch`, `--pair-batch` and `--pad-token`. Without them it writes the same bytes as before.
+- `Split` pre-tokenizer: the Llama 3 regex `(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+`, which groups digits in runs of up to three. It runs on the same hand-written scanner and reference-probed character classes as the two Qwen regexes. Previously it was rejected at load.
+- Profile `lfm3-bpe-chat` (LiquidAI/LFM3-1.7B at `40ebe0aa`), experimental: byte-level BPE with `ignore_merges`, 137/137 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, truncation to 16 tokens, and padded batches of single texts and pairs (starlinghq/starling#217).
 
 ### Behavior
 
 - Tokenizers whose post-processor is a `Sequence` now load instead of failing with `UnsupportedTokenizerComponentException`. Post-processors were restructured to upstream's `process_encodings` shape (merge once, at the end). No change in output for any existing profile: their conformance fixtures pass unchanged.
+- Tokenizers whose `Split` pre-tokenizer uses the Llama 3 regex now load instead of failing with `UnsupportedTokenizerComponentException`. No change in output for any existing profile.
 
 ## [0.3.2] - 2026-10-20
 

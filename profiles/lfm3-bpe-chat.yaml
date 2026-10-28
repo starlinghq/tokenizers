@@ -4,7 +4,7 @@
 profile: lfm3-bpe-chat   # LiquidAI/LFM3-1.7B; adds no tokens
 status: experimental  # fixture results below; fixtures proposed, not yet accepted (conformance.fixtures)
 backlog: LFM3 model request (starlinghq/starling#217)
-library: Starlings.Tokenizers 0.3.4
+library: Starlings.Tokenizers 0.3.3
 
 asset:
   repo: LiquidAI/LFM3-1.7B
