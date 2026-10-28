@@ -317,7 +317,7 @@ internal static class TokenizerJsonLoader
 
                     string r = regex.GetString()!;
                     QwenSplitPattern matcher = QwenSplitPattern.TryCreate(r) ?? throw new UnsupportedTokenizerComponentException(
-                        $"{where}.pattern", $"Regex '{r}' is not one of the supported Qwen pre-tokenizer patterns; Oniguruma regexes are not emulated in general.");
+                        $"{where}.pattern", $"Regex '{r}' is not one of the supported pre-tokenizer patterns (Qwen2, Qwen3.5, Llama 3); Oniguruma regexes are not emulated in general.");
                     string behavior = RequireString(e, "behavior", where);
                     if (behavior != "Isolated")
                     {

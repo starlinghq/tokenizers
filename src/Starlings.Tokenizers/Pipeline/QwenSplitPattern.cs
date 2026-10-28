@@ -1,6 +1,6 @@
 // Copyright (c) 2026 StarlingHq. Licensed under the MIT License or the Apache License, Version 2.0, at your option.
 //
-// A hand-written matcher for two Split regexes, written fresh from the regex semantics (leftmost
+// A hand-written matcher for three Split regexes, written fresh from the regex semantics (leftmost
 // match, alternatives tried in order, greedy quantifiers with backtracking) of the reference's
 // engine, Oniguruma as used by huggingface/tokenizers v0.23.2. No regex engine is involved: .NET
 // Regex matches UTF-16 code units, so \p{L} does not match supplementary-plane letters
@@ -18,6 +18,7 @@ namespace Starlings.Tokenizers.Pipeline;
 /// <list type="bullet">
 /// <item><see cref="Qwen2"/>: <c>(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+</c></item>
 /// <item><see cref="Qwen35"/>: the same with <c>[\p{L}\p{M}]+</c> and <c>[^\s\p{L}\p{M}\p{N}]+</c>.</item>
+/// <item><see cref="Llama3"/>: <see cref="Qwen2"/> with <c>\p{N}{1,3}</c> in place of <c>\p{N}</c> (LFM3).</item>
 /// </list>
 /// </summary>
 /// <remarks>
@@ -29,6 +30,7 @@ internal sealed class QwenSplitPattern : IPattern
 {
     public const string Qwen2 = @"(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+";
     public const string Qwen35 = @"(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?[\p{L}\p{M}]+|\p{N}| ?[^\s\p{L}\p{M}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+";
+    public const string Llama3 = @"(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+";
 
     // Per-character flags.
     private const byte Letter = 1;
@@ -40,17 +42,20 @@ internal sealed class QwenSplitPattern : IPattern
 
     private readonly byte _letterish;      // \p{L}, or [\p{L}\p{M}]
     private readonly byte _notOther;       // classes excluded from the "other" run of alternative 4
+    private readonly int _maxDigits;       // \p{N} or \p{N}{1,3}
 
-    private QwenSplitPattern(bool marksAreLetters)
+    private QwenSplitPattern(bool marksAreLetters, int maxDigits)
     {
+        _maxDigits = maxDigits;
         _letterish = marksAreLetters ? (byte)(Letter | Mark) : Letter;
         _notOther = marksAreLetters ? (byte)(Space | Letter | Number | Mark) : (byte)(Space | Letter | Number);
     }
 
     public static QwenSplitPattern? TryCreate(string regex) => regex switch
     {
-        Qwen2 => new QwenSplitPattern(marksAreLetters: false),
-        Qwen35 => new QwenSplitPattern(marksAreLetters: true),
+        Qwen2 => new QwenSplitPattern(marksAreLetters: false, maxDigits: 1),
+        Qwen35 => new QwenSplitPattern(marksAreLetters: true, maxDigits: 1),
+        Llama3 => new QwenSplitPattern(marksAreLetters: false, maxDigits: 3),
         _ => null,
     };
 
@@ -173,10 +178,16 @@ internal sealed class QwenSplitPattern : IPattern
             return RunEnd(flags, i, _letterish);
         }
 
-        // 3. \p{N}
+        // 3. \p{N}   (Llama 3: \p{N}{1,3}, greedy)
         if ((f & Number) != 0)
         {
-            return i + 1;
+            int end = i + 1;
+            while (end - i < _maxDigits && (flags[end] & Number) != 0)
+            {
+                end++;
+            }
+
+            return end;
         }
 
         // 4. ' ?[^\s\p{L}\p{N}]+[\r\n]*'   (Qwen3.5 also excludes \p{M})

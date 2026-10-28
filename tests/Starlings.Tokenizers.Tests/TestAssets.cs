@@ -89,6 +89,14 @@ internal static class TestAssets
         "tokenizer.json",
         "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4");
 
+    /// <summary>Profile lfm3-bpe-chat: the LiquidAI/LFM3-1.7B tokenizer.json (Llama 3 split regex,
+    /// BPE with ignore_merges; post-processor ByteLevel, adds no tokens).</summary>
+    public static readonly PinnedAsset Lfm3ChatTokenizerJson = new(
+        "LiquidAI/LFM3-1.7B",
+        "40ebe0aa6662c9d40389c2f5d565b6a2c6aebacd",
+        "tokenizer.json",
+        "7e226e34bface23ccf6e495d157bf77186c1c30a7659880e1a8994db528c3701");
+
     private static readonly Lazy<string> _lazyRepoRoot = new(FindRepoRoot);
     private static readonly Dictionary<PinnedAsset, Tokenizer> _loaded = [];
     private static readonly Lock _loadLock = new();
