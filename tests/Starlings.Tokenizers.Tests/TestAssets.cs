@@ -97,6 +97,14 @@ internal static class TestAssets
         "tokenizer.json",
         "7e226e34bface23ccf6e495d157bf77186c1c30a7659880e1a8994db528c3701");
 
+    /// <summary>Profile clover-bpe-chat: the Diffuspace/Clover-35B-A3B-Preview tokenizer.json (Qwen2
+    /// split regex; vocabulary id 151669 renamed to the special added token &lt;|mask|&gt;).</summary>
+    public static readonly PinnedAsset CloverChatTokenizerJson = new(
+        "Diffuspace/Clover-35B-A3B-Preview",
+        "4b0402b65e523d0183a14c431955438714cb16ff",
+        "tokenizer.json",
+        "7c62ba7d8bb13291c94459896cd27537858beb58a88a037b09a150e213420988");
+
     private static readonly Lazy<string> _lazyRepoRoot = new(FindRepoRoot);
     private static readonly Dictionary<PinnedAsset, Tokenizer> _loaded = [];
     private static readonly Lock _loadLock = new();
