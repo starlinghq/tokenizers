@@ -86,7 +86,7 @@ public sealed partial class ProfileConformanceTests
     {
         // Guards against a format change silently dropping a profile from the data-driven run.
         Assert.Superset(
-            new HashSet<string> { "gemma-bpe-embeddinggemma2", "qwen2-bpe-kev", "qwen35-bpe-chat", "qwen3-bpe-chat", "qwen3-bpe-embedding", "xlmr-unigram-e5" },
+            new HashSet<string> { "gemma-bpe-embeddinggemma2", "lfm3-bpe-chat", "qwen2-bpe-kev", "qwen35-bpe-chat", "qwen3-bpe-chat", "qwen3-bpe-embedding", "xlmr-unigram-e5" },
             _profiles.Value.Where(p => p.HasCaseFixtures).Select(p => p.Name).ToHashSet());
     }
 

@@ -40,7 +40,7 @@ For one text (`Tokenizer.EncodeCore`), in upstream order:
 | `Pipeline/TokenizerJsonLoader.cs` | Document reader and component gate (above) |
 | `Pipeline/NormalizedString.cs`, `PreTokenizedString.cs`, `EncodingBuilder.cs` | Upstream's aligned string, split string and mutable encoding |
 | `Pipeline/Normalizers.cs`, `NfcNormalizer.cs` | `Sequence`, `Precompiled`, `Strip`, `Replace`, `NFC` (Unicode 9.0.0 tables, as the reference) |
-| `Pipeline/PreTokenizers.cs`, `QwenSplitPattern.cs` | `Sequence`, `Metaspace`, `Split`, `ByteLevel`; a hand-written scanner for the two Qwen split regexes |
+| `Pipeline/PreTokenizers.cs`, `QwenSplitPattern.cs` | `Sequence`, `Metaspace`, `Split`, `ByteLevel`; a hand-written scanner for the two Qwen split regexes and the Llama 3 one |
 | `Pipeline/AddedVocabulary.cs` | Added-token matching and ids |
 | `Pipeline/UnigramVocabulary*.cs`, `VocabularyTrie.cs`, `ThirdParty/MLNet/` | Unigram vocabulary, trie construction, best-path search |
 | `Pipeline/BpeModel.cs`, `BpeModelReader.cs`, `BpeVocabulary.cs` | BPE model, vocabulary and merges reader, UTF-8 hash tables |

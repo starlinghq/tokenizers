@@ -90,6 +90,27 @@ public class QwenSplitPatternTests
         Assert.Equal(expected, string.Join('|', matches.Select(m => Encoding.UTF8.GetString(utf8, m.Start, m.End - m.Start))));
     }
 
+    // Expected splits from tokenizers 0.23.3 (Split(Regex(Llama3), "isolated").pre_tokenize_str).
+    [Theory]
+    [InlineData(" 123", " |123")]
+    [InlineData("12345", "123|45")]
+    [InlineData("1234567 89", "123|456|7| |89")]
+    [InlineData("x1234y", "x|123|4|y")]
+    [InlineData("\u0663\u0664\u0665\u0666", "\u0663\u0664\u0665|\u0666")]
+    [InlineData("\u00BD\u00BE\u21534", "\u00BD\u00BE\u2153|4")]
+    [InlineData("a1 2", "a|1| |2")]
+    [InlineData("3.14159", "3|.|141|59")]
+    [InlineData("e\u0301x", "e|\u0301x")]
+    [InlineData("Hello world", "Hello| world")]
+    public void Llama3SplitsDigitsInGroupsOfThree(string text, string expected)
+    {
+        QwenSplitPattern pattern = QwenSplitPattern.TryCreate(QwenSplitPattern.Llama3)!;
+        byte[] utf8 = Encoding.UTF8.GetBytes(text);
+        List<PatternMatch> matches = pattern.FindMatches(utf8);
+        Assert.All(matches, m => Assert.True(m.IsMatch));
+        Assert.Equal(expected, string.Join('|', matches.Select(m => Encoding.UTF8.GetString(utf8, m.Start, m.End - m.Start))));
+    }
+
     [Fact]
     public void OtherRegexesAreRejected()
     {
