@@ -4,7 +4,7 @@
 profile: qwen3-bpe-chat   # Qwen/Qwen3-Reranker-0.6B, byte-identical to the Qwen/Qwen3-0.6B tokenizer.json; adds no tokens
 status: experimental  # 137/137 fixture cases exact; fixtures proposed, not yet accepted (conformance.fixtures)
 backlog: Qwen3 Embedding series 0.6B, reranker (starlinghq/starling#144, #100)
-library: Starlings.Tokenizers 0.3.3
+library: Starlings.Tokenizers 0.3.4   # results first recorded on 0.3.3, which was never published
 
 asset:
   repo: Qwen/Qwen3-Reranker-0.6B
