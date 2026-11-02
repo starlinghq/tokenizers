@@ -105,6 +105,14 @@ internal static class TestAssets
         "tokenizer.json",
         "7c62ba7d8bb13291c94459896cd27537858beb58a88a037b09a150e213420988");
 
+    /// <summary>Profile phi4-bpe-chat: the microsoft/Phi-4-mini-instruct tokenizer.json (o200k split
+    /// regex as Removed with invert; no post-processor; ten added tokens with rstrip).</summary>
+    public static readonly PinnedAsset Phi4MiniTokenizerJson = new(
+        "microsoft/Phi-4-mini-instruct",
+        "cfbefacb99257ffa30c83adab238a50856ac3083",
+        "tokenizer.json",
+        "382cc235b56c725945e149cc25f191da667c836655efd0857b004320e90e91ea");
+
     /// <summary>Profile xlmr-unigram-paraphrase-multilingual: the
     /// sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 tokenizer.json (XLM-R Unigram with
     /// WhitespaceSplit; declares truncation 128 and BatchLongest padding).</summary>

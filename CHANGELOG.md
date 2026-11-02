@@ -6,6 +6,8 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ### Added
 
+- `Split` pre-tokenizer: the o200k regex (tiktoken's `o200k_base` pattern, as microsoft/Phi-4-mini-instruct declares it), on a new hand-written scanner over Unicode scalar values with reference-probed `\p{Lu}`, `\p{Ll}`, `\p{Lt}`, `\p{Lm}` and `\p{Lo}` tables. It loads as `Isolated` with `invert` false or as `Removed` with `invert` true (the regex leaves no gaps, so both give the same pieces); other combinations fail at load. Previously it was rejected at load. Checked against huggingface/tokenizers 0.23.3 on 12,420 split cases (`O200kSplitPatternTests`).
+- Profile `phi4-bpe-chat` (microsoft/Phi-4-mini-instruct at `cfbefacb`), experimental: byte-level BPE with the o200k regex and ten `rstrip` added tokens, 137/137 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, truncation to 16 tokens, and padded batches of single texts and pairs, plus 1,500 randomized strings with the Phi-4 role and tool tags exact (starlinghq/starling#109).
 - `WhitespaceSplit` pre-tokenizer (upstream `pre_tokenizers/whitespace.rs`): splits on the Unicode White_Space characters and removes them. Tokenizers that use it now load instead of failing with `UnsupportedTokenizerComponentException` (for example `pre_tokenizer.pretokenizers[0].type=WhitespaceSplit`). Component reference cases from huggingface/tokenizers 0.23.3 (`WhitespaceSplitComponentTests`).
 - Profile `xlmr-unigram-paraphrase-multilingual` (sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 at `e8f8c211`), experimental: XLM-R Unigram with `Sequence[WhitespaceSplit, Metaspace]`, 49/49 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, the file's truncation to 128 tokens and its padding, in padded batches of single texts and pairs. Needed by starlinghq/starling#266.
 - `reference/tokenizer-json/run_tokenizer_json.py --clear-asset-truncation-padding`: accepts an asset that declares truncation or padding, clears both before encoding, and records them in `environment.json`. `ProfileConformanceTests` clears them the same way (a no-op for every earlier profile).
@@ -17,7 +19,8 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ### Behavior
 
-- No change in output for any existing profile: none uses `WhitespaceSplit`, and none declares truncation or padding in its file. Every existing fixture passes unchanged.
+- A tokenizer with an `rstrip` added token and, in the same matching pass (normalized or not), an added token that starts with whitespace now fails at load: upstream resumes matching inside the absorbed whitespace and gives overlapping splits, which this library did not reproduce. No pinned asset has that combination. No change in output for any existing profile.
+- No change in output for any existing profile from `WhitespaceSplit` or the asset truncation/padding clearing: none uses `WhitespaceSplit`, and none declares truncation or padding in its file. Every existing fixture passes unchanged.
 
 ## [0.3.4] - 2026-10-28
 

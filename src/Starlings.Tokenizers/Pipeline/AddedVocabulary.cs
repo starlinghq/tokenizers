@@ -98,11 +98,37 @@ internal sealed class AddedVocabulary
             }
         }
 
+        RejectRstripOverlap(rawPatterns);
+        RejectRstripOverlap(normalizedPatterns);
         _nonNormalizedTrie = rawPatterns.Count == 0 ? null : new ByteTrie(rawPatterns);
         _normalizedTrie = normalizedPatterns.Count == 0 ? null : new ByteTrie(normalizedPatterns);
     }
 
     public int Count => _tokenToId.Count;
+
+    /// <summary>
+    /// Upstream resumes its Aho-Corasick scan at the end of a match, not after the whitespace an
+    /// <c>rstrip</c> token absorbed, so a token starting with whitespace can match inside that
+    /// whitespace and give overlapping splits. This port resumes after the whitespace, so it rejects
+    /// that combination (within one matching pass) instead of diverging.
+    /// </summary>
+    private void RejectRstripOverlap(List<(byte[] Pattern, int Id)> patterns)
+    {
+        if (!patterns.Exists(p => _idToToken[p.Id].Rstrip))
+        {
+            return;
+        }
+
+        foreach ((byte[] pattern, int id) in patterns)
+        {
+            if (UnicodeData.IsWhiteSpace(Utf8Util.DecodeAt(pattern, 0, out _)))
+            {
+                throw new UnsupportedTokenizerComponentException(
+                    "added_tokens",
+                    $"token '{_idToToken[id].Content}' starts with whitespace while another token of the same matching pass has rstrip true; upstream gives overlapping splits there, which is not implemented.");
+            }
+        }
+    }
 
     public IReadOnlyDictionary<string, int> TokenToIdMap => _tokenToId;
 

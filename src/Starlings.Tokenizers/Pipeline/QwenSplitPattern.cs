@@ -277,15 +277,20 @@ internal sealed class QwenSplitPattern : IPattern
 }
 
 /// <summary>
-/// <c>\p{L}</c>, <c>\p{N}</c> and <c>\p{M}</c> as the reference's regex engine matches them
-/// (generated tables, <see cref="RegexUnicodeClassData"/>), independent of the .NET runtime's
-/// Unicode version.
+/// <c>\p{L}</c>, <c>\p{N}</c>, <c>\p{M}</c> and the letter categories <c>\p{Lu}</c>, <c>\p{Ll}</c>,
+/// <c>\p{Lt}</c>, <c>\p{Lm}</c>, <c>\p{Lo}</c> as the reference's regex engine matches them (generated
+/// tables, <see cref="RegexUnicodeClassData"/>), independent of the .NET runtime's Unicode version.
 /// </summary>
 internal static class RegexUnicodeClasses
 {
     public const int Letter = 1;
     public const int Number = 2;
     public const int Mark = 4;
+    public const int UppercaseLetter = 8;
+    public const int LowercaseLetter = 16;
+    public const int TitlecaseLetter = 32;
+    public const int ModifierLetter = 64;
+    public const int OtherLetter = 128;
 
     private static readonly byte[] _bmp = BuildBmp();
 
@@ -310,6 +315,15 @@ internal static class RegexUnicodeClasses
         if (InRanges(RegexUnicodeClassData.MarkRanges, c))
         {
             cls |= Mark;
+        }
+
+        if ((cls & Letter) != 0)
+        {
+            cls |= InRanges(RegexUnicodeClassData.UppercaseLetterRanges, c) ? UppercaseLetter : 0;
+            cls |= InRanges(RegexUnicodeClassData.LowercaseLetterRanges, c) ? LowercaseLetter : 0;
+            cls |= InRanges(RegexUnicodeClassData.TitlecaseLetterRanges, c) ? TitlecaseLetter : 0;
+            cls |= InRanges(RegexUnicodeClassData.ModifierLetterRanges, c) ? ModifierLetter : 0;
+            cls |= InRanges(RegexUnicodeClassData.OtherLetterRanges, c) ? OtherLetter : 0;
         }
 
         return cls;
@@ -345,6 +359,11 @@ internal static class RegexUnicodeClasses
         Fill(bmp, RegexUnicodeClassData.LetterRanges, Letter);
         Fill(bmp, RegexUnicodeClassData.NumberRanges, Number);
         Fill(bmp, RegexUnicodeClassData.MarkRanges, Mark);
+        Fill(bmp, RegexUnicodeClassData.UppercaseLetterRanges, UppercaseLetter);
+        Fill(bmp, RegexUnicodeClassData.LowercaseLetterRanges, LowercaseLetter);
+        Fill(bmp, RegexUnicodeClassData.TitlecaseLetterRanges, TitlecaseLetter);
+        Fill(bmp, RegexUnicodeClassData.ModifierLetterRanges, ModifierLetter);
+        Fill(bmp, RegexUnicodeClassData.OtherLetterRanges, OtherLetter);
         return bmp;
     }
 
