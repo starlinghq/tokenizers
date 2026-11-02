@@ -57,6 +57,7 @@ A model is supported when its `tokenizer.json` uses only supported components. A
 | Profile | Model | Algorithm | Evidence |
 | --- | --- | --- | --- |
 | [`xlmr-unigram-e5`](https://github.com/starlinghq/tokenizers/blob/main/profiles/xlmr-unigram-e5.yaml) | `intfloat/multilingual-e5-small` | SentencePiece Unigram | 49/49 cases exact, with truncation and padded batch |
+| [`xlmr-unigram-paraphrase-multilingual`](https://github.com/starlinghq/tokenizers/blob/main/profiles/xlmr-unigram-paraphrase-multilingual.yaml) | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` | SentencePiece Unigram, WhitespaceSplit | 49/49 cases exact, with and without special tokens, the file's truncation (128) and padding |
 | [`gliner2-base-v1-unigram`](https://github.com/starlinghq/tokenizers/blob/main/profiles/gliner2-base-v1-unigram.yaml) | `fastino/gliner2-base-v1` | SentencePiece Unigram (DeBERTa-v3) | per-word and 10 whole-text cases; offsets, pairs and decode untested |
 | [`qwen2-bpe-kev`](https://github.com/starlinghq/tokenizers/blob/main/profiles/qwen2-bpe-kev.yaml) | `jaredpalmer/kev-0.8b` (Qwen2/Qwen3 regex) | byte-level BPE | 137/137 cases exact, 0 mismatches in 1.15 M randomized encodes |
 | [`qwen35-bpe-chat`](https://github.com/starlinghq/tokenizers/blob/main/profiles/qwen35-bpe-chat.yaml) | `Qwen/Qwen3.5-0.8B` | byte-level BPE | 137/137 cases exact, 0 mismatches in 1.15 M randomized encodes |
@@ -66,7 +67,7 @@ A model is supported when its `tokenizer.json` uses only supported components. A
 | [`lfm3-bpe-chat`](https://github.com/starlinghq/tokenizers/blob/main/profiles/lfm3-bpe-chat.yaml) | `LiquidAI/LFM3-1.7B` | byte-level BPE, Llama 3 regex | 137/137 cases exact, with truncation and padded batches |
 | [`clover-bpe-chat`](https://github.com/starlinghq/tokenizers/blob/main/profiles/clover-bpe-chat.yaml) | `Diffuspace/Clover-35B-A3B-Preview` (`<\|mask\|>` at id 151669) | byte-level BPE | 137/137 cases exact, with truncation and padded batches |
 
-All nine are experimental. BERT-family WordPiece files (for example `sentence-transformers/all-MiniLM-L6-v2` and `BAAI/bge-small-en-v1.5`) load and pass component-level reference cases, but have no profile yet. Other files may load and work too. Without a profile, matching the reference is untested, not promised.
+All ten are experimental. BERT-family WordPiece files (for example `sentence-transformers/all-MiniLM-L6-v2` and `BAAI/bge-small-en-v1.5`) load and pass component-level reference cases, but have no profile yet. Other files may load and work too. Without a profile, matching the reference is untested, not promised.
 
 The full list of components and options, and what fails at load, is in [docs/supported-components.md](https://github.com/starlinghq/tokenizers/blob/main/docs/supported-components.md). Not offered: pre-tokenized input, word ids, overflowing windows (truncation stride), incremental (streaming) decode, and chat templates.
 

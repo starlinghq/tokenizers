@@ -79,6 +79,7 @@ uv venv /tmp/ref && VIRTUAL_ENV=/tmp/ref uv pip install --require-hashes -r refe
 - **Profile id.** Use `<family>-<algorithm>-<model>`, for example `qwen35-bpe-chat` or `gemma-bpe-embeddinggemma2`.
 - **Corpus.** `tokenizer-corpus-v1.jsonl` (49 cases) is the base for every profile. Byte-level BPE profiles also take `tokenizer-corpus-qwen-bpe-v1.jsonl` (88 cases). If the model needs cases the corpora lack, such as a script, a special-token pattern or a long input, propose them in a separate pull request that adds a new corpus file, with the source of each case.
 - **`--truncate`.** Set it to the model's maximum input length when long inputs are truncated in practice, as for encoders.
+- **Truncation or padding in the file.** The runner refuses an asset that declares `truncation` or `padding`, because the fixtures record untruncated, unpadded encodings. Pass `--clear-asset-truncation-padding` to clear both (the runner records what the file declared in `environment.json`; `ProfileConformanceTests` clears them too) and `--truncate` with the file's `max_length`. Check the declared settings as loaded in a profile-specific test, as `ParaphraseMultilingualConformanceTests` does.
 - **Reference version.** The runner pins tokenizers 0.23.3. Bump it only on purpose, and recheck every profile that uses the runner.
 
 Add a `PROPOSED.md` next to the fixtures with these facts:

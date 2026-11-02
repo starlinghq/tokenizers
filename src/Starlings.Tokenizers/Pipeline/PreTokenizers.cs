@@ -1,7 +1,7 @@
 // Copyright (c) 2026 StarlingHq. Licensed under the MIT License or the Apache License, Version 2.0, at your option.
 //
 // Ported from huggingface/tokenizers v0.23.2 (88a4498ad4ea1a9487b0a9b0ff881383fd5a06a3):
-// tokenizers/src/pre_tokenizers/{metaspace,sequence,split,byte_level}.rs, Copyright The HuggingFace Inc. team,
+// tokenizers/src/pre_tokenizers/{metaspace,sequence,split,byte_level,whitespace}.rs, Copyright The HuggingFace Inc. team,
 // Apache License 2.0 (see THIRD-PARTY-NOTICES.md). Modified by StarlingHq: translated to C#.
 
 using System.Text;
@@ -75,6 +75,21 @@ internal sealed class SplitPreTokenizer(IPattern pattern, SplitDelimiterBehavior
     public void PreTokenize(PreTokenizedString pretokenized) =>
         pretokenized.SplitEach(normalized =>
             normalized.Split(pattern.FindMatches(normalized.Normalized), behavior).Select(n => new Split(n)));
+}
+
+/// <summary>
+/// <c>WhitespaceSplit</c> (upstream <c>tokenizers/src/pre_tokenizers/whitespace.rs</c>, blob
+/// <c>20cfb65193b5932f77d7858ff9e7be71ecbde66b</c>, the same in v0.23.2 and v0.23.3): splits each piece
+/// on <c>char::is_whitespace</c> (the Unicode White_Space property) with <c>Removed</c>. The
+/// <c>Fn(char) -&gt; bool</c> pattern isolates every whitespace character, so runs of whitespace
+/// leave no empty pieces and whitespace-only input leaves none at all.
+/// </summary>
+internal sealed class WhitespaceSplitPreTokenizer : IPreTokenizer
+{
+    public void PreTokenize(PreTokenizedString pretokenized) =>
+        pretokenized.SplitEach(normalized =>
+            normalized.Split(BertCharacterPattern.WhiteSpace.FindMatches(normalized.Normalized), SplitDelimiterBehavior.Removed)
+                .Select(n => new Split(n)));
 }
 
 /// <summary>
