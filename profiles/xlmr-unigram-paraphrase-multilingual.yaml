@@ -1,0 +1,87 @@
+# Tokenizer profile: a tested combination of one pinned asset and the interpreter components it
+# uses (profiles/README.md). Status values: supported, unsupported, experimental, untested.
+# Release qualification is a maintainer decision; this file does not grant a badge.
+profile: xlmr-unigram-paraphrase-multilingual   # sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (XLM-R SentencePiece Unigram)
+status: experimental  # fixture results below; fixtures proposed, not yet accepted (conformance.fixtures)
+backlog: starlinghq/starling#266 (BERT route draft contract paraphrase-multilingual, starlinghq/starling#182)
+library: Starlings.Tokenizers 0.3.4 plus the WhitespaceSplit pre-tokenizer (Unreleased); needs the next release
+
+asset:
+  repo: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+  revision: e8f8c211226b894fcb81acc59f3b34ba3efd5f42
+  file: tokenizer.json
+  sha256: 2c3387be76557bd40970cec13153b3bbf80407865484b209e655e5e4729076b8
+  size: 9081518
+  format_version: "1.0"
+  acquisition: tools/fetch-assets.sh   # never committed; Apache-2.0 (the model's license)
+
+runtime_pipeline:   # checked 2026-11-02 (conformance/xlmr-unigram-paraphrase-multilingual/PROPOSED.md)
+  transformers_5: transformers 5.18.0 with tokenizers 0.23.2 (the starlinghq/starling encoder reference environment) loads TokenizersBackend (tokenizer_config.json tokenizer_class PreTrainedTokenizerFast); its live pipeline equals this file as JSON
+  max_seq_length: 128 (sentence-transformers); the file's own truncation max_length is 128 too
+
+reference:
+  implementation: huggingface/tokenizers 0.23.3 (Python binding, Tokenizer.from_file(asset)); reference/tokenizer-json/requirements.txt
+  source_revision: 9ab7691f497eff905f961aba51a4bb9be3e9555c
+  runner: reference/tokenizer-json/run_tokenizer_json.py --truncate 128 --without-special-tokens --batch ... --pair-batch ... --pad-token "<pad>" --clear-asset-truncation-padding
+  offsets_unit: unicode-scalars   # reference unit; the .NET API also gives utf16-code-units
+
+pipeline:   # exactly what the pinned file declares
+  normalizer: Precompiled(precompiled_charsmap)   # no Replace(" {2,}"), unlike xlmr-unigram-e5
+  pre_tokenizer: Sequence[WhitespaceSplit, Metaspace(replacement "▁", add_prefix_space true)]   # legacy Metaspace form: prepend_scheme always, split true
+  model: Unigram(vocab 250002, unk_id 3, byte_fallback absent = false)
+  post_processor: TemplateProcessing(single "<s> $A </s>", pair "<s> $A </s> </s> $B </s>", all type ids 0)
+  decoder: Metaspace(replacement "▁", add_prefix_space true)
+  added_tokens: "[\"<s>\" 0, \"<pad>\" 1, \"</s>\" 2, \"<unk>\" 3, \"<mask>\" 250001 (lstrip true)]"  # all special, normalized false
+  truncation: max_length 128, LongestFirst, stride 0 (direction absent = Right)
+  padding: BatchLongest, Right, pad_id 1, pad_token "<pad>", pad_type_id 0
+
+conformance:
+  fixtures: conformance/xlmr-unigram-paraphrase-multilingual/   # proposed, not yet accepted by a maintainer (PROPOSED.md)
+  corpus: conformance/corpus/tokenizer-corpus-v1.jsonl (49 cases, sha256 8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199)
+  tests:
+    - tests/Starlings.Tokenizers.Tests/ProfileConformanceTests.cs   # data-driven, asset truncation and padding cleared: encode, decode, truncated, without_special_tokens
+    - tests/Starlings.Tokenizers.Tests/ParaphraseMultilingualConformanceTests.cs   # as loaded: declared truncation 128 and padding against the fixtures
+    - tests/Starlings.Tokenizers.Tests/WhitespaceSplitComponentTests.cs   # WhitespaceSplit component reference cases
+  result: # 2026-11-02, Linux x64, .NET SDK 10.0, Debug
+    encode: "49/49 cases exact (46 single, 3 pairs): ids, tokens, type_ids, attention_mask, special_tokens_mask, utf16 and scalar offsets, sequence_ids"
+    encode_without_special_tokens: 49/49 cases exact
+    truncation: "2/2 truncated records exact (long-english, long-mixed; max_length 128, longest_first, right), with and without special tokens; the tokenizer as loaded (the file's truncation) gives the same"
+    batch: 6 single texts and 3 pairs right-padded with <pad> 1, exact with the file's own padding, each row equal to its single encode
+    decode: 49/49 cases exact, skip_special_tokens true and false
+
+capabilities:
+  encode_single: supported
+  encode_pair: experimental            # 3 corpus pairs and a padded pair batch
+  encode_batch: supported
+  add_special_tokens_false: supported
+  offsets_utf16_code_units: supported
+  offsets_unicode_scalars: supported
+  sequence_ids: supported
+  special_tokens_mask: supported
+  decode_skip_special_tokens: supported
+  decode_keep_special_tokens: supported
+  asset_truncation_right_longest_first: supported   # the file's max_length 128 (2 long corpus cases)
+  truncation_left_only_first_only_second: experimental   # generic code path; no fixture for this profile
+  truncation_stride_overflowing: unsupported   # rejected at load; no overflow API
+  asset_padding_right_batch_longest: supported     # tokenizer-batch.json, pad <pad> 1, singles and pairs
+  padding_left_fixed_multiple: experimental        # generic code path; no fixture for this profile
+  added_tokens_special_non_normalized: supported
+  added_token_lstrip: supported        # <mask> lstrip true; corpus case special-literal-mask
+  added_tokens_single_word: unsupported   # rejected at load
+  whitespace_split_pre_tokenizer: supported   # corpus fixtures and WhitespaceSplitComponentTests
+  encode_special_tokens_as_text: unsupported
+  pre_tokenized_input: unsupported
+  word_ids: unsupported
+  incremental_decode_stream: unsupported
+  thread_safety: untested              # immutable by design
+  performance: untested
+
+known_divergences:
+  against_reference: none on the fixtures
+  other_pipelines:
+    - profile xlmr-unigram-e5 (the same vocabulary family with Replace(" {2,}") and no WhitespaceSplit) gives different ids on 6 of 49 corpus cases (space-only, ws-leading-trailing, control-chars, special-literal-s, special-literal-mask, long-mixed), the same 6 cases xlmr-unigram-e5 lists for the WhitespaceSplit+Metaspace pipeline transformers 5.18.0 rebuilds for that model
+  reference_quirks_reproduced:
+    - whitespace-only input encodes to "<s> </s>" (WhitespaceSplit removes every piece)
+    - <mask> absorbs the whitespace on its left (lstrip), so its token covers " <mask>"
+  risks:
+    - grapheme segmentation uses .NET StringInfo; the reference uses unicode-segmentation 1.13.3. A Unicode-version difference could change Precompiled output for newly assigned characters.

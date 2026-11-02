@@ -4,6 +4,16 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+### Added
+
+- `WhitespaceSplit` pre-tokenizer (upstream `pre_tokenizers/whitespace.rs`): splits on the Unicode White_Space characters and removes them. Tokenizers that use it now load instead of failing with `UnsupportedTokenizerComponentException` (for example `pre_tokenizer.pretokenizers[0].type=WhitespaceSplit`). Component reference cases from huggingface/tokenizers 0.23.3 (`WhitespaceSplitComponentTests`).
+- Profile `xlmr-unigram-paraphrase-multilingual` (sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 at `e8f8c211`), experimental: XLM-R Unigram with `Sequence[WhitespaceSplit, Metaspace]`, 49/49 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, the file's truncation to 128 tokens and its padding, in padded batches of single texts and pairs. Needed by starlinghq/starling#266.
+- `reference/tokenizer-json/run_tokenizer_json.py --clear-asset-truncation-padding`: accepts an asset that declares truncation or padding, clears both before encoding, and records them in `environment.json`. `ProfileConformanceTests` clears them the same way (a no-op for every earlier profile).
+
+### Behavior
+
+- No change in output for any existing profile: none uses `WhitespaceSplit`, and none declares truncation or padding in its file. Every existing fixture passes unchanged.
+
 ## [0.3.4] - 2026-10-28
 
 ### Added
