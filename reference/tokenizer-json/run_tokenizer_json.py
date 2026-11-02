@@ -18,13 +18,20 @@ Outputs (``--out``, normally ``conformance/<profile>/``):
 - ``environment.json``: runner, its repository commit, interpreter, packages, CPU, and the asset and
   corpus digests.
 
+An asset that enables truncation or padding is refused, because the rows record untruncated, unpadded
+encodings. ``--clear-asset-truncation-padding`` accepts it: the runner clears both
+(``no_truncation``, ``no_padding``) before encoding and records the asset's settings in
+``environment.json``; ``ProfileConformanceTests`` clears them the same way. Pass ``--truncate`` with
+the asset's ``max_length`` to record the truncation the asset declares.
+
 The row layout is the one ``tests/Starlings.Tokenizers.Tests/ProfileConformanceTests.cs`` reads for every
 profile that declares ``conformance.fixtures`` with a ``tokenizer.jsonl``.
 
 Usage:
     python run_tokenizer_json.py --profile <id> --asset <.models/<repo>/<commit>/tokenizer.json> \\
         --corpus ../../conformance/corpus/tokenizer-corpus-v1.jsonl --out ../../conformance/<id> [--truncate 512] \\
-        [--without-special-tokens] [--batch <id,id,...> --pad-token <token> [--pair-batch <id,id,...>]]
+        [--without-special-tokens] [--batch <id,id,...> --pad-token <token> [--pair-batch <id,id,...>]] \\
+        [--clear-asset-truncation-padding]
 
 Without the optional flags the output is exactly what earlier versions of this runner wrote.
 """
@@ -152,16 +159,26 @@ def main() -> int:
     parser.add_argument("--batch", help="comma-separated single-text case ids to record as one padded batch")
     parser.add_argument("--pair-batch", help="comma-separated pair case ids to record as a second padded batch")
     parser.add_argument("--pad-token", help="the padding token of --batch (its id is looked up in the vocabulary)")
+    parser.add_argument(
+        "--clear-asset-truncation-padding",
+        action="store_true",
+        help="accept an asset that enables truncation or padding: clear both and record them in environment.json",
+    )
     args = parser.parse_args()
 
     tok = Tokenizer.from_file(str(args.asset))
+    asset_settings = None
     if tok.truncation is not None or tok.padding is not None:
-        print(
-            "error: the asset enables truncation or padding; the fixture format records untruncated, "
-            "unpadded encodings (use --truncate for truncation)",
-            file=sys.stderr,
-        )
-        return 1
+        if not args.clear_asset_truncation_padding:
+            print(
+                "error: the asset enables truncation or padding; the fixture format records untruncated, "
+                "unpadded encodings (use --truncate for truncation, or --clear-asset-truncation-padding)",
+                file=sys.stderr,
+            )
+            return 1
+        asset_settings = {"truncation": tok.truncation, "padding": tok.padding}
+        tok.no_truncation()
+        tok.no_padding()
     cases = [c for corpus in args.corpus for c in fixtures.load_corpus(corpus)]
     ids = [c["id"] for c in cases]
     if len(ids) != len(set(ids)):
@@ -200,6 +217,8 @@ def main() -> int:
         options["batch"] = groups["rows"]
         options["pair_batch"] = groups["pairs"]
         options["pad_token"] = args.pad_token
+    if asset_settings is not None:
+        options["cleared_asset_settings"] = asset_settings
     fixtures.write_json(
         args.out / "environment.json",
         {

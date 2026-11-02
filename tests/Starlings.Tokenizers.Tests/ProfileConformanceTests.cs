@@ -68,6 +68,20 @@ public sealed partial class ProfileConformanceTests
         return data;
     }
 
+    /// <summary>Profiles whose fixtures were written by the generic runner, which records the asset
+    /// truncation and padding it cleared in <c>environment.json</c> (<c>options.cleared_asset_settings</c>).</summary>
+    public static TheoryData<string> GenericRunnerProfiles()
+    {
+        var data = new TheoryData<string>();
+        foreach (Profile profile in _profiles.Value.Where(p => p.HasCaseFixtures && p.Environment.Value is { } env
+            && env.GetProperty("runner").GetString() == "reference/tokenizer-json/run_tokenizer_json.py"))
+        {
+            data.Add(profile.Name);
+        }
+
+        return data;
+    }
+
     [Fact]
     public void EveryProfileDeclaresExistingFixtures()
     {
@@ -86,7 +100,7 @@ public sealed partial class ProfileConformanceTests
     {
         // Guards against a format change silently dropping a profile from the data-driven run.
         Assert.Superset(
-            new HashSet<string> { "gemma-bpe-embeddinggemma2", "lfm3-bpe-chat", "phi4-bpe-chat", "qwen2-bpe-kev", "qwen35-bpe-chat", "qwen3-bpe-chat", "qwen3-bpe-embedding", "xlmr-unigram-e5" },
+            new HashSet<string> { "gemma-bpe-embeddinggemma2", "lfm3-bpe-chat", "phi4-bpe-chat", "qwen2-bpe-kev", "qwen35-bpe-chat", "qwen3-bpe-chat", "qwen3-bpe-embedding", "xlmr-unigram-e5", "xlmr-unigram-paraphrase-multilingual" },
             _profiles.Value.Where(p => p.HasCaseFixtures).Select(p => p.Name).ToHashSet());
     }
 
@@ -145,6 +159,69 @@ public sealed partial class ProfileConformanceTests
         }
     }
 
+    /// <summary><see cref="Profile.Load"/> clears the asset's truncation and padding for every profile. The
+    /// settings cleared must be exactly those the runner cleared and recorded: none when
+    /// <c>cleared_asset_settings</c> is absent (the runner refuses such an asset without the flag).</summary>
+    [Theory]
+    [MemberData(nameof(GenericRunnerProfiles))]
+    public void ClearedAssetSettingsMatchTheRunner(string profile)
+    {
+        Profile p = Get(profile);
+        Tokenizer asLoaded = TestAssets.LoadTokenizer(p.Asset);
+        JsonElement cleared = default;
+        if (!p.Environment.Value!.Value.TryGetProperty("options", out JsonElement options)
+            || !options.TryGetProperty("cleared_asset_settings", out cleared))
+        {
+            Assert.Null(asLoaded.Truncation);
+            Assert.Null(asLoaded.Padding);
+            return;
+        }
+
+        Assert.Equal(ExpectedTruncation(cleared.GetProperty("truncation")), asLoaded.Truncation);
+        Assert.Equal(ExpectedPadding(cleared.GetProperty("padding")), asLoaded.Padding);
+    }
+
+    /// <summary>Maps the reference's <c>Tokenizer.truncation</c> dictionary to <see cref="TruncationOptions"/>.</summary>
+    private static TruncationOptions? ExpectedTruncation(JsonElement t)
+    {
+        if (t.ValueKind == JsonValueKind.Null)
+        {
+            return null;
+        }
+
+        Assert.Equal(0, t.GetProperty("stride").GetInt32());
+        return new TruncationOptions(
+            t.GetProperty("max_length").GetInt32(),
+            t.GetProperty("strategy").GetString() switch
+            {
+                "longest_first" => TruncationStrategy.LongestFirst,
+                "only_first" => TruncationStrategy.OnlyFirst,
+                "only_second" => TruncationStrategy.OnlySecond,
+                string other => throw new InvalidOperationException($"Unknown truncation strategy {other}."),
+                null => throw new InvalidOperationException("Truncation strategy missing."),
+            },
+            t.GetProperty("direction").GetString() == "left" ? TruncationDirection.Left : TruncationDirection.Right);
+    }
+
+    /// <summary>Maps the reference's <c>Tokenizer.padding</c> dictionary (<c>length</c> null means
+    /// BatchLongest) to <see cref="PaddingOptions"/>.</summary>
+    private static PaddingOptions? ExpectedPadding(JsonElement pad)
+    {
+        if (pad.ValueKind == JsonValueKind.Null)
+        {
+            return null;
+        }
+
+        static int? NullableInt(JsonElement e) => e.ValueKind == JsonValueKind.Null ? null : e.GetInt32();
+        return new PaddingOptions(
+            pad.GetProperty("pad_id").GetInt32(),
+            pad.GetProperty("pad_token").GetString()!,
+            NullableInt(pad.GetProperty("length")),
+            pad.GetProperty("direction").GetString() == "left" ? PaddingDirection.Left : PaddingDirection.Right,
+            pad.GetProperty("pad_type_id").GetInt32(),
+            NullableInt(pad.GetProperty("pad_to_multiple_of")));
+    }
+
     private static Profile Get(string name) => _profiles.Value.Single(p => p.Name == name);
 
     private static TokenEncoding Encode(Tokenizer tokenizer, JsonElement row, bool addSpecialTokens = true)
@@ -201,6 +278,23 @@ public sealed partial class ProfileConformanceTests
         public Lazy<Dictionary<string, JsonElement>> Cases { get; } = new(() =>
             TestAssets.ReadJsonLines(Path.Combine(FixtureDir, "tokenizer.jsonl")).ToDictionary(r => r.GetProperty("id").GetString()!));
 
-        public Tokenizer Load() => TestAssets.LoadTokenizer(Asset);
+        /// <summary>The fixtures' <c>environment.json</c>, or null if there is none.</summary>
+        public Lazy<JsonElement?> Environment { get; } = new(() =>
+        {
+            string path = Path.Combine(FixtureDir, "environment.json");
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            using JsonDocument doc = JsonDocument.Parse(File.ReadAllBytes(path));
+            return doc.RootElement.Clone();
+        });
+
+        /// <summary>The profile's tokenizer without the asset's own truncation and padding: the rows are
+        /// untruncated, unpadded encodings, and the runner clears both the same way
+        /// (<c>--clear-asset-truncation-padding</c>). A no-op for assets that declare neither.
+        /// <see cref="ClearedAssetSettingsMatchTheRunner"/> checks what is cleared against the runner's record.</summary>
+        public Tokenizer Load() => TestAssets.LoadTokenizer(Asset).WithTruncation(null).WithPadding(null);
     }
 }
