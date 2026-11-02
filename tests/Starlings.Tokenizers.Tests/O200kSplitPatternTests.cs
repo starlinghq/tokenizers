@@ -89,8 +89,9 @@ public class O200kSplitPatternTests
         Assert.True(failures.Count == 0, $"{failures.Count} of {rows} differ:\n{string.Join('\n', failures.Take(20))}");
     }
 
-    // Hand-picked cases; expected pieces from tokenizers 0.23.3
-    // (Split(Regex(o200k), "removed", invert=True).pre_tokenize_str).
+    // Hand-picked spot checks; expected pieces copied by hand from tokenizers 0.23.3
+    // (Split(Regex(o200k), "removed", invert=True).pre_tokenize_str). They are not
+    // fixtures: the reference-written evidence is TestData/o200k-bpe (run_o200k_reference.py).
     [Theory]
     [InlineData("Hello world", "Hello| world")]
     [InlineData("it's IT'S we'Ll heſ", "it's| IT'S| we'Ll| heſ")]
@@ -120,15 +121,16 @@ public class O200kSplitPatternTests
     }
 
     [Theory]
-    [InlineData("Isolated", false, true)]
-    [InlineData("Removed", true, true)]
-    [InlineData("Removed", false, false)]
-    [InlineData("Isolated", true, false)]
-    [InlineData("MergedWithPrevious", false, false)]
-    public void LoaderAcceptsOnlyTheGaplessForms(string behavior, bool invert, bool accepted)
+    [InlineData("Isolated", false, null)]
+    [InlineData("Removed", true, null)]
+    [InlineData("Removed", false, "invert")]
+    [InlineData("Isolated", true, "invert")]
+    [InlineData("MergedWithPrevious", false, "behavior")]
+    [InlineData("MergedWithPrevious", true, "behavior")]
+    public void LoaderAcceptsOnlyTheGaplessForms(string behavior, bool invert, string? rejectedField)
     {
         string json = MinimalTokenizerJson(behavior, invert);
-        if (accepted)
+        if (rejectedField is null)
         {
             Tokenizer t = Tokenizer.FromUtf8Json(Encoding.UTF8.GetBytes(json));
             Assert.Equal(["ab", " c"], t.Encode("ab c").Tokens);
@@ -138,7 +140,7 @@ public class O200kSplitPatternTests
         {
             UnsupportedTokenizerComponentException e = Assert.Throws<UnsupportedTokenizerComponentException>(
                 () => Tokenizer.FromUtf8Json(Encoding.UTF8.GetBytes(json)));
-            Assert.Equal("pre_tokenizer.type=Split.behavior", e.Component);
+            Assert.Equal($"pre_tokenizer.type=Split.{rejectedField}", e.Component);
         }
     }
 

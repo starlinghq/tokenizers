@@ -324,8 +324,11 @@ internal static class TokenizerJsonLoader
                         // false and Removed with invert true (Phi-4-mini) give the same pieces.
                         if ((behavior, invert) is not (("Isolated", false) or ("Removed", true)))
                         {
+                            // Isolated and Removed are each accepted with one invert value, so a wrong
+                            // invert is the field at fault; any other behavior is.
+                            string field = behavior is "Isolated" or "Removed" ? "invert" : "behavior";
                             throw new UnsupportedTokenizerComponentException(
-                                $"{where}.behavior", $"behavior '{behavior}' with invert {(invert ? "true" : "false")} is not implemented for the o200k regex (only Isolated with invert false, or Removed with invert true).");
+                                $"{where}.{field}", $"behavior '{behavior}' with invert {(invert ? "true" : "false")} is not implemented for the o200k regex (only Isolated with invert false, or Removed with invert true).");
                         }
 
                         components.Add("pre_tokenizer:Split");

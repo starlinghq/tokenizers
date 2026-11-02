@@ -4,7 +4,7 @@
 profile: phi4-bpe-chat   # microsoft/Phi-4-mini-instruct; o200k vocabulary and split regex
 status: experimental  # fixture results below; fixtures proposed, not yet accepted (conformance.fixtures)
 backlog: Phi-4-mini model request (starlinghq/starling#109)
-library: Starlings.Tokenizers 0.3.5
+library: Starlings.Tokenizers 0.3.5   # results from the unreleased build of this pull request (Directory.Build.props still says 0.3.4; 0.3.4 cannot load this profile); the version bump lands in the 0.3.5 release pull request
 
 asset:
   repo: microsoft/Phi-4-mini-instruct
