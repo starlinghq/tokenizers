@@ -316,15 +316,32 @@ internal static class TokenizerJsonLoader
                     }
 
                     string r = regex.GetString()!;
-                    QwenSplitPattern matcher = QwenSplitPattern.TryCreate(r) ?? throw new UnsupportedTokenizerComponentException(
-                        $"{where}.pattern", $"Regex '{r}' is not one of the supported pre-tokenizer patterns (Qwen2, Qwen3.5, Llama 3); Oniguruma regexes are not emulated in general.");
                     string behavior = RequireString(e, "behavior", where);
+                    bool invert = RequireBool(e, "invert", where);
+                    if (O200kSplitPattern.TryCreate(r) is { } o200k)
+                    {
+                        // Every character starts a match, so there are no gaps: Isolated with invert
+                        // false and Removed with invert true (Phi-4-mini) give the same pieces.
+                        if ((behavior, invert) is not (("Isolated", false) or ("Removed", true)))
+                        {
+                            throw new UnsupportedTokenizerComponentException(
+                                $"{where}.behavior", $"behavior '{behavior}' with invert {(invert ? "true" : "false")} is not implemented for the o200k regex (only Isolated with invert false, or Removed with invert true).");
+                        }
+
+                        components.Add("pre_tokenizer:Split");
+                        return invert
+                            ? new SplitPreTokenizer(new InvertedPattern(o200k), SplitDelimiterBehavior.Removed)
+                            : new SplitPreTokenizer(o200k, SplitDelimiterBehavior.Isolated);
+                    }
+
+                    QwenSplitPattern matcher = QwenSplitPattern.TryCreate(r) ?? throw new UnsupportedTokenizerComponentException(
+                        $"{where}.pattern", $"Regex '{r}' is not one of the supported pre-tokenizer patterns (Qwen2, Qwen3.5, Llama 3, o200k); Oniguruma regexes are not emulated in general.");
                     if (behavior != "Isolated")
                     {
                         throw new UnsupportedTokenizerComponentException($"{where}.behavior", $"behavior '{behavior}' is not implemented for Regex patterns (only Isolated).");
                     }
 
-                    if (RequireBool(e, "invert", where))
+                    if (invert)
                     {
                         throw new UnsupportedTokenizerComponentException($"{where}.invert", "invert true is not implemented.");
                     }

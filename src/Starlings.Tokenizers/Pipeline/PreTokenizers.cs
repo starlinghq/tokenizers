@@ -68,8 +68,8 @@ internal sealed class MetaspacePreTokenizer(Rune replacement, PrependScheme prep
         });
 }
 
-/// <summary><c>Split</c> (upstream <c>tokenizers/src/pre_tokenizers/split.rs</c>) with
-/// <c>invert</c> false; the loader accepts only the Qwen regexes with <c>Isolated</c>.</summary>
+/// <summary><c>Split</c> (upstream <c>tokenizers/src/pre_tokenizers/split.rs</c>); <c>invert</c> is an
+/// <see cref="InvertedPattern"/>. The loader limits which behavior and invert each regex accepts.</summary>
 internal sealed class SplitPreTokenizer(IPattern pattern, SplitDelimiterBehavior behavior) : IPreTokenizer
 {
     public void PreTokenize(PreTokenizedString pretokenized) =>
