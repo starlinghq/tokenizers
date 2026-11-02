@@ -9,8 +9,8 @@ namespace Starlings.Tokenizers.Tests;
 /// Unicode-scalar offsets are the output of <c>reference/components/whitespace_split_cases.py</c>
 /// (<c>reference/tokenizer-json/requirements.txt</c>, <c>python -I</c>), which builds the same
 /// tokenizers. The inputs cover every White_Space character class Rust's <c>char::is_whitespace</c>
-/// accepts, runs, leading and trailing whitespace, whitespace-only and empty input, and characters
-/// that are not whitespace (U+200B, U+180E, U+FEFF).
+/// accepts (U+2000 to U+200A each), runs, leading and trailing whitespace, whitespace-only and empty
+/// input, and characters that are not whitespace (U+200B, U+180E, U+FEFF).
 /// </summary>
 public sealed class WhitespaceSplitComponentTests
 {
@@ -36,6 +36,7 @@ public sealed class WhitespaceSplitComponentTests
         { "whitespace_split", "a\u00A0b", [1, 2], [0, 1, 2, 3] },
         { "whitespace_split", "\u1680a", [1], [1, 2] },
         { "whitespace_split", "a\u2000\u200Ab", [1, 2], [0, 1, 3, 4] },
+        { "whitespace_split", "a\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009b", [1, 2], [0, 1, 10, 11] },
         { "whitespace_split", "a\u2028b\u2029c", [1, 2, 3], [0, 1, 2, 3, 4, 5] },
         { "whitespace_split", "a\u202Fb\u205Fc", [1, 2, 3], [0, 1, 2, 3, 4, 5] },
         { "whitespace_split", "a\u3000b", [1, 2], [0, 1, 2, 3] },
@@ -55,6 +56,7 @@ public sealed class WhitespaceSplitComponentTests
         { "whitespace_split_metaspace", "a\u00A0b", [10, 11], [0, 1, 2, 3] },
         { "whitespace_split_metaspace", "\u1680a", [10], [1, 2] },
         { "whitespace_split_metaspace", "a\u2000\u200Ab", [10, 11], [0, 1, 3, 4] },
+        { "whitespace_split_metaspace", "a\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009b", [10, 11], [0, 1, 10, 11] },
         { "whitespace_split_metaspace", "a\u2028b\u2029c", [10, 11, 13], [0, 1, 2, 3, 4, 5] },
         { "whitespace_split_metaspace", "a\u202Fb\u205Fc", [10, 11, 13], [0, 1, 2, 3, 4, 5] },
         { "whitespace_split_metaspace", "a\u3000b", [10, 11], [0, 1, 2, 3] },
