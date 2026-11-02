@@ -201,6 +201,9 @@ public sealed partial class ProfileConformanceTests
         public Lazy<Dictionary<string, JsonElement>> Cases { get; } = new(() =>
             TestAssets.ReadJsonLines(Path.Combine(FixtureDir, "tokenizer.jsonl")).ToDictionary(r => r.GetProperty("id").GetString()!));
 
-        public Tokenizer Load() => TestAssets.LoadTokenizer(Asset);
+        /// <summary>The profile's tokenizer without the asset's own truncation and padding: the rows are
+        /// untruncated, unpadded encodings, and the runner clears both the same way
+        /// (<c>--clear-asset-truncation-padding</c>). A no-op for assets that declare neither.</summary>
+        public Tokenizer Load() => TestAssets.LoadTokenizer(Asset).WithTruncation(null).WithPadding(null);
     }
 }
