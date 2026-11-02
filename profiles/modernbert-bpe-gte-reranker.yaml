@@ -3,7 +3,7 @@
 # Release qualification is a maintainer decision; this file does not grant a badge.
 profile: modernbert-bpe-gte-reranker   # Alibaba-NLP/gte-reranker-modernbert-base (ModernBERT tokenizer: GPT-2 byte-level BPE, [CLS]/[SEP] templates)
 status: experimental  # fixture results below; fixtures proposed, not yet accepted (conformance.fixtures)
-backlog: starlinghq/starling#102 (gte-reranker-modernbert-base), starlinghq/starling#101 (ModernBERT)
+backlog: starlinghq/starling#101 (gte-reranker-modernbert-base), starlinghq/starling#102 (ModernBERT)
 library: Starlings.Tokenizers 0.3.4
 
 asset:
