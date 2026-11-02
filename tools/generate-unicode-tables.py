@@ -11,11 +11,17 @@ Two generated C# files under src/Starlings.Tokenizers/Pipeline/:
 - RegexUnicodeClassData.g.cs: the code points that the reference's regex engine (Oniguruma, in
   tokenizers 0.23.2) matches with \\p{L}, \\p{N} and \\p{M}, as inclusive ranges. Input: the
   unicode-classes.json written by reference/qwen-bpe/run_qwen_bpe_tokenizer.py
-  --unicode-classes, which probes every Unicode scalar value through the reference.
+  --unicode-classes, which probes every Unicode scalar value through the reference. The same file also
+  gets \\p{Lu}, \\p{Ll}, \\p{Lt}, \\p{Lm} and \\p{Lo} (the o200k regex) from the second probe file,
+  tests/Starlings.Tokenizers.Tests/TestData/o200k-bpe/unicode-classes.json, written by
+  reference/o200k-bpe/run_o200k_reference.py (tokenizers 0.23.3, whose \\p{L}, \\p{N}, \\p{M} and \\s
+  equal the 0.23.2 probe; the generator checks that).
 
 Usage:
     curl -L https://crates.io/api/v1/crates/unicode-normalization-alignments/0.1.12/download -o una.crate
-    tools/generate-unicode-tables.py --crate una.crate --classes unicode-classes.json
+    tools/generate-unicode-tables.py --crate una.crate \\
+        --classes tests/Starlings.Tokenizers.Tests/TestData/qwen-bpe/unicode-classes.json \\
+        --letter-classes tests/Starlings.Tokenizers.Tests/TestData/o200k-bpe/unicode-classes.json
 """
 
 from __future__ import annotations
@@ -128,10 +134,24 @@ internal static class Unicode9NormalizationData
     print(f"ccc {len(ccc_entries)}, decompositions {len(decomposed)}, compositions {len(composed)}")
 
 
-def write_classes(classes: dict) -> None:
+def write_classes(classes: dict, letter_classes: dict) -> None:
+    for name in ("L", "N", "M", "s"):
+        if letter_classes["classes"][name] != classes["classes"][name]:
+            raise SystemExit(f"\\p{{{name}}} differs between the two probe files")
+    tables = [(n, d, classes["classes"][n]) for n, d in [("L", "Letter"), ("N", "Number"), ("M", "Mark")]]
+    tables += [
+        (n, d, letter_classes["classes"][n])
+        for n, d in [
+            ("Lu", "UppercaseLetter"),
+            ("Ll", "LowercaseLetter"),
+            ("Lt", "TitlecaseLetter"),
+            ("Lm", "ModifierLetter"),
+            ("Lo", "OtherLetter"),
+        ]
+    ]
     parts = []
-    for name, doc in [("L", "Letter"), ("N", "Number"), ("M", "Mark")]:
-        flat = [v for r in classes["classes"][name] for v in r]
+    for name, doc, ranges in tables:
+        flat = [v for r in ranges for v in r]
         parts.append(
             f"""    /// <summary><c>\\p{{{name}}}</c>: inclusive <c>start, end</c> ranges, sorted.</summary>
     public static ReadOnlySpan<int> {doc}Ranges =>
@@ -144,7 +164,10 @@ def write_classes(classes: dict) -> None:
     text = f"""{HEADER}//
 // Data: the code points the regex engine of huggingface/tokenizers 0.23.2 (Oniguruma, crate onig_sys
 // 69.9.3) matches with \\p{{L}}, \\p{{N}} and \\p{{M}}, probed over every Unicode scalar value by
-// reference/qwen-bpe/run_qwen_bpe_tokenizer.py --unicode-classes ({classes["engine"]}).
+// reference/qwen-bpe/run_qwen_bpe_tokenizer.py --unicode-classes ({classes["engine"]}),
+// and with \\p{{Lu}}, \\p{{Ll}}, \\p{{Lt}}, \\p{{Lm}} and \\p{{Lo}}, probed the same way by
+// reference/o200k-bpe/run_o200k_reference.py ({letter_classes["engine"]}; its \\p{{L}}, \\p{{N}}, \\p{{M}}
+// and \\s equal the first probe).
 // Unicode Character Database general categories (Unicode License V3); see THIRD-PARTY-NOTICES.md.
 // \\s matched exactly these {len(white)} code points: {", ".join(f"U+{c:04X}" for c in white)}.
 
@@ -162,6 +185,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--crate", type=Path, required=True)
     parser.add_argument("--classes", type=Path, required=True)
+    parser.add_argument("--letter-classes", type=Path, required=True)
     args = parser.parse_args()
     data = args.crate.read_bytes()
     digest = hashlib.sha256(data).hexdigest()
@@ -171,7 +195,10 @@ def main() -> int:
         member = tar.extractfile("unicode-normalization-alignments-0.1.12/src/tables.rs")
         tables_rs = member.read().decode("utf-8")
     write_normalization(*parse_tables(tables_rs))
-    write_classes(json.loads(args.classes.read_text(encoding="utf-8")))
+    write_classes(
+        json.loads(args.classes.read_text(encoding="utf-8")),
+        json.loads(args.letter_classes.read_text(encoding="utf-8")),
+    )
     return 0
 
 

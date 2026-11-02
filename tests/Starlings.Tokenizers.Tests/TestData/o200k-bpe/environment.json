@@ -1,0 +1,47 @@
+{
+  "runner": "reference/o200k-bpe/run_o200k_reference.py",
+  "runner_repository_commit": "ea2742105c40d2f937dbdc5a80c204a23c6b0e0f",
+  "reference": "tokenizers.pre_tokenizers.Split(tokenizers.Regex(o200k), 'removed', invert=True)",
+  "regex": "[^\\r\\n\\p{L}\\p{N}]?[\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{M}]*[\\p{Ll}\\p{Lm}\\p{Lo}\\p{M}]+(?i:'s|'t|'re|'ve|'m|'ll|'d)?|[^\\r\\n\\p{L}\\p{N}]?[\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{M}]+[\\p{Ll}\\p{Lm}\\p{Lo}\\p{M}]*(?i:'s|'t|'re|'ve|'m|'ll|'d)?|\\p{N}{1,3}| ?[^\\s\\p{L}\\p{N}]+[\\r\\n/]*|\\s*[\\r\\n]+|\\s+(?!\\S)|\\s+",
+  "seed": 20261102,
+  "split_rows": 12420,
+  "split_random_strings": 4000,
+  "representatives": [
+    "A",
+    "a",
+    "ǅ",
+    "ʰ",
+    "日",
+    "́",
+    "ः",
+    "1",
+    "½",
+    " ",
+    "\t",
+    "\n",
+    "\r",
+    "　",
+    "/",
+    "'",
+    "s",
+    "!",
+    "😀",
+    "𝐀"
+  ],
+  "asset": {
+    "path": "tokenizer.json",
+    "sha256": "382cc235b56c725945e149cc25f191da667c836655efd0857b004320e90e91ea",
+    "size": 15524095
+  },
+  "phi4_rows": 1500,
+  "environment": {
+    "python": "3.13.15",
+    "platform": "Linux-7.2.8-9-omarchy-x86_64-with-glibc2.44",
+    "machine": "x86_64",
+    "cpu": "Intel(R) Core(TM) i7-5820K CPU @ 3.30GHz",
+    "cpu_count": 12,
+    "packages": {
+      "tokenizers": "0.23.3"
+    }
+  }
+}
