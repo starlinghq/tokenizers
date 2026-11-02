@@ -4,6 +4,15 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+### Added
+
+- Profile `modernbert-bpe-gte-reranker` (Alibaba-NLP/gte-reranker-modernbert-base at `f7481e60`), experimental: the ModernBERT tokenizer (NFC, GPT-2 byte-level BPE with `use_regex: true`, `[CLS] $A [SEP]` / `[CLS] $A [SEP] $B [SEP]` templates, `[MASK]` with `lstrip`), 137/137 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, truncation to 16 tokens, and padded batches of single texts and pairs. No library change. The file declares truncation 8000 and Fixed 8000 padding, which `Tokenizer.FromFile` applies as `Tokenizer.from_file` does.
+- `reference/tokenizer-json/run_tokenizer_json.py --clear-asset-truncation-padding`: accepts an asset that declares truncation or padding, clears both before encoding and records them in `environment.json`; `ProfileConformanceTests` clears them the same way.
+
+### Documentation
+
+- `docs/supported-components.md`: `ByteLevel` pre-tokenizer with `use_regex` true (the GPT-2 split regex, used by `whisper-bpe` and `modernbert-bpe-gte-reranker`) is listed as supported; the table still listed it as rejected.
+
 ## [0.3.4] - 2026-10-28
 
 ### Added
