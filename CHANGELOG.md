@@ -4,6 +4,8 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+## [0.3.5] - 2026-11-02
+
 ### Added
 
 - `Split` pre-tokenizer: the o200k regex (tiktoken's `o200k_base` pattern, as microsoft/Phi-4-mini-instruct declares it), on a new hand-written scanner over Unicode scalar values with reference-probed `\p{Lu}`, `\p{Ll}`, `\p{Lt}`, `\p{Lm}` and `\p{Lo}` tables. It loads as `Isolated` with `invert` false or as `Removed` with `invert` true (the regex leaves no gaps, so both give the same pieces); other combinations fail at load. Previously it was rejected at load. Checked against huggingface/tokenizers 0.23.3 on 12,420 split cases (`O200kSplitPatternTests`).
