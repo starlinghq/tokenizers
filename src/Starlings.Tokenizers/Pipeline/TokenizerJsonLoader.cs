@@ -340,6 +340,11 @@ internal static class TokenizerJsonLoader
                     return new ByteLevelPreTokenizer(addPrefixSpace, useRegex);
                 }
 
+            case "WhitespaceSplit":
+                AllowKeys(e, where, "type");
+                components.Add("pre_tokenizer:WhitespaceSplit");
+                return new WhitespaceSplitPreTokenizer();
+
             case "BertPreTokenizer":
                 AllowKeys(e, where, "type");
                 components.Add("pre_tokenizer:BertPreTokenizer");
