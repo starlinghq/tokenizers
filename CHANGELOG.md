@@ -4,6 +4,15 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+### Added
+
+- `Split` pre-tokenizer: the o200k regex (tiktoken's `o200k_base` pattern, as microsoft/Phi-4-mini-instruct declares it), on a new hand-written scanner over Unicode scalar values with reference-probed `\p{Lu}`, `\p{Ll}`, `\p{Lt}`, `\p{Lm}` and `\p{Lo}` tables. It loads as `Isolated` with `invert` false or as `Removed` with `invert` true (the regex leaves no gaps, so both give the same pieces); other combinations fail at load. Previously it was rejected at load. Checked against huggingface/tokenizers 0.23.3 on 12,420 split cases (`O200kSplitPatternTests`).
+- Profile `phi4-bpe-chat` (microsoft/Phi-4-mini-instruct at `cfbefacb`), experimental: byte-level BPE with the o200k regex and ten `rstrip` added tokens, 137/137 cases exact against huggingface/tokenizers 0.23.3, with and without special tokens, truncation to 16 tokens, and padded batches of single texts and pairs, plus 1,500 randomized strings with the Phi-4 role and tool tags exact (starlinghq/starling#109).
+
+### Behavior
+
+- A tokenizer with an `rstrip` added token and, in the same matching pass (normalized or not), an added token that starts with whitespace now fails at load: upstream resumes matching inside the absorbed whitespace and gives overlapping splits, which this library did not reproduce. No pinned asset has that combination. No change in output for any existing profile.
+
 ## [0.3.4] - 2026-10-28
 
 ### Added
