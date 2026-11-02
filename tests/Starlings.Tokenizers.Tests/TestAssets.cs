@@ -105,6 +105,15 @@ internal static class TestAssets
         "tokenizer.json",
         "7c62ba7d8bb13291c94459896cd27537858beb58a88a037b09a150e213420988");
 
+    /// <summary>Profile modernbert-bpe-gte-reranker: the Alibaba-NLP/gte-reranker-modernbert-base
+    /// tokenizer.json (ModernBERT: GPT-2 byte-level BPE with [CLS]/[SEP] templates; the file declares
+    /// truncation 8000 and Fixed 8000 padding).</summary>
+    public static readonly PinnedAsset ModernBertGteRerankerTokenizerJson = new(
+        "Alibaba-NLP/gte-reranker-modernbert-base",
+        "f7481e6055501a30fb19d090657df9ec1f79ab2c",
+        "tokenizer.json",
+        "2aea6ff4701d063e7e029b6be695a1659f2caaa2ae4fb0e8b18285818271becd");
+
     private static readonly Lazy<string> _lazyRepoRoot = new(FindRepoRoot);
     private static readonly Dictionary<PinnedAsset, Tokenizer> _loaded = [];
     private static readonly Lock _loadLock = new();
