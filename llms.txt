@@ -124,7 +124,7 @@ Pad tokens differ by model (`<pad>`, `[PAD]`, `<|endoftext|>`). If the file has 
 
 - Models: `Unigram`, `BPE` (byte-level, or SentencePiece-style with `byte_fallback`), `WordPiece` (experimental).
 - Normalizers: `Sequence`, `Precompiled`, `NFC`, `Strip`, `Replace` (string patterns and the regex `" {2,}"`), `BertNormalizer` (defaults only, experimental).
-- Pre-tokenizers: `Sequence`, `Metaspace`, `ByteLevel` (with `use_regex` false), `Split` (string patterns, or the Qwen2/Qwen3 and Qwen3.5 regexes), `BertPreTokenizer` (experimental).
+- Pre-tokenizers: `Sequence`, `Metaspace`, `ByteLevel` (with `use_regex` false), `Split` (string patterns, or the Qwen2/Qwen3 and Qwen3.5 regexes), `BertPreTokenizer` (experimental), `WhitespaceSplit`.
 - Post-processors: `TemplateProcessing`, `ByteLevel`.
 - Decoders: `Metaspace`, `ByteLevel`, `Sequence`, `Replace`, `ByteFallback`, `Fuse`, `WordPiece` (experimental).
 - Everything else fails at load. The authoritative table with every option is docs/supported-components.md.
