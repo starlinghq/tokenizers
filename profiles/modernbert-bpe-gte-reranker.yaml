@@ -1,0 +1,86 @@
+# Tokenizer profile: a tested combination of one pinned asset and the interpreter components it
+# uses (profiles/README.md). Status values: supported, unsupported, experimental, untested.
+# Release qualification is a maintainer decision; this file does not grant a badge.
+profile: modernbert-bpe-gte-reranker   # Alibaba-NLP/gte-reranker-modernbert-base (ModernBERT tokenizer: GPT-2 byte-level BPE, [CLS]/[SEP] templates)
+status: experimental  # fixture results below; fixtures proposed, not yet accepted (conformance.fixtures)
+backlog: starlinghq/starling#101 (gte-reranker-modernbert-base), starlinghq/starling#102 (ModernBERT)
+library: Starlings.Tokenizers 0.3.4
+
+asset:
+  repo: Alibaba-NLP/gte-reranker-modernbert-base
+  revision: f7481e6055501a30fb19d090657df9ec1f79ab2c
+  file: tokenizer.json
+  sha256: 2aea6ff4701d063e7e029b6be695a1659f2caaa2ae4fb0e8b18285818271becd
+  size: 3583499
+  format_version: "1.0"
+  acquisition: tools/fetch-assets.sh   # never committed; Apache-2.0 (the model's license)
+
+runtime_pipeline:   # checked 2026-11-02 (conformance/modernbert-bpe-gte-reranker/PROPOSED.md)
+  transformers_5: transformers 5.22.1 with tokenizers 0.23.3 gives TokenizersBackend (tokenizer_config.json tokenizer_class PreTrainedTokenizerFast); its backend_tokenizer.to_str() equals this file as JSON, truncation and padding included
+  truncation_padding_at_call: transformers applies truncation and padding per call (tokenizer_config.json max_length 512, model_max_length 8192, pad_token [PAD]); without arguments it neither truncates nor pads, unlike Tokenizer.from_file on this file (8000, Fixed 8000)
+  padding: tokenizer_config.json pad_token [PAD] (50283), padding_side right
+
+reference:
+  implementation: huggingface/tokenizers 0.23.3 (Python binding, Tokenizer.from_file(asset), asset truncation and padding cleared); reference/tokenizer-json/requirements.txt
+  source_revision: 9ab7691f497eff905f961aba51a4bb9be3e9555c
+  runner: reference/tokenizer-json/run_tokenizer_json.py --truncate 16 --without-special-tokens --batch ... --pad-token "[PAD]" --pair-batch ... --clear-asset-truncation-padding
+  offsets_unit: unicode-scalars   # reference unit; the .NET API also gives utf16-code-units
+
+pipeline:   # exactly what the pinned file declares
+  normalizer: NFC   # Unicode 9.0.0 data, as the reference's crate unicode-normalization-alignments 0.1.12
+  pre_tokenizer: ByteLevel(add_prefix_space false, trim_offsets true, use_regex true)   # the GPT-2 split regex (Pipeline/Gpt2SplitPattern.cs), as whisper-bpe
+  model: BPE(vocab 50280, merges 50009, unk_token null, byte_fallback false, fuse_unk false, ignore_merges false, dropout null, prefix and suffix null)
+  post_processor: TemplateProcessing(single "[CLS] $A [SEP]", pair "[CLS] $A [SEP] $B [SEP]", every type_id 0)
+  decoder: ByteLevel   # options unused by the decoder
+  added_tokens: "116: special 1 <|padding|>, 50279 <|endoftext|>, 50280 [UNK], 50281 [CLS], 50282 [SEP], 50283 [PAD], 50284 [MASK] (lstrip true), all normalized false; non-special 109, normalized true: 0 |||IP_ADDRESS|||, 50277 |||EMAIL_ADDRESS|||, 50278 |||PHONE_NUMBER|||, 50254-50276 runs of 24 down to 2 spaces, 50285-50367 [unused0]-[unused82]; ids 0, 1 and 50254-50279 are also vocabulary entries with the same id"
+  truncation: LongestFirst, right, max_length 8000, stride 0   # applied by Tokenizer.FromFile; cleared for the fixtures
+  padding: Fixed 8000, right, pad [PAD] 50283, pad_type_id 0   # applied by Tokenizer.FromFile; cleared for the fixtures
+
+conformance:
+  fixtures: conformance/modernbert-bpe-gte-reranker/   # proposed, not yet accepted by a maintainer (PROPOSED.md)
+  corpus:
+    - conformance/corpus/tokenizer-corpus-v1.jsonl (49 cases, sha256 8c291a87644c79012d00029c00480a81aa9e508138e4b7fe1485bb7cd1519199)
+    - conformance/corpus/tokenizer-corpus-qwen-bpe-v1.jsonl (88 cases, sha256 8a95607487e6cb9a9c7aabeebbbc93bb5c62b206364db43e0c419061e9c2aed3)
+  tests:
+    - tests/Starlings.Tokenizers.Tests/ProfileConformanceTests.cs   # data-driven: encode, decode, truncated, without_special_tokens (asset truncation and padding cleared)
+    - tests/Starlings.Tokenizers.Tests/ModernBertConformanceTests.cs   # declared pipeline, truncation and padding; padded batches
+  result: # 2026-11-02, Linux x64, .NET SDK 10.0, Debug
+    encode: "137/137 cases exact (133 single, 4 pairs): ids, tokens, type_ids, attention_mask, special_tokens_mask, utf16 and scalar offsets, sequence_ids"
+    encode_without_special_tokens: 137/137 cases exact
+    truncation: "90/90 truncated records exact with special tokens and 66/66 without (max_length 16, longest_first, right)"
+    batch: 6 single texts and 4 pairs right-padded with [PAD] 50283, exact, each row equal to its single encode
+    decode: 137/137 cases exact, skip_special_tokens true and false
+
+capabilities:
+  encode_single: supported
+  encode_pair: experimental            # 4 corpus pairs and a padded pair batch
+  encode_batch: supported              # batch of single encodes
+  add_special_tokens_false: supported  # every case recorded both ways
+  offsets_utf16_code_units: supported
+  offsets_unicode_scalars: supported
+  sequence_ids: supported
+  special_tokens_mask: supported
+  added_tokens_special_and_non_special_in_text: supported   # corpus: [CLS] [SEP] [MASK] literals, whitespace runs matching the space added tokens
+  added_token_lstrip: experimental     # [MASK] lstrip true; one corpus case ("[SEP] [MASK]")
+  added_token_with_vocabulary_id: experimental   # ids 0, 1, 50254-50279 share their vocabulary id; the space-run tokens are exercised by the corpus, the rest are not
+  decode_skip_special_tokens: supported
+  decode_keep_special_tokens: supported
+  decode_invalid_utf8: experimental    # shared ByteLevel decoder; no random id sequences for this profile
+  truncation_right_longest_first: supported   # max_length 16 over the corpus (single and pair)
+  truncation_as_declared_8000: experimental   # loaded as declared (ModernBertConformanceTests); no corpus case reaches 8000 tokens (longest 2162)
+  truncation_left_only_first_only_second: experimental   # generic code path; no fixture for this profile
+  padding_right_batch_longest: supported   # tokenizer-batch.json, pad [PAD] 50283, singles and pairs
+  padding_fixed_as_declared_8000: experimental   # loaded as declared (ModernBertConformanceTests); generic Fixed code path, no reference fixture at 8000
+  padding_left_multiple: experimental  # generic code path; no fixture for this profile
+  bpe_dropout_unk_token_byte_fallback_affixes: unsupported   # rejected at load
+  other_split_regexes: unsupported     # only the regexes in docs/supported-components.md are recognized; others fail at load
+  incremental_decode_stream: unsupported
+  thread_safety: untested              # immutable by design
+  performance: untested
+
+known_divergences:
+  against_reference: none on the fixtures
+  loading_defaults:
+    - Tokenizer.FromFile applies the file's truncation (8000) and Fixed 8000 padding, as huggingface/tokenizers Tokenizer.from_file does; transformers instead decides per call (no padding by default, max_length 512 in tokenizer_config.json, model_max_length 8192). A caller that wants transformers' default behavior clears both (WithTruncation(null), WithPadding(null)) and sets its own
+  risks:
+    - regex character classes are generated tables probed from the reference (tools/generate-unicode-tables.py); a different reference build would need a regeneration and requalification
