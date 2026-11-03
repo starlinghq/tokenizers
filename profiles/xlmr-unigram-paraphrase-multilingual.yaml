@@ -4,7 +4,7 @@
 profile: xlmr-unigram-paraphrase-multilingual   # sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (XLM-R SentencePiece Unigram)
 status: experimental  # fixture results below; fixtures proposed, not yet accepted (conformance.fixtures)
 backlog: starlinghq/starling#266 (BERT route draft contract paraphrase-multilingual, starlinghq/starling#182)
-library: Starlings.Tokenizers 0.3.4 plus the WhitespaceSplit pre-tokenizer (Unreleased); needs the next release
+library: Starlings.Tokenizers 0.3.5   # first version with the WhitespaceSplit pre-tokenizer
 
 asset:
   repo: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2

@@ -4,7 +4,7 @@
 profile: qwen3-bpe-embedding   # Qwen/Qwen3-Embedding-0.6B; Qwen2/Qwen3 byte-level BPE, appends <|endoftext|>
 status: experimental  # 137/137 fixture cases exact; fixtures proposed, not yet accepted (conformance.fixtures)
 backlog: Qwen3 Embedding series 0.6B (starlinghq/starling#144, #108)
-library: Starlings.Tokenizers 0.3.3   # first version with the Sequence post-processor
+library: Starlings.Tokenizers 0.3.4   # first published version with the Sequence post-processor; results first recorded on 0.3.3, which was never published
 
 asset:
   repo: Qwen/Qwen3-Embedding-0.6B

@@ -4,6 +4,8 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+## [0.3.5] - 2026-11-02
+
 ### Added
 
 - `Split` pre-tokenizer: the o200k regex (tiktoken's `o200k_base` pattern, as microsoft/Phi-4-mini-instruct declares it), on a new hand-written scanner over Unicode scalar values with reference-probed `\p{Lu}`, `\p{Ll}`, `\p{Lt}`, `\p{Lm}` and `\p{Lo}` tables. It loads as `Isolated` with `invert` false or as `Removed` with `invert` true (the regex leaves no gaps, so both give the same pieces); other combinations fail at load. Previously it was rejected at load. Checked against huggingface/tokenizers 0.23.3 on 12,420 split cases (`O200kSplitPatternTests`).
@@ -16,11 +18,12 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 ### Documentation
 
 - `docs/supported-components.md`: `ByteLevel` pre-tokenizer with `use_regex` true (the GPT-2 split regex, used by `whisper-bpe` and `modernbert-bpe-gte-reranker`) is listed as supported; the table still listed it as rejected.
+- `CHANGELOG.md` and the `library:` lines of `qwen3-bpe-embedding`, `qwen3-bpe-chat` and `lfm3-bpe-chat`: 0.3.3 was never published, so its section says so and those profiles now name 0.3.4, the first published version that has them.
 
 ### Behavior
 
 - A tokenizer with an `rstrip` added token and, in the same matching pass (normalized or not), an added token that starts with whitespace now fails at load: upstream resumes matching inside the absorbed whitespace and gives overlapping splits, which this library did not reproduce. No pinned asset has that combination. No change in output for any existing profile.
-- No change in output for any existing profile from `WhitespaceSplit` or the asset truncation/padding clearing: none uses `WhitespaceSplit`, and none declares truncation or padding in its file. Every existing fixture passes unchanged.
+- No change in output for any profile that shipped in 0.3.4 or earlier from `WhitespaceSplit` or the asset truncation/padding clearing: none of them uses `WhitespaceSplit`, and none declares truncation or padding in its file. Every existing fixture passes unchanged. Of the profiles new in this release, `xlmr-unigram-paraphrase-multilingual` and `modernbert-bpe-gte-reranker` do declare truncation and padding in their files (see above).
 
 ## [0.3.4] - 2026-10-28
 
@@ -33,6 +36,8 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 - No change in output for any existing profile; no library change.
 
 ## [0.3.3] - 2026-10-28
+
+Not published: 0.3.3 was never tagged or pushed to nuget.org. Everything in this section first shipped in 0.3.4.
 
 ### Added
 
