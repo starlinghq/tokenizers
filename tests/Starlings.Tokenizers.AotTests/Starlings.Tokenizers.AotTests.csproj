@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The Starlings.Tokenizers.Tests sources, compiled against xUnit.net's Native AOT packages (test discovery by source
+    generators, no runtime reflection) and published with Native AOT, so the conformance fixtures run inside an
+    AOT-compiled binary. Two classes inspect metadata by reflection and are left out: IndependenceTests (the
+    referenced-assembly check; tools/check-independence.sh covers it) and PinnedAssetsTests (TestAssets fields).
+
+      dotnet publish tests/Starlings.Tokenizers.AotTests -c Release -r linux-x64 -o tests/Starlings.Tokenizers.AotTests/bin/aot
+      tests/Starlings.Tokenizers.AotTests/bin/aot/Starlings.Tokenizers.AotTests
+
+    The published binary must stay inside the repository: TestAssets finds conformance/ by walking up from it.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <RootNamespace>Starlings.Tokenizers.Tests</RootNamespace>
+    <PublishAot>true</PublishAot>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit.v3.aot" />
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Starlings.Tokenizers.Tests/*.cs"
+             Exclude="../Starlings.Tokenizers.Tests/IndependenceTests.cs;../Starlings.Tokenizers.Tests/PinnedAssetsTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/Starlings.Tokenizers/Starlings.Tokenizers.csproj" />
+  </ItemGroup>
+
+</Project>
