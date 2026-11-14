@@ -4,6 +4,11 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+### Documentation
+
+- New cold-start record [docs/benchmarks/tokenizer-coldstart-2026-11-14.md](docs/benchmarks/tokenizer-coldstart-2026-11-14.md): all 16 pinned assets against Python `tokenizers` 0.23.3, on a RunPod CPU pod. Files of 9 MB and more load in 0.31 to 0.58 of Python's time; files under 1 MB take about 37 ms against 9 ms. The README's load-time claim and a new Performance section, and `docs/performance.md`, now use these numbers. The Python reference script is `benchmarks/python-cold-load.py`.
+- README, `llms.txt` and `profiles/README.md` list the `whisper-bpe` profile (added in 0.3.2-preview.1, missing from all three), and the README counts thirteen profiles instead of ten.
+
 ## [0.3.5] - 2026-11-02
 
 ### Added
