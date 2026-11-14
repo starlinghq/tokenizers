@@ -5,6 +5,7 @@
     tools/check-independence.sh enforces this in CI.
   -->
   <ItemGroup>
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="xunit.v3" Version="4.0.2" />
   </ItemGroup>
 </Project>
