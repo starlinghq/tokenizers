@@ -17,6 +17,10 @@ The current comparison, for all 16 pinned assets: a fresh .NET process running `
 
 Files of 9 MB and more load in 0.31 to 0.58 of Python's time, and the process exits 1.8 to 3.4 times sooner. Files under 1 MB load in about 37 ms against Python's 9 ms, because the first call compiles the .NET loader (JIT), a fixed cost the native library does not pay. The two are about even near 3 MB. All 16 rows, process wall times, memory, and why the pod had to be pinned: [docs/benchmarks/tokenizer-coldstart-2026-11-14.md](benchmarks/tokenizer-coldstart-2026-11-14.md).
 
+## First-call cost: JIT, ReadyToRun and Native AOT (2026-11-14)
+
+On small files the time is almost all first-call cost, not parsing. Measured with BenchmarkDotNet on the same kind of pod, the MiniLM file takes 30.1 ms in a fresh process and 3.2 ms once the loader has been compiled, and the first `Encode` takes 24.5 ms against 8 µs afterwards. Publishing the application with Native AOT removes that cost: MiniLM loads in 5.3 ms and first encodes in 2.1 ms, against 40.8 and 26.1 ms with the JIT in the same run. ReadyToRun removes about a third of it (29.7 and 12.8 ms), because framework generics instantiated over the library's structs are still compiled at run time. Details and the methods involved: [docs/benchmarks/tokenizer-first-call-2026-11-14.md](benchmarks/tokenizer-first-call-2026-11-14.md).
+
 ## Load time on the workstation (2026-10)
 
 The sections below were measured on the maintainer's workstation (i7-5820K, Linux x64) in October 2026, against `tokenizers` 0.23.2 and 0.23.3. Absolute times are not comparable with the pod above; the ratios agree with it.
@@ -30,7 +34,19 @@ Gemma BPE profile, exploratory ([docs/benchmarks/tokenizer-gemma-bpe-2026-10-10.
 Qwen BPE profiles, exploratory (same machine, 2026-10-10, under background load average 5 to 8 from other services; [docs/benchmarks/tokenizer-qwen-bpe-2026-10-10.md](benchmarks/tokenizer-qwen-bpe-2026-10-10.md)): cold `Tokenizer.FromFile` of the 20 MB Qwen `tokenizer.json` (248,044 tokens, 247,587 merges) about 0.31 s for `qwen2-bpe-kev` and 0.33 s for `qwen35-bpe-chat`, against about 0.96 s for the Rust `tokenizers` 0.23.2 `Tokenizer.from_file` measured right after; the BPE `vocab` object and `merges` array are scanned from the bytes like the Unigram vocabulary (same fast-path and fallback rules, `BpeLoaderTests`).
 
 
-## Running the benchmark
+## Running the benchmarks
+
+`benchmarks/Starlings.Tokenizers.Benchmarks` is a BenchmarkDotNet suite: `LoadBenchmarks` (`Tokenizer.FromFile`) and `EncodeBenchmarks` (the first `Encode` after loading), each for five assets from 0.5 to 32 MB, each with a `Cold` job (one call in each of 20 fresh processes) and a `Warm` job (steady state). Cold minus warm is the first-call cost. CI builds it but never runs it.
+
+```sh
+tools/fetch-assets.sh
+dotnet run -c Release --project benchmarks/Starlings.Tokenizers.Benchmarks -- --filter '*'
+dotnet run -c Release --project benchmarks/Starlings.Tokenizers.Benchmarks -- --filter '*LoadBenchmarks*' --runtimes nativeaot10.0
+```
+
+`--runtimes nativeaot10.0` adds a steady-state Native AOT job (needs `clang` and `zlib1g-dev`). BenchmarkDotNet cannot run Python, so the comparison against Python `tokenizers` uses LoadBench and `benchmarks/python-cold-load.py` below.
+
+### LoadBench
 
 `benchmarks/Starlings.Tokenizers.LoadBench` measures `Tokenizer.FromFile` in fresh processes (`cold`) and repeated in one process (`warm`), with GC allocated bytes and peak working set. CI builds it but never runs it.
 

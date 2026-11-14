@@ -40,18 +40,27 @@ static int Child(string path, long mainTimestamp)
     long t1 = Stopwatch.GetTimestamp();
     var ids = tokenizer.Encode("query: how much protein should a female eat").Ids;
     long t2 = Stopwatch.GetTimestamp();
-    var result = new Dictionary<string, object>
+    // Written with Utf8JsonWriter rather than JsonSerializer so that the program also publishes with Native AOT.
+    using var json = new MemoryStream();
+    using (var writer = new Utf8JsonWriter(json))
     {
-        ["main_to_load_start_ms"] = Stopwatch.GetElapsedTime(mainTimestamp, t0).TotalMilliseconds,
-        ["load_ms"] = Stopwatch.GetElapsedTime(t0, t1).TotalMilliseconds,
-        ["first_encode_ms"] = Stopwatch.GetElapsedTime(t1, t2).TotalMilliseconds,
-        ["allocated_bytes"] = GC.GetTotalAllocatedBytes(precise: true),
-        ["peak_working_set_bytes"] = Process.GetCurrentProcess().PeakWorkingSet64,
-        ["retained_bytes"] = GC.GetTotalMemory(forceFullCollection: true),
-        ["gc_count"] = new[] { GC.CollectionCount(0), GC.CollectionCount(1), GC.CollectionCount(2) },
-        ["ids"] = string.Join(' ', ids),
-    };
-    Console.WriteLine(JsonSerializer.Serialize(result));
+        writer.WriteStartObject();
+        writer.WriteNumber("main_to_load_start_ms", Stopwatch.GetElapsedTime(mainTimestamp, t0).TotalMilliseconds);
+        writer.WriteNumber("load_ms", Stopwatch.GetElapsedTime(t0, t1).TotalMilliseconds);
+        writer.WriteNumber("first_encode_ms", Stopwatch.GetElapsedTime(t1, t2).TotalMilliseconds);
+        writer.WriteNumber("allocated_bytes", GC.GetTotalAllocatedBytes(precise: true));
+        writer.WriteNumber("peak_working_set_bytes", Process.GetCurrentProcess().PeakWorkingSet64);
+        writer.WriteNumber("retained_bytes", GC.GetTotalMemory(forceFullCollection: true));
+        writer.WriteStartArray("gc_count");
+        writer.WriteNumberValue(GC.CollectionCount(0));
+        writer.WriteNumberValue(GC.CollectionCount(1));
+        writer.WriteNumberValue(GC.CollectionCount(2));
+        writer.WriteEndArray();
+        writer.WriteString("ids", string.Join(' ', ids));
+        writer.WriteEndObject();
+    }
+
+    Console.WriteLine(System.Text.Encoding.UTF8.GetString(json.ToArray()));
     GC.KeepAlive(tokenizer);
     return 0;
 }

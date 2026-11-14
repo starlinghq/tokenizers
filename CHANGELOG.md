@@ -4,9 +4,14 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+### Added
+
+- `benchmarks/Starlings.Tokenizers.Benchmarks`: BenchmarkDotNet suite for `Tokenizer.FromFile` and the first `Encode`, cold (fresh process per call) and warm, over five assets. Not packed; CI builds it but never runs it. LoadBench now writes its child output with `Utf8JsonWriter`, so it also publishes with Native AOT. `benchmarks/python-cold-load.py` reports the first encode too.
+
 ### Documentation
 
 - New cold-start record [docs/benchmarks/tokenizer-coldstart-2026-11-14.md](docs/benchmarks/tokenizer-coldstart-2026-11-14.md): all 16 pinned assets against Python `tokenizers` 0.23.3, on a RunPod CPU pod. Files of 9 MB and more load in 0.31 to 0.58 of Python's time; files under 1 MB take about 37 ms against 9 ms. The README's load-time claim and a new Performance section, and `docs/performance.md`, now use these numbers. The Python reference script is `benchmarks/python-cold-load.py`.
+- New first-call record [docs/benchmarks/tokenizer-first-call-2026-11-14.md](docs/benchmarks/tokenizer-first-call-2026-11-14.md): on small files the cold load is almost all JIT (MiniLM 30 ms cold against 3.2 ms warm); Native AOT removes it (5.3 ms) and ReadyToRun about a third of it. The README and `docs/performance.md` say so.
 - README, `llms.txt` and `profiles/README.md` list the `whisper-bpe` profile (added in 0.3.2-preview.1, missing from all three), and the README counts thirteen profiles instead of ten.
 
 ## [0.3.5] - 2026-11-02

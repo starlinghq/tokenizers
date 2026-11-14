@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    BenchmarkDotNet benchmarks for Starlings.Tokenizers: Tokenizer.FromFile and the first Encode after it, each as a
+    cold job (a fresh process per measurement, first call included) and a warm job (steady state in one process).
+    The difference between the two is the first-call cost (JIT, type loading, static initialization).
+    Not packed; never run in CI. Usage: docs/performance.md.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <ServerGarbageCollection>false</ServerGarbageCollection>
+    <!-- BenchmarkDotNet requires optimized, non-debuggable builds and generates its own runner project. -->
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <IsPublishable>false</IsPublishable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/Starlings.Tokenizers/Starlings.Tokenizers.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -55,6 +55,7 @@ def main() -> int:
     runs = int(sys.argv[2]) if len(sys.argv) > 2 else 15
     load: list[float] = []
     imports: list[float] = []
+    encodes: list[float] = []
     wall: list[float] = []
     ids = None
     for _ in range(runs):
@@ -64,6 +65,7 @@ def main() -> int:
         r = json.loads(out)
         load.append(r["load_ms"])
         imports.append(r["import_ms"])
+        encodes.append(r["first_encode_ms"])
         if ids is not None and ids != r["ids"]:
             print("ids differ between runs", file=sys.stderr)
             return 1
@@ -71,6 +73,7 @@ def main() -> int:
     print(f"python cold runs: {runs}; load average after: {load_average()}")
     print(summary("load_ms (Tokenizer.from_file)", load))
     print(summary("import_ms (from tokenizers import Tokenizer)", imports))
+    print(summary("first_encode_ms", encodes))
     print(summary("process wall_ms", wall))
     print(f"ids: {ids}")
     return 0
