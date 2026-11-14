@@ -6,6 +6,7 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ### Added
 
+- The package is marked Native AOT and trimming compatible (`IsAotCompatible`): the trim, AOT and single-file analyzers run on every build, and the library has no warnings from them. `tests/Starlings.Tokenizers.AotTests` compiles the test sources against xUnit.net's Native AOT packages and runs them as a Native AOT binary on Linux x64: 6,004 of 6,004 tests pass with every pinned asset, which is every profile's conformance fixtures. The two classes that inspect metadata by reflection (`IndependenceTests`, `PinnedAssetsTests`) are left out of the AOT run.
 - `benchmarks/Starlings.Tokenizers.Benchmarks`: BenchmarkDotNet suite for `Tokenizer.FromFile` and the first `Encode`, cold (fresh process per call) and warm, over five assets. Not packed; CI builds it but never runs it. LoadBench now writes its child output with `Utf8JsonWriter`, so it also publishes with Native AOT. `benchmarks/python-cold-load.py` reports the first encode too.
 
 ### Documentation

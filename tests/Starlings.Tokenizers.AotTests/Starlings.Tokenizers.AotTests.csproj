@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The Starlings.Tokenizers.Tests sources, compiled against xUnit.net's Native AOT packages (test discovery by source
+    generators, no runtime reflection) and published with Native AOT, so the conformance fixtures run inside an
+    AOT-compiled binary. Two classes inspect metadata by reflection and are left out: IndependenceTests (the
+    referenced-assembly check; tools/check-independence.sh covers it) and PinnedAssetsTests (TestAssets fields).
+
+      dotnet publish tests/Starlings.Tokenizers.AotTests -c Release -o tests/Starlings.Tokenizers.AotTests/bin/aot
+      tests/Starlings.Tokenizers.AotTests/bin/aot/Starlings.Tokenizers.AotTests
+
+    The published binary must stay inside the repository: TestAssets finds conformance/ by walking up from it.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <RootNamespace>Starlings.Tokenizers.Tests</RootNamespace>
+    <PublishAot>true</PublishAot>
+    <!--
+      Linux x64 only (where the AOT run is checked). Set here rather than with -r, which would also apply to the library
+      project and change its restore, so that locked-mode restore (CI=true) works for both.
+    -->
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <!--
+      Test code only: the shared sources quote strings in test labels and failure messages with reflection-based
+      JsonSerializer.Serialize. Reflection serialization is re-enabled and the test assembly is rooted so the trimmer
+      keeps what it needs; a test that still cannot serialize fails loudly.
+      CA1822 (test methods that could be static) is suppressed by the reflection xunit.v3 package but not by the AOT one.
+      The library is trimmed and AOT-compiled as any consumer's would be.
+    -->
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+    <NoWarn>$(NoWarn);CA1822;IL2026;IL3050</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit.v3.aot" />
+    <Using Include="Xunit" />
+    <TrimmerRootAssembly Include="Starlings.Tokenizers.AotTests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../Starlings.Tokenizers.Tests/*.cs"
+             Exclude="../Starlings.Tokenizers.Tests/IndependenceTests.cs;../Starlings.Tokenizers.Tests/PinnedAssetsTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/Starlings.Tokenizers/Starlings.Tokenizers.csproj" />
+  </ItemGroup>
+
+</Project>

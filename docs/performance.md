@@ -21,6 +21,10 @@ Files of 9 MB and more load in 0.31 to 0.58 of Python's time, and the process ex
 
 On small files the time is almost all first-call cost, not parsing. Measured with BenchmarkDotNet on the same kind of pod, the MiniLM file takes 30.1 ms in a fresh process and 3.2 ms once the loader has been compiled, and the first `Encode` takes 24.5 ms against 8 µs afterwards. Publishing the application with Native AOT removes that cost: MiniLM loads in 5.3 ms and first encodes in 2.1 ms, against 40.8 and 26.1 ms with the JIT in the same run. ReadyToRun removes about a third of it (29.7 and 12.8 ms), because framework generics instantiated over the library's structs are still compiled at run time. Details and the methods involved: [docs/benchmarks/tokenizer-first-call-2026-11-14.md](benchmarks/tokenizer-first-call-2026-11-14.md).
 
+## Native AOT on every pinned asset (2026-11-14)
+
+The package is marked `IsAotCompatible`, and the whole test suite passes as a Native AOT binary (6,004 of 6,004 tests, every profile's fixtures). Measured on all 16 pinned files, as medians of 30 fresh processes per build in rotation on one pinned core, an application published with Native AOT loads every file in 0.25 to 0.52 of Python's time: MiniLM 4.4 ms against 8.8 ms, Whisper 10.3 against 33.1 ms, e5 87 against 325 ms, Gemma 171 against 525 ms. With the JIT, the same run gave 36.9, 46.6, 127 and 202 ms. The ids were identical across the three on every file. Full table, first-encode and process times: [docs/benchmarks/tokenizer-aot-2026-11-14.md](benchmarks/tokenizer-aot-2026-11-14.md).
+
 ## Load time on the workstation (2026-10)
 
 The sections below were measured on the maintainer's workstation (i7-5820K, Linux x64) in October 2026, against `tokenizers` 0.23.2 and 0.23.3. Absolute times are not comparable with the pod above; the ratios agree with it.

@@ -9,6 +9,8 @@ tools/fetch-assets.sh                                   # pinned tokenizer.json 
 dotnet test --solution Tokenizers.slnx                  # missing assets skip; STARLING_REQUIRE_ASSETS=1 makes them fail (CI)
 STARLING_REQUIRE_ASSETS=1 dotnet test --solution Tokenizers.slnx -- --filter-class '*ProfileConformanceTests'
 tools/check-independence.sh                             # src/ never references Microsoft.ML.Tokenizers
+dotnet publish tests/Starlings.Tokenizers.AotTests -c Release -o tests/Starlings.Tokenizers.AotTests/bin/aot \
+  && STARLING_REQUIRE_ASSETS=1 tests/Starlings.Tokenizers.AotTests/bin/aot/Starlings.Tokenizers.AotTests   # the tests as a Native AOT binary (Linux x64; needs clang, zlib1g-dev)
 tools/release-drill.sh                                  # clean clone, pack, local feed, outside consumer (commit first)
 uvx ruff@0.16.9 check . && uvx ruff@0.16.9 format --check .   # Python under reference/ and tools/
 ```

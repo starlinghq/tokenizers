@@ -12,7 +12,7 @@ string text = tokenizer.Decode(encoding.Ids.AsSpan(), skipSpecialTokens: true);
 
 - **Faithful.** Every supported tokenizer has a profile: a pinned `tokenizer.json` (full commit SHA and SHA-256) with reference outputs from huggingface/tokenizers for multilingual text, emoji, combining marks, control characters, pairs, truncation and padding. CI fails on any difference.
 - **Explicit.** A `tokenizer.json` that uses a component this library does not implement fails at load with `UnsupportedTokenizerComponentException`, naming the JSON path. Nothing is approximated, and unknown fields are rejected rather than ignored.
-- **Plain .NET.** No native code, no package dependencies, `net10.0`. Instances are immutable and thread-safe. Large vocabularies load about three times faster than in the Python `tokenizers` library: the 17 MB e5 file takes 0.13 s in a fresh process, against 0.38 s ([measurements](https://github.com/starlinghq/tokenizers/blob/main/docs/performance.md)).
+- **Plain .NET.** No native code, no package dependencies, `net10.0`, Native AOT and trimming compatible. Instances are immutable and thread-safe. Large vocabularies load two to three times faster than in the Python `tokenizers` library, and with Native AOT every pinned file loads faster than in Python ([measurements](https://github.com/starlinghq/tokenizers/blob/main/docs/performance.md)).
 
 Part of [Starling](https://github.com/starlinghq), .NET implementations of AI models with reproducible evidence of what works.
 
@@ -78,18 +78,18 @@ Need a tokenizer that is not here? [Open a tokenizer request](https://github.com
 
 ## Performance
 
-Cold load in a fresh process: `Tokenizer.FromFile` against `Tokenizer.from_file` in Python `tokenizers` 0.23.3 (the Rust library's Python binding). Measured on 2026-11-14 on a RunPod CPU pod (AMD EPYC 9575F, both sides on the same core), medians of three rounds of 10 fresh processes per side:
+Cold load in a fresh process: `Tokenizer.FromFile` with the default JIT and in an application published with Native AOT, against `Tokenizer.from_file` in Python `tokenizers` 0.23.3 (the Rust library's Python binding). Measured on 2026-11-14 on a RunPod CPU pod (AMD EPYC 9575F, every process on the same core), as medians of 30 fresh processes per build, run in rotation:
 
-| `tokenizer.json` | Size | .NET | Python | .NET / Python |
+| `tokenizer.json` | Size | .NET (JIT) | .NET (Native AOT) | Python |
 | --- | ---: | ---: | ---: | ---: |
-| `google/embeddinggemma-2` | 32 MB | 222 ms | 636 ms | 0.35 |
-| `Qwen/Qwen3.5-0.8B` | 20 MB | 125 ms | 398 ms | 0.31 |
-| `intfloat/multilingual-e5-small` | 17 MB | 129 ms | 379 ms | 0.34 |
-| `microsoft/Phi-4-mini-instruct` | 16 MB | 106 ms | 276 ms | 0.39 |
-| `openai/whisper-large-v3-turbo` | 2.7 MB | 45 ms | 33 ms | 1.39 |
-| `sentence-transformers/all-MiniLM-L6-v2` | 0.5 MB | 37 ms | 9 ms | 4.13 |
+| `google/embeddinggemma-2` | 32 MB | 202 ms | 171 ms | 525 ms |
+| `Qwen/Qwen3.5-0.8B` | 20 MB | 116 ms | 83 ms | 331 ms |
+| `intfloat/multilingual-e5-small` | 17 MB | 127 ms | 87 ms | 325 ms |
+| `microsoft/Phi-4-mini-instruct` | 16 MB | 95 ms | 65 ms | 235 ms |
+| `openai/whisper-large-v3-turbo` | 2.7 MB | 47 ms | 10 ms | 33 ms |
+| `sentence-transformers/all-MiniLM-L6-v2` | 0.5 MB | 37 ms | 4.4 ms | 8.8 ms |
 
-Small files are the exception. Under 1 MB, the .NET load does not drop below about 37 ms, while Python loads them in 9 ms. That time is the JIT compiling the loader on first use; the load itself takes about 3 ms. An application published with Native AOT avoids it: the 0.5 MB file then loads in 5.3 ms. Both libraries returned the same ids on all 16 pinned files. All rows, process wall times, memory and method are in [docs/performance.md](https://github.com/starlinghq/tokenizers/blob/main/docs/performance.md).
+With the JIT, files under about 3 MB load slower than in Python: the first call compiles the loader, which costs about 30 ms whatever the file size (the load itself takes about 3 ms for MiniLM). An application published with Native AOT has no such cost, and every one of the 16 pinned files loads in 0.25 to 0.52 of Python's time. All three gave the same ids on every file. All rows, first-encode and process times, and the method are in [docs/performance.md](https://github.com/starlinghq/tokenizers/blob/main/docs/performance.md).
 
 ## Documentation
 

@@ -7,10 +7,16 @@
     <PackageTags>tokenizer;tokenizers;tokenizer.json;huggingface;bpe;byte-level-bpe;unigram;sentencepiece;wordpiece;llm;embeddings;nlp;starling</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>https://github.com/starlinghq/tokenizers/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <!--
+      Native AOT and trimming safe: enables the trim, AOT and single-file analyzers, so any change that would break an
+      AOT-published consumer fails the build (warnings are errors). Checked at run time by tests/Starlings.Tokenizers.AotTests.
+    -->
+    <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="Starlings.Tokenizers.Tests" />
+    <InternalsVisibleTo Include="Starlings.Tokenizers.AotTests" />
   </ItemGroup>
 
   <ItemGroup>
