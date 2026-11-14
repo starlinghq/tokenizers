@@ -1,8 +1,25 @@
 # Performance
 
-All numbers are exploratory: measured on a shared workstation (i7-5820K, Linux x64), not on a controlled benchmark machine. The dated records under [benchmarks/](benchmarks/) give the method, the raw output and the machine load at the time.
+All numbers are exploratory: measured on shared machines, not on a controlled benchmark machine. The dated records under [benchmarks/](benchmarks/) give the method, the raw output and the machine load at the time.
 
-## Load time
+## Cold start against Python `tokenizers` (2026-11-14)
+
+The current comparison, for all 16 pinned assets: a fresh .NET process running `Tokenizer.FromFile` against a fresh Python interpreter running `tokenizers` 0.23.3 `Tokenizer.from_file`. It was measured on a RunPod CPU pod (AMD EPYC 9575F, both sides pinned to one physical core), with library commit `5951cbe` and .NET 10.0.15. Medians of three interleaved rounds of 10 processes:
+
+| Asset | Size | .NET load | Python load | .NET / Python |
+| --- | ---: | ---: | ---: | ---: |
+| `google/embeddinggemma-2` (`gemma-bpe-embeddinggemma2`) | 32 MB | 222 ms | 636 ms | 0.35 |
+| `Qwen/Qwen3.5-0.8B` (`qwen35-bpe-chat`) | 20 MB | 125 ms | 398 ms | 0.31 |
+| `intfloat/multilingual-e5-small` (`xlmr-unigram-e5`) | 17 MB | 129 ms | 379 ms | 0.34 |
+| `microsoft/Phi-4-mini-instruct` (`phi4-bpe-chat`) | 16 MB | 106 ms | 276 ms | 0.39 |
+| `openai/whisper-large-v3-turbo` (`whisper-bpe`) | 2.7 MB | 45 ms | 33 ms | 1.39 |
+| `sentence-transformers/all-MiniLM-L6-v2` (WordPiece) | 0.5 MB | 37 ms | 9 ms | 4.13 |
+
+Files of 9 MB and more load in 0.31 to 0.58 of Python's time, and the process exits 1.8 to 3.4 times sooner. Files under 1 MB load in about 37 ms against Python's 9 ms, because the first call compiles the .NET loader (JIT), a fixed cost the native library does not pay. The two are about even near 3 MB. All 16 rows, process wall times, memory, and why the pod had to be pinned: [docs/benchmarks/tokenizer-coldstart-2026-11-14.md](benchmarks/tokenizer-coldstart-2026-11-14.md).
+
+## Load time on the workstation (2026-10)
+
+The sections below were measured on the maintainer's workstation (i7-5820K, Linux x64) in October 2026, against `tokenizers` 0.23.2 and 0.23.3. Absolute times are not comparable with the pod above; the ratios agree with it.
 
 `Tokenizer.FromFile` on the e5 `tokenizer.json` (17 MB, 250,002 Unigram pieces) takes about 0.27 s in a fresh process on the workstation above, down from 1.29 s in 0.1.0-preview.1; the Rust `tokenizers` 0.23.2 `Tokenizer.from_file` takes about 0.50 s on the same machine. Measurements and method: [docs/benchmarks/tokenizer-load-2026-10-09.md](benchmarks/tokenizer-load-2026-10-09.md).
 
@@ -22,5 +39,7 @@ tools/fetch-assets.sh
 dotnet run -c Release --project benchmarks/Starlings.Tokenizers.LoadBench -- cold .models/<repo>/<commit>/tokenizer.json 15
 dotnet run -c Release --project benchmarks/Starlings.Tokenizers.LoadBench -- warm .models/<repo>/<commit>/tokenizer.json 10
 ```
+
+The Python reference is `benchmarks/python-cold-load.py <tokenizer.json> [runs]` (needs `pip install tokenizers`): it runs a fresh interpreter per run, and its output matches `LoadBench cold`, including the ids. Alternate the two on the same file. On a shared or rented machine, pin both to the same physical core (`taskset`), as the 2026-11-14 record explains.
 
 Record a new measurement as a dated file under `docs/benchmarks/` with the commit, SDK and runtime versions, the machine and its load, and the reference measured right after on the same machine.
