@@ -17,11 +17,21 @@
     <RootNamespace>Starlings.Tokenizers.Tests</RootNamespace>
     <PublishAot>true</PublishAot>
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <!--
+      Test code only: the shared sources build some tokenizer.json documents and failure messages with reflection-based
+      JsonSerializer (anonymous types, which source generation cannot describe). Reflection serialization is re-enabled
+      and the test assembly is rooted so the trimmer keeps its members; a test that still cannot serialize fails loudly.
+      CA1822 (test methods that could be static) is suppressed by the reflection xunit.v3 package but not by the AOT one.
+      The library is trimmed and AOT-compiled as any consumer's would be.
+    -->
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+    <NoWarn>$(NoWarn);CA1822;IL2026;IL3050</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="xunit.v3.aot" />
     <Using Include="Xunit" />
+    <TrimmerRootAssembly Include="Starlings.Tokenizers.AotTests" />
   </ItemGroup>
 
   <ItemGroup>
