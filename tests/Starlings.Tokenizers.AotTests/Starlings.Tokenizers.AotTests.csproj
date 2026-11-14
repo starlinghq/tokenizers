@@ -6,7 +6,7 @@
     AOT-compiled binary. Two classes inspect metadata by reflection and are left out: IndependenceTests (the
     referenced-assembly check; tools/check-independence.sh covers it) and PinnedAssetsTests (TestAssets fields).
 
-      dotnet publish tests/Starlings.Tokenizers.AotTests -c Release -r linux-x64 -o tests/Starlings.Tokenizers.AotTests/bin/aot
+      dotnet publish tests/Starlings.Tokenizers.AotTests -c Release -o tests/Starlings.Tokenizers.AotTests/bin/aot
       tests/Starlings.Tokenizers.AotTests/bin/aot/Starlings.Tokenizers.AotTests
 
     The published binary must stay inside the repository: TestAssets finds conformance/ by walking up from it.
@@ -16,8 +16,11 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <RootNamespace>Starlings.Tokenizers.Tests</RootNamespace>
     <PublishAot>true</PublishAot>
-    <!-- Linux x64 only (where the AOT run is checked); keeps packages.lock.json the same for restore and publish. -->
-    <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
+    <!--
+      Linux x64 only (where the AOT run is checked). Set here rather than with -r, which would also apply to the library
+      project and change its restore, so that locked-mode restore (CI=true) works for both.
+    -->
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     <!--
       Test code only: the shared sources build some tokenizer.json documents and failure messages with reflection-based
