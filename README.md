@@ -89,7 +89,7 @@ Cold load in a fresh process: `Tokenizer.FromFile` against `Tokenizer.from_file`
 | `openai/whisper-large-v3-turbo` | 2.7 MB | 45 ms | 33 ms | 1.39 |
 | `sentence-transformers/all-MiniLM-L6-v2` | 0.5 MB | 37 ms | 9 ms | 4.13 |
 
-Small files are the exception. Under 1 MB, the .NET load does not drop below about 37 ms, most of it spent compiling the loader on first use, while Python loads them in 9 ms. Both libraries returned the same ids on all 16 pinned files. All rows, process wall times, memory and method are in [docs/performance.md](https://github.com/starlinghq/tokenizers/blob/main/docs/performance.md).
+Small files are the exception. Under 1 MB, the .NET load does not drop below about 37 ms, while Python loads them in 9 ms. That time is the JIT compiling the loader on first use; the load itself takes about 3 ms. An application published with Native AOT avoids it: the 0.5 MB file then loads in 5.3 ms. Both libraries returned the same ids on all 16 pinned files. All rows, process wall times, memory and method are in [docs/performance.md](https://github.com/starlinghq/tokenizers/blob/main/docs/performance.md).
 
 ## Documentation
 
