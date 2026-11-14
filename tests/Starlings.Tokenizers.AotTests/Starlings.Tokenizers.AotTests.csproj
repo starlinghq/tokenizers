@@ -23,9 +23,9 @@
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     <!--
-      Test code only: the shared sources build some tokenizer.json documents and failure messages with reflection-based
-      JsonSerializer (anonymous types, which source generation cannot describe). Reflection serialization is re-enabled
-      and the test assembly is rooted so the trimmer keeps its members; a test that still cannot serialize fails loudly.
+      Test code only: the shared sources quote strings in test labels and failure messages with reflection-based
+      JsonSerializer.Serialize. Reflection serialization is re-enabled and the test assembly is rooted so the trimmer
+      keeps what it needs; a test that still cannot serialize fails loudly.
       CA1822 (test methods that could be static) is suppressed by the reflection xunit.v3 package but not by the AOT one.
       The library is trimmed and AOT-compiled as any consumer's would be.
     -->
