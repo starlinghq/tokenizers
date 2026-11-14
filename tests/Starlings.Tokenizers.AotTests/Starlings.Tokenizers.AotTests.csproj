@@ -16,6 +16,8 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <RootNamespace>Starlings.Tokenizers.Tests</RootNamespace>
     <PublishAot>true</PublishAot>
+    <!-- Linux x64 only (where the AOT run is checked); keeps packages.lock.json the same for restore and publish. -->
+    <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     <!--
       Test code only: the shared sources build some tokenizer.json documents and failure messages with reflection-based
