@@ -1,5 +1,5 @@
 using System.Text;
-using System.Text.Json;
+using System.Text.Json.Nodes;
 using Starlings.Tokenizers.Pipeline;
 
 namespace Starlings.Tokenizers.Tests;
@@ -7,41 +7,41 @@ namespace Starlings.Tokenizers.Tests;
 /// <summary>Reference cases from huggingface/tokenizers 0.23.2 on a small BERT-profile vocabulary.</summary>
 public sealed class BertWordPieceComponentTests
 {
-    private static readonly string _json = JsonSerializer.Serialize(new
+    // Built with JsonObject rather than JsonSerializer over anonymous types, so that it also runs under Native AOT
+    // (tests/Starlings.Tokenizers.AotTests); the text is the same as the serializer wrote.
+    private static readonly string _json = new JsonObject
     {
-        version = "1.0",
-        added_tokens = new[]
+        ["version"] = "1.0",
+        ["added_tokens"] = new JsonArray(
+            Added("[PAD]", 1), Added("[UNK]", 0), Added("[CLS]", 2), Added("[SEP]", 3), Added("[MASK]", 23)),
+        ["normalizer"] = new JsonObject
         {
-            Added("[PAD]", 1), Added("[UNK]", 0), Added("[CLS]", 2), Added("[SEP]", 3), Added("[MASK]", 23),
+            ["type"] = "BertNormalizer",
+            ["clean_text"] = true,
+            ["handle_chinese_chars"] = true,
+            ["strip_accents"] = null,
+            ["lowercase"] = true,
         },
-        normalizer = new
+        ["pre_tokenizer"] = new JsonObject { ["type"] = "BertPreTokenizer" },
+        ["post_processor"] = new JsonObject
         {
-            type = "BertNormalizer",
-            clean_text = true,
-            handle_chinese_chars = true,
-            strip_accents = (bool?)null,
-            lowercase = true,
-        },
-        pre_tokenizer = new { type = "BertPreTokenizer" },
-        post_processor = new
-        {
-            type = "TemplateProcessing",
-            single = new object[] { Special("[CLS]", 0), Sequence("A", 0), Special("[SEP]", 0) },
-            pair = new object[] { Special("[CLS]", 0), Sequence("A", 0), Special("[SEP]", 0), Sequence("B", 1), Special("[SEP]", 1) },
-            special_tokens = new Dictionary<string, object>
+            ["type"] = "TemplateProcessing",
+            ["single"] = new JsonArray(Special("[CLS]", 0), Sequence("A", 0), Special("[SEP]", 0)),
+            ["pair"] = new JsonArray(Special("[CLS]", 0), Sequence("A", 0), Special("[SEP]", 0), Sequence("B", 1), Special("[SEP]", 1)),
+            ["special_tokens"] = new JsonObject
             {
                 ["[CLS]"] = SpecialEntry("[CLS]", 2),
                 ["[SEP]"] = SpecialEntry("[SEP]", 3),
             },
         },
-        decoder = new { type = "WordPiece", prefix = "##", cleanup = true },
-        model = new
+        ["decoder"] = new JsonObject { ["type"] = "WordPiece", ["prefix"] = "##", ["cleanup"] = true },
+        ["model"] = new JsonObject
         {
-            type = "WordPiece",
-            unk_token = "[UNK]",
-            continuing_subword_prefix = "##",
-            max_input_chars_per_word = 100,
-            vocab = new Dictionary<string, int>
+            ["type"] = "WordPiece",
+            ["unk_token"] = "[UNK]",
+            ["continuing_subword_prefix"] = "##",
+            ["max_input_chars_per_word"] = 100,
+            ["vocab"] = new JsonObject
             {
                 ["[UNK]"] = 0, ["[PAD]"] = 1, ["[CLS]"] = 2, ["[SEP]"] = 3,
                 ["hello"] = 4, [","] = 5, ["world"] = 6, ["!"] = 7,
@@ -52,7 +52,7 @@ public sealed class BertWordPieceComponentTests
                 ["a"] = 24, ["b"] = 25, ["𠀀"] = 26, ["a⃝ा"] = 27, ["ab"] = 28,
             },
         },
-    });
+    }.ToJsonString();
 
     [Fact]
     public void MatchesReferenceForNormalizationWordPieceOffsetsAndDecode()
@@ -377,20 +377,23 @@ public sealed class BertWordPieceComponentTests
         Assert.Equal(expectedComponent, e.Component);
     }
 
-    private static object Added(string content, int id) => new
+    private static JsonObject Added(string content, int id) => new()
     {
-        id,
-        content,
-        single_word = false,
-        lstrip = false,
-        rstrip = false,
-        normalized = false,
-        special = true,
+        ["id"] = id,
+        ["content"] = content,
+        ["single_word"] = false,
+        ["lstrip"] = false,
+        ["rstrip"] = false,
+        ["normalized"] = false,
+        ["special"] = true,
     };
 
-    private static object Special(string id, int typeId) => new { SpecialToken = new { id, type_id = typeId } };
+    private static JsonObject Special(string id, int typeId) =>
+        new() { ["SpecialToken"] = new JsonObject { ["id"] = id, ["type_id"] = typeId } };
 
-    private static object Sequence(string id, int typeId) => new { Sequence = new { id, type_id = typeId } };
+    private static JsonObject Sequence(string id, int typeId) =>
+        new() { ["Sequence"] = new JsonObject { ["id"] = id, ["type_id"] = typeId } };
 
-    private static object SpecialEntry(string id, int tokenId) => new { id, ids = new[] { tokenId }, tokens = new[] { id } };
+    private static JsonObject SpecialEntry(string id, int tokenId) =>
+        new() { ["id"] = id, ["ids"] = new JsonArray(tokenId), ["tokens"] = new JsonArray(id) };
 }

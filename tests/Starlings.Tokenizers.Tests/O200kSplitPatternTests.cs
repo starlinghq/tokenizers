@@ -1,6 +1,7 @@
 using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Starlings.Tokenizers.Pipeline;
 
 namespace Starlings.Tokenizers.Tests;
@@ -146,28 +147,25 @@ public class O200kSplitPatternTests
 
     private static string MinimalTokenizerJson(string behavior, bool invert)
     {
-        var doc = new
+        // JsonObject rather than JsonSerializer over an anonymous type, so that it also runs under Native AOT.
+        string json = new JsonObject
         {
-            version = "1.0",
-            truncation = (object?)null,
-            padding = (object?)null,
-            added_tokens = Array.Empty<object>(),
-            normalizer = (object?)null,
-            pre_tokenizer = new
+            ["version"] = "1.0",
+            ["truncation"] = null,
+            ["padding"] = null,
+            ["added_tokens"] = new JsonArray(),
+            ["normalizer"] = null,
+            ["pre_tokenizer"] = new JsonObject
             {
-                type = "Split",
-                pattern = new Dictionary<string, string> { ["Regex"] = O200kSplitPattern.O200k },
-                behavior,
-                invert,
+                ["type"] = "Split",
+                ["pattern"] = new JsonObject { ["Regex"] = O200kSplitPattern.O200k },
+                ["behavior"] = behavior,
+                ["invert"] = invert,
             },
-            post_processor = (object?)null,
-            decoder = (object?)null,
-            model = new
-            {
-                type = "WordLevelPlaceholder",
-            },
-        };
-        string json = JsonSerializer.Serialize(doc);
+            ["post_processor"] = null,
+            ["decoder"] = null,
+            ["model"] = new JsonObject { ["type"] = "WordLevelPlaceholder" },
+        }.ToJsonString();
         const string model = "{\"type\":\"BPE\",\"dropout\":null,\"unk_token\":null,\"continuing_subword_prefix\":null,\"end_of_word_suffix\":null,\"fuse_unk\":false,\"byte_fallback\":false,\"ignore_merges\":false,\"vocab\":{\"a\":0,\"b\":1,\" \":2,\"c\":3,\"ab\":4,\" c\":5},\"merges\":[[\"a\",\"b\"],[\" \",\"c\"]]}";
         return json.Replace("{\"type\":\"WordLevelPlaceholder\"}", model, StringComparison.Ordinal);
     }
