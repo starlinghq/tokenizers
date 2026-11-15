@@ -19,7 +19,7 @@
       A published version is immutable. The release tag is v$(Version); the release workflow refuses
       a tag that differs.
     -->
-    <VersionPrefix>0.3.5</VersionPrefix>
+    <VersionPrefix>0.3.6</VersionPrefix>
 
     <Authors>StarlingHq</Authors>
     <Company>StarlingHq</Company>
