@@ -14,6 +14,7 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 - New cold-start record [docs/benchmarks/tokenizer-coldstart-2026-11-14.md](docs/benchmarks/tokenizer-coldstart-2026-11-14.md): all 16 pinned assets against Python `tokenizers` 0.23.3, on a RunPod CPU pod. Files of 9 MB and more load in 0.31 to 0.58 of Python's time; files under 1 MB take about 37 ms against 9 ms. The README's load-time claim and a new Performance section, and `docs/performance.md`, now use these numbers. The Python reference script is `benchmarks/python-cold-load.py`.
 - New first-call record [docs/benchmarks/tokenizer-first-call-2026-11-14.md](docs/benchmarks/tokenizer-first-call-2026-11-14.md): on small files the cold load is almost all JIT (MiniLM 30 ms cold against 3.2 ms warm); Native AOT removes it (5.3 ms) and ReadyToRun about a third of it. The README and `docs/performance.md` say so.
 - README, `llms.txt` and `profiles/README.md` list the `whisper-bpe` profile (added in 0.3.2-preview.1, missing from all three), and the README counts thirteen profiles instead of ten.
+- Profiles `qwen2-bpe-kev`, `qwen35-bpe-chat` and `clover-bpe-chat` no longer list `byte_level_use_regex_true_pre_tokenizer: unsupported # rejected at load`. The loader has accepted `ByteLevel` with `use_regex` true since 0.3.2-preview.1, and none of these files uses it, so the entry is dropped, as in the other byte-level profiles (#25).
 
 ## [0.3.5] - 2026-11-02
 
