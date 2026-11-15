@@ -4,6 +4,10 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [Unreleased]
 
+## [0.3.6] - 2026-11-14
+
+Native AOT. The library code is unchanged since 0.3.5: no `.cs` file, profile or conformance fixture changed, only the project now declares itself AOT and trimming compatible.
+
 ### Added
 
 - The package is marked Native AOT and trimming compatible (`IsAotCompatible`): the trim, AOT and single-file analyzers run on every build, and the library has no warnings from them. `tests/Starlings.Tokenizers.AotTests` compiles the test sources against xUnit.net's Native AOT packages and runs them as a Native AOT binary on Linux x64: 6,004 of 6,004 tests pass with every pinned asset, which is every profile's conformance fixtures. The two classes that inspect metadata by reflection (`IndependenceTests`, `PinnedAssetsTests`) are left out of the AOT run.
@@ -14,6 +18,11 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 - New cold-start record [docs/benchmarks/tokenizer-coldstart-2026-11-14.md](docs/benchmarks/tokenizer-coldstart-2026-11-14.md): all 16 pinned assets against Python `tokenizers` 0.23.3, on a RunPod CPU pod. Files of 9 MB and more load in 0.31 to 0.58 of Python's time; files under 1 MB take about 37 ms against 9 ms. The README's load-time claim and a new Performance section, and `docs/performance.md`, now use these numbers. The Python reference script is `benchmarks/python-cold-load.py`.
 - New first-call record [docs/benchmarks/tokenizer-first-call-2026-11-14.md](docs/benchmarks/tokenizer-first-call-2026-11-14.md): on small files the cold load is almost all JIT (MiniLM 30 ms cold against 3.2 ms warm); Native AOT removes it (5.3 ms) and ReadyToRun about a third of it. The README and `docs/performance.md` say so.
 - README, `llms.txt` and `profiles/README.md` list the `whisper-bpe` profile (added in 0.3.2-preview.1, missing from all three), and the README counts thirteen profiles instead of ten.
+
+### Behavior
+
+- No change in output for any profile: every profile's conformance fixtures pass unchanged, under the JIT and as a Native AOT binary. Profiles covered: `xlmr-unigram-e5`, `xlmr-unigram-paraphrase-multilingual`, `gliner2-base-v1-unigram`, `qwen2-bpe-kev`, `qwen35-bpe-chat`, `qwen3-bpe-embedding`, `qwen3-bpe-chat`, `gemma-bpe-embeddinggemma2`, `lfm3-bpe-chat`, `clover-bpe-chat`, `phi4-bpe-chat`, `modernbert-bpe-gte-reranker` and `whisper-bpe`.
+- The SDK adds a build-time-only `Microsoft.NET.ILLink.Tasks` reference for the trim analyzer. The package still has no dependencies.
 
 ## [0.3.5] - 2026-11-02
 
