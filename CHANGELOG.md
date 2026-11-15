@@ -6,7 +6,7 @@ All notable changes to Starlings.Tokenizers (published as StarlingHq.Tokenizers 
 
 ## [0.3.6] - 2026-11-14
 
-Native AOT. The library code is unchanged since 0.3.5: no `.cs` file, profile or conformance fixture changed, only the project now declares itself AOT and trimming compatible.
+Native AOT. The library code is unchanged since 0.3.5: no `.cs` file or conformance fixture changed, and three profile files lost a stale capability line (see Documentation). The project now declares itself AOT and trimming compatible.
 
 ### Added
 
