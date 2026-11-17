@@ -1,6 +1,6 @@
 # Cold start against Python `tokenizers`, every pinned asset, 2026-11-14
 
-`Tokenizer.FromFile` in a fresh .NET process against `Tokenizer.from_file` in a fresh Python interpreter, for all 16 pinned `tokenizer.json` assets (13 profiles and the three WordPiece files without one). The earlier records ([e5](tokenizer-load-2026-10-09.md), [Gemma](tokenizer-gemma-bpe-2026-10-10.md), [Qwen](tokenizer-qwen-bpe-2026-10-10.md)) were taken on the maintainer's workstation, under background load, against `tokenizers` 0.23.2 and 0.23.3. This run uses a rented machine and the current reference.
+`Tokenizer.FromFile` in a fresh .NET process against `Tokenizer.from_file` in a fresh Python interpreter, for all 16 pinned `tokenizer.json` assets (13 profiles and the three WordPiece files without one). The earlier records ([e5](tokenizer-load-2026-10-09.md), [Gemma](tokenizer-gemma-bpe-2026-10-10.md), [Qwen](tokenizer-qwen-bpe-2026-10-10.md)) were taken on the development workstation, under background load, against `tokenizers` 0.23.2 and 0.23.3. This run uses a rented machine and the current reference.
 
 ## Setup
 
