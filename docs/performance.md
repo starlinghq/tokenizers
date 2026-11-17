@@ -27,7 +27,7 @@ The package is marked `IsAotCompatible`, and the whole test suite passes as a Na
 
 ## Load time on the workstation (2026-10)
 
-The sections below were measured on the maintainer's workstation (i7-5820K, Linux x64) in October 2026, against `tokenizers` 0.23.2 and 0.23.3. Absolute times are not comparable with the pod above; the ratios agree with it.
+The sections below were measured on a development workstation (i7-5820K, Linux x64) in October 2026, against `tokenizers` 0.23.2 and 0.23.3. Absolute times are not comparable with the pod above; the ratios agree with it.
 
 `Tokenizer.FromFile` on the e5 `tokenizer.json` (17 MB, 250,002 Unigram pieces) takes about 0.27 s in a fresh process on the workstation above, down from 1.29 s in 0.1.0-preview.1; the Rust `tokenizers` 0.23.2 `Tokenizer.from_file` takes about 0.50 s on the same machine. Measurements and method: [docs/benchmarks/tokenizer-load-2026-10-09.md](benchmarks/tokenizer-load-2026-10-09.md).
 

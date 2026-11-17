@@ -4,7 +4,7 @@
 
 `Tokenizer.FromFile` in `Starlings.Tokenizers`, 0.1.0-preview.1 (main at `ff55265`) against 0.1.0-preview.2 (this change). Follow-up to decision 1 of [e5-2026-10-09.md](e5-2026-10-09.md): the owned tokenizer's load made a C# process reach its first e5 embedding 1.7x later than Python.
 
-One workstation, not a controlled lab machine: Intel i7-5820K (6 cores, AVX2), Linux x64 7.2, .NET 10.0.12 (SDK 10.0.100), Release builds, assets in the OS page cache. Load average 0.7 to 1.8 during every run (checked before each series; the script waits while it is above 4); the user's desktop, Chrome and a local ClickHouse server were running. Exploratory evidence, reproducible with the commands below.
+One workstation, not a controlled lab machine: Intel i7-5820K (6 cores, AVX2), Linux x64, .NET 10.0.12 (SDK 10.0.100), Release builds, assets in the OS page cache. Load average 0.7 to 1.8 during every run (checked before each series; the script waits while it is above 4); the user's desktop, Chrome and a local ClickHouse server were running. Exploratory evidence, reproducible with the commands below.
 
 Assets: e5 `tokenizer.json` (`intfloat/multilingual-e5-small@614241f6`, 17,082,730 bytes, 250,002 Unigram pieces, SHA-256 `0b44a9d7…4c39`) and GLiNER2 `tokenizer.json` (`fastino/gliner2-base-v1@f9634218`, 8,650,701 bytes, 128,000 pieces, `1b7fbabf…9c16`).
 
@@ -25,7 +25,7 @@ Assets: e5 `tokenizer.json` (`intfloat/multilingual-e5-small@614241f6`, 17,082,7
 | GLiNER2 | warm reload, ms | 224 (217–459) | 77 (72–93) | 2.9x |
 | GLiNER2 | managed heap after load, MiB | 36.5 | 6.3 | |
 
-Rust reference on the same machine, same e5 file: Python `tokenizers` 0.23.2 (`/home/mark/Projects/AI-models/e5/venv-bench-cpu`), `Tokenizer.from_file` in a fresh interpreter, 15 runs: **501 ms** median (492–547), import 16 ms. The owned tokenizer now loads in about 54% of the Rust tokenizer's time.
+Rust reference on the same machine, same e5 file: Python `tokenizers` 0.23.2 (a local virtual environment), `Tokenizer.from_file` in a fresh interpreter, 15 runs: **501 ms** median (492–547), import 16 ms. The owned tokenizer now loads in about 54% of the Rust tokenizer's time.
 
 Encoding is not slower: `LoadBench encode` (200 x 5 texts per round, 20 rounds after 3 warm-up rounds, two interleaved pairs): 0.1.0-preview.1 183.6 and 181.7 ms per round, 0.1.0-preview.2 175.3 and 178.8 ms; identical id checksums.
 
